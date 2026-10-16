@@ -317,17 +317,17 @@
                         </button>
                     </div>
 
-                    <!-- Derecha: Banco de Moscas, Récord HI y Puntuación -->
+                    <!-- Derecha: Banco de Moscas, Récord HI y Metros -->
                     <div class="flex items-center gap-2 sm:gap-3.5 bg-slate-900/80 backdrop-blur-md px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-700/70 shadow-md font-pixel text-[9px] sm:text-xs tracking-wider pointer-events-auto">
                         <div id="flyCounterHud" class="flex items-center gap-1 text-amber-400" title="Moscas Doradas en esta partida (Banco total guardado)">
                             <span>🪰</span>
                             <span id="flyCountText">00</span>
                         </div>
                         <div id="hiScoreHud" class="text-slate-300">
-                            HI <span id="hiScoreText">00000</span>
+                            HI <span id="hiScoreText">00000</span><span class="text-[8px] sm:text-[10px]">m</span>
                         </div>
                         <div id="scoreHud" class="text-emerald-400 font-bold">
-                            <span id="scoreText">00000</span>
+                            <span id="scoreText">00000</span><span class="text-[8px] sm:text-[10px]">m</span>
                         </div>
                     </div>
                 </div>
@@ -387,7 +387,7 @@
                         <!-- Marcadores de la partida -->
                         <div class="w-full grid grid-cols-3 gap-1.5 bg-slate-800/90 p-2 rounded-xl border border-slate-700">
                             <div class="flex flex-col items-center border-r border-slate-700 pr-1">
-                                <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Puntos</span>
+                                <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Metros</span>
                                 <span id="finalScoreText" class="font-pixel text-[10px] sm:text-xs text-emerald-400 mt-0.5">00000</span>
                             </div>
                             <div class="flex flex-col items-center border-r border-slate-700 px-1">
@@ -403,7 +403,7 @@
                         <!-- Barra hacia el próximo premio por distancia -->
                         <div id="nextMilestoneBox" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-1.5 text-left">
                             <div class="flex items-center justify-between text-[10px] text-slate-300 mb-1">
-                                <span id="nextMilestoneLabel" class="font-bold text-amber-300 truncate">🎁 Próximo premio: 150 pts</span>
+                                <span id="nextMilestoneLabel" class="font-bold text-amber-300 truncate">🎁 Próximo premio: 150 m</span>
                                 <span id="nextMilestonePercent" class="font-pixel text-[8px] text-emerald-400">0%</span>
                             </div>
                             <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
@@ -504,12 +504,12 @@
         <!-- LEYENDA INFERIOR SOLO PARA ESCRITORIO -->
         <footer class="desktop-chrome w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300 shrink-0">
             <div class="flex flex-wrap items-center gap-4">
-                <span class="flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span> <b>150–5000 pts:</b> 30 Premios progresivos por distancia y maestría</span>
-                <span class="flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full bg-amber-400"></span> <b>🪰 Moscas Doradas:</b> +50 pts y moneda para objetos exclusivos</span>
+                <span class="flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span> <b>150–5000 m:</b> 30 Premios progresivos por distancia y maestría</span>
+                <span class="flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full bg-amber-400"></span> <b>🪰 Moscas Doradas:</b> moneda para comprar objetos exclusivos</span>
             </div>
             <div class="flex items-center gap-3 text-slate-400 text-[11px] ml-auto">
                 <span>Tecla <b>C</b>: Abrir Armario</span>
-                <span>🌿 Día/Noche: <b>700 pts</b></span>
+                <span>🌿 Día/Noche: <b>700 m</b></span>
             </div>
         </footer>
     </div>
@@ -547,7 +547,7 @@
                     rarity: 'COMÚN',
                     unlockType: 'score',
                     reqValue: 250,
-                    desc: 'Premio por alcanzar 250 puntos en una carrera.',
+                    desc: 'Premio por alcanzar 250 metros en una carrera.',
                     colors: {
                         outline: '#7c2d12',
                         bodyDark: '#c2410c',
@@ -583,7 +583,7 @@
                     rarity: 'RARO',
                     unlockType: 'score',
                     reqValue: 550,
-                    desc: 'Premio por alcanzar 550 puntos en una partida.',
+                    desc: 'Premio por alcanzar 550 metros en una partida.',
                     colors: {
                         outline: '#a16207',
                         bodyDark: '#ca8a04',
@@ -601,7 +601,7 @@
                     rarity: 'RARO',
                     unlockType: 'score',
                     reqValue: 900,
-                    desc: 'Premio venenoso por llegar a 900 puntos.',
+                    desc: 'Premio venenoso por llegar a 900 metros.',
                     colors: {
                         outline: '#1d4ed8',
                         bodyDark: '#2563eb',
@@ -637,7 +637,7 @@
                     rarity: 'ÉPICO',
                     unlockType: 'score',
                     reqValue: 1400,
-                    desc: 'Premio por sobrevivir dos ciclos completos (1400 pts).',
+                    desc: 'Premio por sobrevivir dos ciclos completos (1400 m).',
                     colors: {
                         outline: '#7f1d1d',
                         bodyDark: '#dc2626',
@@ -673,7 +673,7 @@
                     rarity: 'MÍTICO',
                     unlockType: 'score',
                     reqValue: 2000,
-                    desc: 'Premio glacial por alcanzar los 2000 puntos.',
+                    desc: 'Premio glacial por alcanzar los 2000 metros.',
                     colors: {
                         outline: '#0369a1',
                         bodyDark: '#0284c7',
@@ -691,7 +691,7 @@
                     rarity: 'MÍTICO',
                     unlockType: 'score',
                     reqValue: 2800,
-                    desc: 'Premio maestro por alcanzar 2800 puntos.',
+                    desc: 'Premio maestro por alcanzar 2800 metros.',
                     colors: {
                         outline: '#581c87',
                         bodyDark: '#7e22ce',
@@ -709,7 +709,7 @@
                     rarity: 'LEYENDA',
                     unlockType: 'score',
                     reqValue: 4000,
-                    desc: '¡Hazaña legendaria! Llega a los 4000 puntos.',
+                    desc: '¡Hazaña legendaria! Llega a los 4000 metros.',
                     colors: {
                         outline: '#042f2e',
                         bodyDark: '#0f766e',
@@ -738,7 +738,7 @@
                     rarity: 'COMÚN',
                     unlockType: 'score',
                     reqValue: 150,
-                    desc: 'Premio inicial por llegar a 150 puntos.'
+                    desc: 'Premio inicial por llegar a 150 metros.'
                 },
                 {
                     id: 'mushroom_cap',
@@ -756,7 +756,7 @@
                     rarity: 'RARO',
                     unlockType: 'score',
                     reqValue: 450,
-                    desc: 'Premio por alcanzar 450 puntos.'
+                    desc: 'Premio por alcanzar 450 metros.'
                 },
                 {
                     id: 'explorer_straw',
@@ -774,7 +774,7 @@
                     rarity: 'RARO',
                     unlockType: 'score',
                     reqValue: 800,
-                    desc: 'Premio por superar la primera noche (800 pts).'
+                    desc: 'Premio por superar la primera noche (800 m).'
                 },
                 {
                     id: 'viking_helm',
@@ -783,7 +783,7 @@
                     rarity: 'ÉPICO',
                     unlockType: 'score',
                     reqValue: 1250,
-                    desc: 'Premio guerrero por alcanzar 1250 puntos.'
+                    desc: 'Premio guerrero por alcanzar 1250 metros.'
                 },
                 {
                     id: 'wizard_hat',
@@ -801,7 +801,7 @@
                     rarity: 'MÍTICO',
                     unlockType: 'score',
                     reqValue: 1850,
-                    desc: 'Premio real por alcanzar 1850 puntos.'
+                    desc: 'Premio real por alcanzar 1850 metros.'
                 },
                 {
                     id: 'samurai_kabuto',
@@ -819,7 +819,7 @@
                     rarity: 'LEYENDA',
                     unlockType: 'score',
                     reqValue: 3200,
-                    desc: 'Premio divino por alcanzar 3200 puntos.'
+                    desc: 'Premio divino por alcanzar 3200 metros.'
                 }
             ],
             trails: [
@@ -839,7 +839,7 @@
                     rarity: 'COMÚN',
                     unlockType: 'score',
                     reqValue: 350,
-                    desc: 'Premio por alcanzar 350 puntos.'
+                    desc: 'Premio por alcanzar 350 metros.'
                 },
                 {
                     id: 'sakura_petals',
@@ -866,7 +866,7 @@
                     rarity: 'ÉPICO',
                     unlockType: 'score',
                     reqValue: 1100,
-                    desc: 'Premio por alcanzar 1100 puntos.'
+                    desc: 'Premio por alcanzar 1100 metros.'
                 },
                 {
                     id: 'toxic_spore',
@@ -875,7 +875,7 @@
                     rarity: 'ÉPICO',
                     unlockType: 'score',
                     reqValue: 1650,
-                    desc: 'Premio por alcanzar 1650 puntos.'
+                    desc: 'Premio por alcanzar 1650 metros.'
                 },
                 {
                     id: 'electric_sparks',
@@ -893,7 +893,7 @@
                     rarity: 'LEYENDA',
                     unlockType: 'score',
                     reqValue: 2500,
-                    desc: 'Premio épico por llegar a 2500 puntos.'
+                    desc: 'Premio épico por llegar a 2500 metros.'
                 }
             ],
             badges: [
@@ -901,21 +901,21 @@
                     id: 'first_hop',
                     name: 'Aprendiz del Pantano',
                     icon: '🌱',
-                    reqText: 'Alcanza 200 puntos',
+                    reqText: 'Alcanza 200 metros',
                     check: (stats) => stats.highScore >= 200
                 },
                 {
                     id: 'dragonfly_dodger',
                     name: 'Domador de Libélulas',
                     icon: '蜻',
-                    reqText: 'Alcanza 500 puntos',
+                    reqText: 'Alcanza 500 metros',
                     check: (stats) => stats.highScore >= 500
                 },
                 {
                     id: 'night_survivor',
                     name: 'Vigilante Nocturno',
                     icon: '🌙',
-                    reqText: 'Sobrevive hasta los 1000 puntos',
+                    reqText: 'Sobrevive hasta los 1000 metros',
                     check: (stats) => stats.highScore >= 1000
                 },
                 {
@@ -929,7 +929,7 @@
                     id: 'swamp_veteran',
                     name: 'Maestro del Salto',
                     icon: '🔥',
-                    reqText: 'Supera los 1800 puntos',
+                    reqText: 'Supera los 1800 metros',
                     check: (stats) => stats.highScore >= 1800
                 },
                 {
@@ -943,14 +943,14 @@
                     id: 'swamp_monarch',
                     name: 'Rey del Pantano',
                     icon: '👑',
-                    reqText: 'Supera los 3000 puntos',
+                    reqText: 'Supera los 3000 metros',
                     check: (stats) => stats.highScore >= 3000
                 },
                 {
                     id: 'immortal_kero',
                     name: 'Leyenda Inmortal',
                     icon: '🌌',
-                    reqText: 'Alcanza los 5000 puntos',
+                    reqText: 'Alcanza los 5000 metros',
                     check: (stats) => stats.highScore >= 5000
                 }
             ]
@@ -1403,11 +1403,12 @@
                 pxHelper(9 + ox, -5 + oy, 5, 1, '#86efac');
                 pxHelper(11 + ox, -2 + oy, 2, 2, '#166534');
             } else if (hatId === ' headband_ninja') {
-                pxHelper(4 + ox, 3 + oy, 15, 2, '#dc2626');
-                pxHelper(16 + ox, 3 + oy, 2, 2, '#fef08a');
+                // Cinta sobre la frente, por encima de los ojos (los ojos ocupan y 0–4)
+                pxHelper(4 + ox, -2 + oy, 15, 2, '#dc2626');
+                pxHelper(16 + ox, -2 + oy, 2, 2, '#fef08a');
                 const wave = animFrame === 0 ? 0 : 1;
-                pxHelper(0 + ox, 2 + oy + wave, 4, 2, '#ef4444');
-                pxHelper(-2 + ox, 4 + oy - wave, 3, 2, '#b91c1c');
+                pxHelper(0 + ox, -3 + oy + wave, 4, 2, '#ef4444');
+                pxHelper(-2 + ox, -1 + oy - wave, 3, 2, '#b91c1c');
             } else if (hatId === 'mushroom_cap') {
                 pxHelper(4 + ox, -4 + oy, 15, 4, '#dc2626');
                 pxHelper(6 + ox, -6 + oy, 11, 2, '#ef4444');
@@ -2288,7 +2289,7 @@
 
             if (nextReward) {
                 const progress = Math.min(100, Math.round((playerData.highScore / nextReward.reqValue) * 100));
-                nextLabel.textContent = `${nextReward.icon} Próximo: ${nextReward.name} (${nextReward.reqValue} pts)`;
+                nextLabel.textContent = `${nextReward.icon} Próximo: ${nextReward.name} (${nextReward.reqValue} m)`;
                 nextPct.textContent = `${progress}%`;
                 nextFill.style.width = `${progress}%`;
             } else {
@@ -2392,13 +2393,12 @@
                         fliesCollected++;
                         playerData.flyBank++;
                         playerData.lifetimeFlies++;
-                        score += 50;
                         savePlayerData();
 
                         kero.triggerTongue(fly.x + 10, fly.y + 10);
                         sound.playBonusFly();
                         createDustParticles(fly.x + 10, fly.y + 10, 10, '#facc15');
-                        createFloatingText('+50 PTS / +1🪰', fly.x - 10, fly.y - 8, '#facc15');
+                        createFloatingText('+1🪰', fly.x - 10, fly.y - 8, '#facc15');
                         document.getElementById('flyCountText').textContent = String(fliesCollected).padStart(2, '0');
                         goldenFlies.splice(i, 1);
                         continue;
@@ -2661,7 +2661,7 @@
             document.getElementById('previewHatName').textContent = hatObj ? hatObj.name : 'Sin Sombrero';
             document.getElementById('previewTrailName').textContent = `Estela: ${trailObj ? trailObj.name : 'Polvo'}`;
             document.getElementById('wardrobeFlyBank').textContent = playerData.flyBank;
-            document.getElementById('wardrobeHiScore').textContent = `${Math.floor(playerData.highScore)} pts`;
+            document.getElementById('wardrobeHiScore').textContent = `${Math.floor(playerData.highScore)} m`;
         }
 
         function renderWardrobeItems() {
@@ -2765,7 +2765,7 @@
                     actionBtnHTML = `
                         <div class="w-full">
                             <div class="flex justify-between text-[9px] text-amber-300 font-bold mb-0.5">
-                                <span>🔒 Meta: ${item.reqValue} pts</span>
+                                <span>🔒 Meta: ${item.reqValue} m</span>
                                 <span>${pct}%</span>
                             </div>
                             <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
