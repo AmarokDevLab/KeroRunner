@@ -1,0 +1,20 @@
+{
+  "name": "Kero Runner",
+  "short_name": "Kero Runner",
+  "description": "Corre, salta y agáchate con Kero, la ranita del pantano.",
+  "id": "./",
+  "start_url": "./kero_runner_el_salto_del_pantano_v3.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "landscape",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "lang": "es",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

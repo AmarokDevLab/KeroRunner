@@ -1,0 +1,3073 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KERO RUNNER - El Juego de la Rana</title>
+    <!-- PWA -->
+    <meta name="description" content="Corre, salta y agáchate con Kero, la ranita del pantano.">
+    <meta name="theme-color" content="#020617">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-180.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kero Runner">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pixel-font: 'Press Start 2P', monospace;
+            --ui-font: 'Inter', sans-serif;
+        }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100dvh;
+            overflow: hidden;
+            font-family: var(--ui-font);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+            background-color: #020617;
+        }
+        .font-pixel {
+            font-family: var(--pixel-font);
+        }
+
+        /* Contenedor principal: En escritorio tiene marco arcade, en móvil o pantalla completa ocupa 100vw x 100dvh */
+        .app-shell {
+            width: 100vw;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        /* Vista de Escritorio (pantallas grandes con mouse) */
+        @media (min-width: 1024px) and (min-height: 620px) {
+            body:not(.force-fullscreen) .app-shell {
+                max-width: 1080px;
+                margin: 0 auto;
+                padding: 1rem 1.25rem;
+                gap: 0.75rem;
+            }
+            body:not(.force-fullscreen) #canvasContainer {
+                border-radius: 1.25rem;
+                border-width: 4px;
+                max-height: 480px;
+            }
+        }
+
+        /* MODO CONSOLA MÓVIL / PANTALLA COMPLETA */
+        @media (max-width: 1023px), (max-height: 619px) {
+            .desktop-chrome {
+                display: none !important;
+            }
+            .app-shell {
+                max-width: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            #canvasContainer {
+                width: 100vw !important;
+                height: 100dvh !important;
+                max-height: none !important;
+                border-radius: 0 !important;
+                border: none !important;
+            }
+        }
+
+        body.force-fullscreen .desktop-chrome {
+            display: none !important;
+        }
+        body.force-fullscreen .app-shell {
+            max-width: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        body.force-fullscreen #canvasContainer {
+            width: 100vw !important;
+            height: 100dvh !important;
+            max-height: none !important;
+            border-radius: 0 !important;
+            border: none !important;
+        }
+
+        /* HUD Superior Flotante con soporte para Notch / Isla Dinámica */
+        .floating-hud-top {
+            top: max(0.5rem, env(safe-area-inset-top));
+            left: max(0.75rem, env(safe-area-inset-left));
+            right: max(0.75rem, env(safe-area-inset-right));
+        }
+
+        /* Botones Táctiles Flotantes Semitransparentes en las esquinas inferiores */
+        .floating-btn-left {
+            bottom: max(0.75rem, env(safe-area-inset-bottom));
+            left: max(0.85rem, env(safe-area-inset-left));
+        }
+        .floating-btn-right {
+            bottom: max(0.75rem, env(safe-area-inset-bottom));
+            right: max(0.85rem, env(safe-area-inset-right));
+        }
+
+        .touch-arcade-pad {
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            transition: transform 0.06s ease, background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.08s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+        }
+        .touch-arcade-pad:active,
+        .touch-arcade-pad.active-press {
+            transform: scale(0.93) translateY(3px);
+        }
+
+        /* Efecto de botón arcade tradicional para menús */
+        .btn-arcade {
+            transition: transform 0.06s ease, box-shadow 0.06s ease, background-color 0.15s ease;
+            box-shadow: 0 4px 0 #1e293b, 0 8px 14px rgba(0,0,0,0.35);
+        }
+        .btn-arcade:active, .btn-arcade.active-press {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #1e293b, 0 3px 6px rgba(0,0,0,0.3);
+        }
+        .btn-arcade-green {
+            box-shadow: 0 4px 0 #14532d, 0 8px 14px rgba(0,0,0,0.35);
+        }
+        .btn-arcade-green:active, .btn-arcade-green.active-press {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #14532d, 0 3px 6px rgba(0,0,0,0.3);
+        }
+        .btn-arcade-amber {
+            box-shadow: 0 4px 0 #78350f, 0 8px 14px rgba(0,0,0,0.35);
+        }
+        .btn-arcade-amber:active, .btn-arcade-amber.active-press {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #78350f, 0 3px 6px rgba(0,0,0,0.3);
+        }
+
+        /* Sutil efecto CRT retro */
+        .crt-overlay::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.06) 50%);
+            background-size: 100% 4px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        canvas {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            touch-action: none;
+        }
+
+        /* Scroll personalizado para el Armario */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(16, 185, 129, 0.5);
+            border-radius: 8px;
+        }
+
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(0.98); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 1.8s infinite ease-in-out;
+        }
+
+        @keyframes rotate-phone {
+            0%, 100% { transform: rotate(0deg); }
+            40%, 60% { transform: rotate(-90deg); }
+        }
+        .animate-rotate-phone {
+            animation: rotate-phone 2.4s infinite ease-in-out;
+        }
+
+        @keyframes toast-slide {
+            0% { transform: translate(-50%, -140%); opacity: 0; }
+            12% { transform: translate(-50%, 0); opacity: 1; }
+            85% { transform: translate(-50%, 0); opacity: 1; }
+            100% { transform: translate(-50%, -140%); opacity: 0; }
+        }
+        .animate-toast {
+            animation: toast-slide 3.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100">
+
+    <!-- AVISO INTERACTIVO PARA GIRAR EL CELULAR A HORIZONTAL -->
+    <div id="rotatePromptOverlay" class="hidden fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex-col items-center justify-center p-6 text-center select-none">
+        <div class="bg-slate-900 border-2 border-emerald-500/70 rounded-3xl p-6 max-w-xs w-full flex flex-col items-center gap-4 shadow-2xl">
+            <div class="w-16 h-16 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                <svg class="w-10 h-10 animate-rotate-phone" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                </svg>
+            </div>
+            <h3 class="font-pixel text-xs text-emerald-400 leading-relaxed">MODO HORIZONTAL RECOMENDADO</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Gira tu celular horizontalmente para disfrutar de <b>Kero Runner</b> a pantalla completa con los botones en las esquinas.
+            </p>
+            <button id="enterLandscapeBtn" class="btn-arcade btn-arcade-green bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[10px] py-3 px-4 rounded-xl font-bold w-full cursor-pointer">
+                ⛶ ACTIVAR PANTALLA COMPLETA
+            </button>
+            <button id="dismissRotateBtn" class="text-xs text-slate-400 hover:text-slate-200 underline py-1 cursor-pointer">
+                Continuar en vertical
+            </button>
+        </div>
+    </div>
+
+    <div class="app-shell">
+        <!-- HEADER DE ESCRITORIO -->
+        <header class="desktop-chrome w-full flex items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 px-4 py-2.5 rounded-2xl shadow-lg shrink-0">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 bg-emerald-500/20 border-2 border-emerald-500 rounded-xl flex items-center justify-center shadow-inner shrink-0">
+                    <span class="text-xl">🐸</span>
+                </div>
+                <div class="truncate">
+                    <h1 class="font-pixel text-base text-emerald-400 tracking-wider truncate">KERO RUNNER</h1>
+                    <p class="text-xs text-slate-400 truncate">¡Avanza más lejos, atrapa moscas doradas y desbloquea trajes para Kero!</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 shrink-0">
+                <button id="headerWardrobeBtn" class="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/60 text-amber-300 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors">
+                    <span>👑</span>
+                    <span>Armario & Premios</span>
+                    <span id="headerUnlockCount" class="bg-amber-400 text-slate-950 px-1.5 py-0.2 rounded-md font-pixel text-[9px]">3/30</span>
+                </button>
+                <div class="flex items-center gap-1.5 bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-bold text-emerald-300">
+                    <span>🌱</span>
+                    <span id="phaseLabel">INICIO SUAVE</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENEDOR PRINCIPAL DEL JUEGO -->
+        <main class="w-full flex-1 min-h-0 flex flex-col items-center justify-center">
+            <div id="canvasContainer" class="relative w-full h-full bg-[#f4f7f0] border-slate-800 shadow-2xl overflow-hidden crt-overlay select-none flex items-center justify-center">
+                
+                <!-- NOTIFICACIÓN TOAST DE PREMIO DESBLOQUEADO EN TIEMPO REAL -->
+                <div id="unlockToast" class="hidden absolute top-14 left-1/2 z-40 pointer-events-none bg-slate-900/95 border-2 border-amber-400 text-amber-300 px-4 py-2 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[250px] max-w-[90vw]">
+                    <div class="w-9 h-9 rounded-xl bg-amber-400/20 border border-amber-400 flex items-center justify-center text-lg shrink-0" id="toastIcon">🎁</div>
+                    <div class="text-left overflow-hidden">
+                        <div class="font-pixel text-[8px] sm:text-[9px] text-amber-400 uppercase tracking-wider">¡PREMIO DESBLOQUEADO!</div>
+                        <div class="text-xs font-bold text-white truncate" id="toastTitle">Corona del Rey</div>
+                    </div>
+                </div>
+
+                <!-- BARRA HUD FLOTANTE SUPERIOR -->
+                <div class="floating-hud-top absolute z-20 flex items-center justify-between gap-1.5 sm:gap-2 pointer-events-none">
+                    
+                    <!-- Izquierda: Velocímetro, Meta Próximo Premio, Audio, Armario y Pantalla Completa -->
+                    <div class="flex items-center gap-1 sm:gap-1.5 pointer-events-auto">
+                        <!-- Velocímetro en vivo -->
+                        <div id="speedBadgeHud" class="flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md border border-emerald-500/50 px-2 py-1.5 rounded-xl shadow-md transition-colors duration-300">
+                            <span class="font-pixel text-[8px] sm:text-[10px] text-emerald-400 transition-colors duration-300" id="speedText">SPD 1.0x</span>
+                            <div class="w-8 sm:w-12 h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700 hidden sm:block">
+                                <div id="speedBarFill" class="h-full bg-emerald-400 transition-all duration-150" style="width: 6%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Indicador de Próximo Premio por Distancia -->
+                        <div id="nextRewardHud" class="hidden md:flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-amber-500/40 text-[10px] font-bold text-amber-300 shadow-md" title="Próximo premio por distancia">
+                            <span>🎁</span>
+                            <span id="nextRewardHudText">Meta: 150m</span>
+                        </div>
+
+                        <!-- Indicador Día/Noche -->
+                        <div id="timeBadge" class="flex items-center gap-1 bg-slate-900/80 backdrop-blur-md px-2 py-1.5 rounded-xl border border-slate-700/80 text-[10px] sm:text-xs font-bold text-amber-300 shadow-md">
+                            <span id="timeIcon">☀️</span>
+                            <span id="timeLabel" class="hidden lg:inline">DÍA</span>
+                        </div>
+
+                        <!-- Botón Rápido al Armario -->
+                        <button id="hudWardrobeBtn" class="bg-slate-900/85 hover:bg-slate-800 backdrop-blur-md text-amber-300 border border-amber-500/50 px-2.5 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform" title="Personalizar a Kero">
+                            <span>👕</span>
+                            <span class="hidden sm:inline text-[10px] font-pixel">SKINS</span>
+                        </button>
+
+                        <!-- Botón de Sonido -->
+                        <button id="muteBtn" class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md text-slate-100 border border-slate-700/80 px-2 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform" title="Activar/Silenciar Sonido (Tecla M)">
+                            <span id="soundIcon">🔊</span>
+                        </button>
+
+                        <!-- Botón de Pantalla Completa -->
+                        <button id="fullscreenBtn" class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md text-emerald-400 border border-slate-700/80 px-2 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform" title="Pantalla Completa Horizontal">
+                            <span id="fullscreenIcon">⛶</span>
+                        </button>
+                    </div>
+
+                    <!-- Derecha: Banco de Moscas, Récord HI y Puntuación -->
+                    <div class="flex items-center gap-2 sm:gap-3.5 bg-slate-900/80 backdrop-blur-md px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-700/70 shadow-md font-pixel text-[9px] sm:text-xs tracking-wider pointer-events-auto">
+                        <div id="flyCounterHud" class="flex items-center gap-1 text-amber-400" title="Moscas Doradas en esta partida (Banco total guardado)">
+                            <span>🪰</span>
+                            <span id="flyCountText">00</span>
+                        </div>
+                        <div id="hiScoreHud" class="text-slate-300">
+                            HI <span id="hiScoreText">00000</span>
+                        </div>
+                        <div id="scoreHud" class="text-emerald-400 font-bold">
+                            <span id="scoreText">00000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EL CANVAS DEL JUEGO -->
+                <canvas id="gameCanvas" width="800" height="300" class="w-full h-full block"></canvas>
+
+                <!-- CONTROLES FLOTANTES EN LAS ESQUINAS INFERIORES -->
+                <button id="touchDuckBtn" aria-label="Agacharse" class="floating-btn-left absolute z-25 touch-arcade-pad bg-amber-500/30 hover:bg-amber-500/45 active:bg-amber-400/65 border-2 border-amber-300/70 text-slate-950 rounded-2xl sm:rounded-3xl w-28 h-20 sm:w-36 sm:h-24 flex flex-col items-center justify-center gap-1 select-none cursor-pointer">
+                    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-amber-950 drop-shadow" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                    <span class="font-pixel text-[9px] sm:text-[10px] text-amber-950 font-black tracking-tighter drop-shadow-sm">AGACHARSE</span>
+                </button>
+
+                <button id="touchJumpBtn" aria-label="Saltar" class="floating-btn-right absolute z-25 touch-arcade-pad bg-emerald-500/35 hover:bg-emerald-500/50 active:bg-emerald-400/70 border-2 border-emerald-300/75 text-slate-950 rounded-2xl sm:rounded-3xl w-32 h-24 sm:w-40 sm:h-28 flex flex-col items-center justify-center gap-1 select-none cursor-pointer">
+                    <svg class="w-8 h-8 sm:w-10 sm:h-10 text-emerald-950 drop-shadow" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+                    </svg>
+                    <span class="font-pixel text-[10px] sm:text-xs text-emerald-950 font-black tracking-wider drop-shadow-sm">SALTAR</span>
+                </button>
+
+                <!-- OVERLAY DE INICIO -->
+                <div id="startOverlay" class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-[2px] p-3 text-center transition-opacity duration-200">
+                    <div class="bg-slate-900/95 border-2 border-emerald-500/80 px-4 sm:px-6 py-3 sm:py-5 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center gap-2 sm:gap-2.5">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">Premios por Distancia</span>
+                            <span class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold">🪰 Banco: <b id="startBankFlies">0</b></span>
+                        </div>
+                        <h2 class="font-pixel text-sm sm:text-xl text-emerald-400 drop-shadow">KERO RUNNER</h2>
+                        <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
+                            Supera récords de distancia y atrapa <b>Moscas Doradas</b> para desbloquear colores, sombreros y estelas mágicas para tu ranita.
+                        </p>
+                        <div class="flex flex-wrap items-center justify-center gap-2 w-full mt-1">
+                            <button id="startBtn" class="btn-arcade btn-arcade-green bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[10px] sm:text-xs px-4 py-3 rounded-xl font-bold tracking-wider uppercase flex-1 min-w-[140px] cursor-pointer animate-pulse-slow">
+                                ▶ JUGAR AHORA
+                            </button>
+                            <button id="startWardrobeBtn" class="btn-arcade btn-arcade-amber bg-amber-400 hover:bg-amber-300 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-3.5 py-3 rounded-xl font-bold tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer">
+                                <span>👑</span>
+                                <span>PERSONALIZAR</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OVERLAY DE GAME OVER CON PROGRESO DE PREMIOS -->
+                <div id="gameOverOverlay" class="hidden absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/75 backdrop-blur-[2px] p-2.5 text-center">
+                    <div class="bg-slate-900/95 border-2 border-rose-500/80 px-4 sm:px-5 py-3 sm:py-4 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center gap-2 transform transition-all">
+                        <div class="flex items-center justify-between w-full">
+                            <h2 class="font-pixel text-xs sm:text-base text-rose-400 tracking-widest">¡FIN DEL JUEGO!</h2>
+                            <div id="newRecordBadge" class="hidden bg-amber-500/20 border border-amber-400 text-amber-300 font-pixel text-[8px] px-2 py-0.5 rounded-full">
+                                ★ NUEVO RÉCORD ★
+                            </div>
+                        </div>
+                        <p id="deathReasonText" class="text-[11px] text-slate-400 -mt-1">Kero chocó en el pantano</p>
+                        
+                        <!-- Marcadores de la partida -->
+                        <div class="w-full grid grid-cols-3 gap-1.5 bg-slate-800/90 p-2 rounded-xl border border-slate-700">
+                            <div class="flex flex-col items-center border-r border-slate-700 pr-1">
+                                <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Puntos</span>
+                                <span id="finalScoreText" class="font-pixel text-[10px] sm:text-xs text-emerald-400 mt-0.5">00000</span>
+                            </div>
+                            <div class="flex flex-col items-center border-r border-slate-700 px-1">
+                                <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Récord HI</span>
+                                <span id="finalHiScoreText" class="font-pixel text-[10px] sm:text-xs text-amber-400 mt-0.5">00000</span>
+                            </div>
+                            <div class="flex flex-col items-center pl-1">
+                                <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Banco 🪰</span>
+                                <span id="finalTotalFliesText" class="font-pixel text-[10px] sm:text-xs text-yellow-300 mt-0.5">0</span>
+                            </div>
+                        </div>
+
+                        <!-- Barra hacia el próximo premio por distancia -->
+                        <div id="nextMilestoneBox" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-1.5 text-left">
+                            <div class="flex items-center justify-between text-[10px] text-slate-300 mb-1">
+                                <span id="nextMilestoneLabel" class="font-bold text-amber-300 truncate">🎁 Próximo premio: 150 pts</span>
+                                <span id="nextMilestonePercent" class="font-pixel text-[8px] text-emerald-400">0%</span>
+                            </div>
+                            <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div id="nextMilestoneFill" class="h-full bg-gradient-to-r from-emerald-500 to-amber-400 transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 w-full mt-0.5">
+                            <button id="restartBtn" class="btn-arcade btn-arcade-green bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-4 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1.5 flex-1 cursor-pointer">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"/></svg>
+                                <span>REINTENTAR</span>
+                            </button>
+                            <button id="gameOverWardrobeBtn" class="btn-arcade btn-arcade-amber bg-amber-400 hover:bg-amber-300 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-3.5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1 cursor-pointer">
+                                <span>👑</span>
+                                <span>ARMARIO</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODAL DEL ARMARIO DE PERSONALIZACIÓN Y PREMIOS -->
+                <div id="wardrobeOverlay" class="hidden absolute inset-0 z-40 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-2 sm:p-4 select-none">
+                    <div class="bg-slate-900 border-2 border-emerald-500/80 rounded-2xl shadow-2xl w-full max-w-2xl h-full max-h-[96%] flex flex-col overflow-hidden">
+                        
+                        <!-- Cabecera del Armario -->
+                        <div class="flex items-center justify-between px-3.5 py-2.5 bg-slate-950/90 border-b border-slate-800 shrink-0">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg">👑</span>
+                                <h3 class="font-pixel text-[10px] sm:text-xs text-emerald-400">ARMARIO DE KERO & PREMIOS</h3>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="bg-amber-500/20 border border-amber-400/50 text-amber-300 px-2.5 py-1 rounded-lg text-[10px] sm:text-xs font-bold flex items-center gap-1" title="Moscas Doradas disponibles para canjear">
+                                    <span>🪰</span>
+                                    <span id="wardrobeFlyBank">0</span>
+                                </div>
+                                <div class="hidden sm:flex bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 px-2.5 py-1 rounded-lg text-[10px] font-bold items-center gap-1">
+                                    <span>🏆 HI:</span>
+                                    <span id="wardrobeHiScore">0m</span>
+                                </div>
+                                <button id="closeWardrobeBtn" class="bg-rose-500/20 hover:bg-rose-500/40 border border-rose-500/50 text-rose-300 font-pixel text-[10px] px-2.5 py-1 rounded-lg cursor-pointer">
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Cuerpo del Armario: Vista Previa en Vivo + Catálogo por Pestañas -->
+                        <div class="flex-1 min-h-0 flex flex-col sm:flex-row overflow-hidden">
+                            
+                            <!-- Panel Izquierdo / Superior: Vista Previa Animada de Kero -->
+                            <div class="sm:w-52 bg-slate-950/60 border-b sm:border-b-0 sm:border-r border-slate-800 p-2.5 flex sm:flex-col items-center justify-between sm:justify-center gap-2 shrink-0">
+                                <div class="relative bg-slate-900 border-2 border-slate-700 rounded-xl p-1.5 flex items-center justify-center shadow-inner">
+                                    <canvas id="keroPreviewCanvas" width="110" height="90" class="w-[92px] h-[76px] sm:w-[125px] sm:h-[102px] block"></canvas>
+                                </div>
+                                <div class="flex flex-col items-start sm:items-center text-left sm:text-center flex-1 sm:flex-initial">
+                                    <span class="text-[10px] text-emerald-400 font-pixel" id="previewSkinName">Verde Clásico</span>
+                                    <span class="text-[10px] text-amber-300 font-bold mt-0.5" id="previewHatName">Sin Sombrero</span>
+                                    <span class="text-[9px] text-sky-300 mt-0.5" id="previewTrailName">Estela: Polvo</span>
+                                </div>
+                            </div>
+
+                            <!-- Panel Derecho: Pestañas y Cuadrícula de Objetos -->
+                            <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
+                                <!-- Pestañas -->
+                                <div class="flex border-b border-slate-800 bg-slate-900/60 px-2 pt-1.5 gap-1 shrink-0">
+                                    <button data-tab="skins" class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-emerald-500 text-slate-950 font-bold cursor-pointer transition-colors">
+                                        🎨 COLORES
+                                    </button>
+                                    <button data-tab="hats" class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
+                                        🎩 SOMBREROS
+                                    </button>
+                                    <button data-tab="trails" class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
+                                        ✨ ESTELAS
+                                    </button>
+                                    <button data-tab="badges" class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
+                                        🏆 LOGROS
+                                    </button>
+                                </div>
+
+                                <!-- Lista de Ítems -->
+                                <div id="wardrobeItemsGrid" class="flex-1 overflow-y-auto custom-scroll p-2.5 grid grid-cols-2 sm:grid-cols-2 gap-2 content-start">
+                                    <!-- Generado dinámicamente por JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pie del Armario -->
+                        <div class="px-3.5 py-2 bg-slate-950/90 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400 shrink-0">
+                            <span>💡 <b>Tip:</b> Los premios por récord se desbloquean automáticamente al avanzar más lejos.</span>
+                            <button id="wardrobePlayBtn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[9px] px-3 py-1.5 rounded-lg font-bold cursor-pointer shrink-0">
+                                ¡LISTO!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- LEYENDA INFERIOR SOLO PARA ESCRITORIO -->
+        <footer class="desktop-chrome w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300 shrink-0">
+            <div class="flex flex-wrap items-center gap-4">
+                <span class="flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span> <b>150–5000 pts:</b> 30 Premios progresivos por distancia y maestría</span>
+                <span class="flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full bg-amber-400"></span> <b>🪰 Moscas Doradas:</b> +50 pts y moneda para objetos exclusivos</span>
+            </div>
+            <div class="flex items-center gap-3 text-slate-400 text-[11px] ml-auto">
+                <span>Tecla <b>C</b>: Abrir Armario</span>
+                <span>🌿 Día/Noche: <b>700 pts</b></span>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        /**
+         * ============================================================================
+         * 1. CATÁLOGO EXPANDIDO DE PERSONALIZACIÓN Y SISTEMA DE PREMIOS (30 ÍTEMS + 8 LOGROS)
+         * ============================================================================
+         */
+        const CUSTOMIZATION_CATALOG = {
+            skins: [
+                {
+                    id: 'classic',
+                    name: 'Verde Pantano',
+                    icon: '🐸',
+                    rarity: 'COMÚN',
+                    unlockType: 'free',
+                    reqValue: 0,
+                    desc: 'La ranita Kero original del pantano.',
+                    colors: {
+                        outline: '#15803d',
+                        bodyDark: '#16a34a',
+                        bodyMain: '#22c55e',
+                        highlight: '#4ade80',
+                        bellyTop: '#dcfce7',
+                        bellyMain: '#bbf7d0',
+                        cheek: '#fb7185'
+                    }
+                },
+                {
+                    id: 'autumn_leaf',
+                    name: 'Rana Otoñal',
+                    icon: '🍂',
+                    rarity: 'COMÚN',
+                    unlockType: 'score',
+                    reqValue: 250,
+                    desc: 'Premio por alcanzar 250 puntos en una carrera.',
+                    colors: {
+                        outline: '#7c2d12',
+                        bodyDark: '#c2410c',
+                        bodyMain: '#ea580c',
+                        highlight: '#fb923c',
+                        bellyTop: '#ffedd5',
+                        bellyMain: '#fed7aa',
+                        cheek: '#fde047'
+                    }
+                },
+                {
+                    id: 'axolotl_pink',
+                    name: 'Rosa Ajolote',
+                    icon: '🌸',
+                    rarity: 'RARO',
+                    unlockType: 'flies',
+                    reqValue: 18,
+                    desc: 'Canjeable con 18 Moscas Doradas del banco.',
+                    colors: {
+                        outline: '#be185d',
+                        bodyDark: '#db2777',
+                        bodyMain: '#f472b6',
+                        highlight: '#f9a8d4',
+                        bellyTop: '#fce7f3',
+                        bellyMain: '#fbcfe8',
+                        cheek: '#fb7185'
+                    }
+                },
+                {
+                    id: 'golden_toad',
+                    name: 'Rana Dorada',
+                    icon: '🌟',
+                    rarity: 'RARO',
+                    unlockType: 'score',
+                    reqValue: 550,
+                    desc: 'Premio por alcanzar 550 puntos en una partida.',
+                    colors: {
+                        outline: '#a16207',
+                        bodyDark: '#ca8a04',
+                        bodyMain: '#eab308',
+                        highlight: '#fde047',
+                        bellyTop: '#fef9c3',
+                        bellyMain: '#fef08a',
+                        cheek: '#fb923c'
+                    }
+                },
+                {
+                    id: 'blue_dart',
+                    name: 'Dardo Azul',
+                    icon: '💧',
+                    rarity: 'RARO',
+                    unlockType: 'score',
+                    reqValue: 900,
+                    desc: 'Premio venenoso por llegar a 900 puntos.',
+                    colors: {
+                        outline: '#1d4ed8',
+                        bodyDark: '#2563eb',
+                        bodyMain: '#3b82f6',
+                        highlight: '#60a5fa',
+                        bellyTop: '#e0f2fe',
+                        bellyMain: '#bae6fd',
+                        cheek: '#f472b6'
+                    }
+                },
+                {
+                    id: 'amethyst_crystal',
+                    name: 'Cristal Amatista',
+                    icon: '💎',
+                    rarity: 'ÉPICO',
+                    unlockType: 'flies',
+                    reqValue: 35,
+                    desc: 'Canjeable con 35 Moscas Doradas.',
+                    colors: {
+                        outline: '#4c1d95',
+                        bodyDark: '#6d28d9',
+                        bodyMain: '#8b5cf6',
+                        highlight: '#c4b5fd',
+                        bellyTop: '#f3e8ff',
+                        bellyMain: '#ddd6fe',
+                        cheek: '#f472b6'
+                    }
+                },
+                {
+                    id: 'magma_frog',
+                    name: 'Rana Magma',
+                    icon: '🔥',
+                    rarity: 'ÉPICO',
+                    unlockType: 'score',
+                    reqValue: 1400,
+                    desc: 'Premio por sobrevivir dos ciclos completos (1400 pts).',
+                    colors: {
+                        outline: '#7f1d1d',
+                        bodyDark: '#dc2626',
+                        bodyMain: '#f97316',
+                        highlight: '#facc15',
+                        bellyTop: '#fef08a',
+                        bellyMain: '#fde047',
+                        cheek: '#ef4444'
+                    }
+                },
+                {
+                    id: 'shadow_ninja',
+                    name: 'Sombra Ninja',
+                    icon: '🥷',
+                    rarity: 'ÉPICO',
+                    unlockType: 'flies',
+                    reqValue: 55,
+                    desc: 'Canjeable con 55 Moscas Doradas.',
+                    colors: {
+                        outline: '#020617',
+                        bodyDark: '#0f172a',
+                        bodyMain: '#334155',
+                        highlight: '#64748b',
+                        bellyTop: '#94a3b8',
+                        bellyMain: '#cbd5e1',
+                        cheek: '#ef4444'
+                    }
+                },
+                {
+                    id: 'arctic_frost',
+                    name: 'Escarcha Boreal',
+                    icon: '❄️',
+                    rarity: 'MÍTICO',
+                    unlockType: 'score',
+                    reqValue: 2000,
+                    desc: 'Premio glacial por alcanzar los 2000 puntos.',
+                    colors: {
+                        outline: '#0369a1',
+                        bodyDark: '#0284c7',
+                        bodyMain: '#38bdf8',
+                        highlight: '#e0f2fe',
+                        bellyTop: '#ffffff',
+                        bellyMain: '#bae6fd',
+                        cheek: '#818cf8'
+                    }
+                },
+                {
+                    id: 'cyber_neon',
+                    name: 'Ciber Neón',
+                    icon: '⚡',
+                    rarity: 'MÍTICO',
+                    unlockType: 'score',
+                    reqValue: 2800,
+                    desc: 'Premio maestro por alcanzar 2800 puntos.',
+                    colors: {
+                        outline: '#581c87',
+                        bodyDark: '#7e22ce',
+                        bodyMain: '#a855f7',
+                        highlight: '#22d3ee',
+                        bellyTop: '#cffafe',
+                        bellyMain: '#67e8f9',
+                        cheek: '#f43f5e'
+                    }
+                },
+                {
+                    id: 'cosmic_emerald',
+                    name: 'Guardián Cósmico',
+                    icon: '🌌',
+                    rarity: 'LEYENDA',
+                    unlockType: 'score',
+                    reqValue: 4000,
+                    desc: '¡Hazaña legendaria! Llega a los 4000 puntos.',
+                    colors: {
+                        outline: '#042f2e',
+                        bodyDark: '#0f766e',
+                        bodyMain: '#14b8a6',
+                        highlight: '#fde047',
+                        bellyTop: '#fef9c3',
+                        bellyMain: '#5eead4',
+                        cheek: '#facc15'
+                    }
+                }
+            ],
+            hats: [
+                {
+                    id: 'none',
+                    name: 'Sin Sombrero',
+                    icon: '🍃',
+                    rarity: 'COMÚN',
+                    unlockType: 'free',
+                    reqValue: 0,
+                    desc: 'Kero al natural.'
+                },
+                {
+                    id: 'leaf_hat',
+                    name: 'Hoja de Loto',
+                    icon: '🍀',
+                    rarity: 'COMÚN',
+                    unlockType: 'score',
+                    reqValue: 150,
+                    desc: 'Premio inicial por llegar a 150 puntos.'
+                },
+                {
+                    id: 'mushroom_cap',
+                    name: 'Gorrito Hongo',
+                    icon: '🍄',
+                    rarity: 'COMÚN',
+                    unlockType: 'flies',
+                    reqValue: 12,
+                    desc: 'Canjeable con 12 Moscas Doradas.'
+                },
+                {
+                    id: ' headband_ninja',
+                    name: 'Cinta Karateka',
+                    icon: '🥋',
+                    rarity: 'RARO',
+                    unlockType: 'score',
+                    reqValue: 450,
+                    desc: 'Premio por alcanzar 450 puntos.'
+                },
+                {
+                    id: 'explorer_straw',
+                    name: 'Sombrero Aventurero',
+                    icon: '👒',
+                    rarity: 'RARO',
+                    unlockType: 'flies',
+                    reqValue: 28,
+                    desc: 'Canjeable con 28 Moscas Doradas.'
+                },
+                {
+                    id: 'cool_shades',
+                    name: 'Gafas Pixel',
+                    icon: '🕶️',
+                    rarity: 'RARO',
+                    unlockType: 'score',
+                    reqValue: 800,
+                    desc: 'Premio por superar la primera noche (800 pts).'
+                },
+                {
+                    id: 'viking_helm',
+                    name: 'Casco Vikingo',
+                    icon: '⚔️',
+                    rarity: 'ÉPICO',
+                    unlockType: 'score',
+                    reqValue: 1250,
+                    desc: 'Premio guerrero por alcanzar 1250 puntos.'
+                },
+                {
+                    id: 'wizard_hat',
+                    name: 'Sombrero Mago',
+                    icon: '🧙',
+                    rarity: 'ÉPICO',
+                    unlockType: 'flies',
+                    reqValue: 50,
+                    desc: 'Canjeable con 50 Moscas Doradas.'
+                },
+                {
+                    id: 'royal_crown',
+                    name: 'Corona del Rey',
+                    icon: '👑',
+                    rarity: 'MÍTICO',
+                    unlockType: 'score',
+                    reqValue: 1850,
+                    desc: 'Premio real por alcanzar 1850 puntos.'
+                },
+                {
+                    id: 'samurai_kabuto',
+                    name: 'Kabuto Samurái',
+                    icon: '👹',
+                    rarity: 'MÍTICO',
+                    unlockType: 'flies',
+                    reqValue: 85,
+                    desc: 'Reliquia canjeable con 85 Moscas Doradas.'
+                },
+                {
+                    id: 'angel_halo',
+                    name: 'Aureola Celestial',
+                    icon: '😇',
+                    rarity: 'LEYENDA',
+                    unlockType: 'score',
+                    reqValue: 3200,
+                    desc: 'Premio divino por alcanzar 3200 puntos.'
+                }
+            ],
+            trails: [
+                {
+                    id: 'default',
+                    name: 'Polvo del Pantano',
+                    icon: '💨',
+                    rarity: 'COMÚN',
+                    unlockType: 'free',
+                    reqValue: 0,
+                    desc: 'Partículas clásicas al saltar y aterrizar.'
+                },
+                {
+                    id: 'bubbles',
+                    name: 'Burbujas Acuáticas',
+                    icon: '🫧',
+                    rarity: 'COMÚN',
+                    unlockType: 'score',
+                    reqValue: 350,
+                    desc: 'Premio por alcanzar 350 puntos.'
+                },
+                {
+                    id: 'sakura_petals',
+                    name: 'Pétalos de Cerezo',
+                    icon: '🌸',
+                    rarity: 'RARO',
+                    unlockType: 'flies',
+                    reqValue: 22,
+                    desc: 'Canjeable con 22 Moscas Doradas.'
+                },
+                {
+                    id: 'sparkles',
+                    name: 'Polvo Estelar',
+                    icon: '✨',
+                    rarity: 'RARO',
+                    unlockType: 'flies',
+                    reqValue: 42,
+                    desc: 'Canjeable con 42 Moscas Doradas.'
+                },
+                {
+                    id: 'fire_steps',
+                    name: 'Salto Ígneo',
+                    icon: '🔥',
+                    rarity: 'ÉPICO',
+                    unlockType: 'score',
+                    reqValue: 1100,
+                    desc: 'Premio por alcanzar 1100 puntos.'
+                },
+                {
+                    id: 'toxic_spore',
+                    name: 'Esporas Neón',
+                    icon: '🧪',
+                    rarity: 'ÉPICO',
+                    unlockType: 'score',
+                    reqValue: 1650,
+                    desc: 'Premio por alcanzar 1650 puntos.'
+                },
+                {
+                    id: 'electric_sparks',
+                    name: 'Voltaje Puro',
+                    icon: '⚡',
+                    rarity: 'MÍTICO',
+                    unlockType: 'flies',
+                    reqValue: 75,
+                    desc: 'Canjeable con 75 Moscas Doradas.'
+                },
+                {
+                    id: 'rainbow_trail',
+                    name: 'Estela Arcoíris',
+                    icon: '🌈',
+                    rarity: 'LEYENDA',
+                    unlockType: 'score',
+                    reqValue: 2500,
+                    desc: 'Premio épico por llegar a 2500 puntos.'
+                }
+            ],
+            badges: [
+                {
+                    id: 'first_hop',
+                    name: 'Aprendiz del Pantano',
+                    icon: '🌱',
+                    reqText: 'Alcanza 200 puntos',
+                    check: (stats) => stats.highScore >= 200
+                },
+                {
+                    id: 'dragonfly_dodger',
+                    name: 'Domador de Libélulas',
+                    icon: '蜻',
+                    reqText: 'Alcanza 500 puntos',
+                    check: (stats) => stats.highScore >= 500
+                },
+                {
+                    id: 'night_survivor',
+                    name: 'Vigilante Nocturno',
+                    icon: '🌙',
+                    reqText: 'Sobrevive hasta los 1000 puntos',
+                    check: (stats) => stats.highScore >= 1000
+                },
+                {
+                    id: 'fly_hunter',
+                    name: 'Cazador de Moscas',
+                    icon: '🪰',
+                    reqText: 'Atrapa 30 moscas en total',
+                    check: (stats) => stats.lifetimeFlies >= 30
+                },
+                {
+                    id: 'swamp_veteran',
+                    name: 'Maestro del Salto',
+                    icon: '🔥',
+                    reqText: 'Supera los 1800 puntos',
+                    check: (stats) => stats.highScore >= 1800
+                },
+                {
+                    id: 'fly_tycoon',
+                    name: 'Magnate Dorado',
+                    icon: '💰',
+                    reqText: 'Atrapa 100 moscas en total',
+                    check: (stats) => stats.lifetimeFlies >= 100
+                },
+                {
+                    id: 'swamp_monarch',
+                    name: 'Rey del Pantano',
+                    icon: '👑',
+                    reqText: 'Supera los 3000 puntos',
+                    check: (stats) => stats.highScore >= 3000
+                },
+                {
+                    id: 'immortal_kero',
+                    name: 'Leyenda Inmortal',
+                    icon: '🌌',
+                    reqText: 'Alcanza los 5000 puntos',
+                    check: (stats) => stats.highScore >= 5000
+                }
+            ]
+        };
+
+        /**
+         * ============================================================================
+         * 2. SINTETIZADOR DE SONIDO RETRO (Web Audio API)
+         * ============================================================================
+         */
+        class RetroSoundEngine {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) {
+                        this.ctx = new AudioContext();
+                    }
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            toggleMute() {
+                this.muted = !this.muted;
+                return this.muted;
+            }
+
+            playJump() {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(190, now);
+                osc.frequency.exponentialRampToValueAtTime(360, now + 0.055);
+                osc.frequency.setValueAtTime(280, now + 0.065);
+                osc.frequency.exponentialRampToValueAtTime(580, now + 0.14);
+
+                gain.gain.setValueAtTime(0.11, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.15);
+            }
+
+            playDuck() {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(260, now);
+                osc.frequency.exponentialRampToValueAtTime(120, now + 0.06);
+
+                gain.gain.setValueAtTime(0.09, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.065);
+            }
+
+            playMilestone() {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(587.33, now);
+                osc.frequency.setValueAtTime(880.00, now + 0.085);
+
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.setValueAtTime(0.12, now + 0.22);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.30);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.31);
+            }
+
+            playBonusFly() {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.045);
+
+                    gain.gain.setValueAtTime(0.14, now + idx * 0.045);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.045 + 0.1);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now + idx * 0.045);
+                    osc.stop(now + idx * 0.045 + 0.1);
+                });
+            }
+
+            // Fanfarria especial al desbloquear un nuevo premio o comprar un ítem
+            playUnlockFanfare() {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const notes = [440, 554.37, 659.25, 880, 1108.73];
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.065);
+
+                    gain.gain.setValueAtTime(0.13, now + idx * 0.065);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.065 + 0.18);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now + idx * 0.065);
+                    osc.stop(now + idx * 0.065 + 0.18);
+                });
+            }
+
+            playGameOver() {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const notes = [300, 250, 200, 135];
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.09);
+                    if (idx === notes.length - 1) {
+                        osc.frequency.linearRampToValueAtTime(95, now + idx * 0.09 + 0.25);
+                    }
+
+                    const dur = idx === notes.length - 1 ? 0.28 : 0.085;
+                    gain.gain.setValueAtTime(0.12, now + idx * 0.09);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.09 + dur);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now + idx * 0.09);
+                    osc.stop(now + idx * 0.09 + dur);
+                });
+            }
+        }
+
+        /**
+         * ============================================================================
+         * 3. ESTADO DE PROGRESIÓN PERSISTENTE (LocalStorage) Y FUNCIONES DE DESBLOQUEO
+         * ============================================================================
+         */
+        let playerData = {
+            highScore: 0,
+            flyBank: 0,
+            lifetimeFlies: 0,
+            equippedSkin: 'classic',
+            equippedHat: 'none',
+            equippedTrail: 'default',
+            unlockedSkins: ['classic'],
+            unlockedHats: ['none'],
+            unlockedTrails: ['default']
+        };
+
+        function loadPlayerData() {
+            try {
+                const saved = localStorage.getItem('kero_runner_save_v2');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    playerData = { ...playerData, ...parsed };
+                } else {
+                    // Migrar récord anterior si existía
+                    const oldHi = parseInt(localStorage.getItem('kero_runner_highscore') || '0', 10);
+                    if (oldHi > 0) playerData.highScore = oldHi;
+                }
+            } catch (e) {
+                console.warn('No se pudo leer localStorage');
+            }
+            checkAllScoreUnlocks(playerData.highScore, false);
+        }
+
+        function savePlayerData() {
+            try {
+                localStorage.setItem('kero_runner_save_v2', JSON.stringify(playerData));
+                localStorage.setItem('kero_runner_highscore', String(Math.floor(playerData.highScore)));
+            } catch (e) {}
+            updateHeaderUnlockCounter();
+        }
+
+        // Cola de notificaciones Toast para mostrar premios ganados mientras corres
+        let toastQueue = [];
+        let toastActive = false;
+
+        function showUnlockToast(icon, title) {
+            toastQueue.push({ icon, title });
+            processToastQueue();
+        }
+
+        function processToastQueue() {
+            if (toastActive || toastQueue.length === 0) return;
+            toastActive = true;
+            const next = toastQueue.shift();
+            const toastEl = document.getElementById('unlockToast');
+            document.getElementById('toastIcon').textContent = next.icon;
+            document.getElementById('toastTitle').textContent = next.title;
+
+            toastEl.classList.remove('hidden', 'animate-toast');
+            void toastEl.offsetWidth; // reflow
+            toastEl.classList.add('animate-toast');
+            sound.playUnlockFanfare();
+
+            setTimeout(() => {
+                toastEl.classList.add('hidden');
+                toastActive = false;
+                processToastQueue();
+            }, 3650);
+        }
+
+        function checkAllScoreUnlocks(currentPts, notify = true) {
+            let unlockedAnything = false;
+
+            CUSTOMIZATION_CATALOG.skins.forEach(item => {
+                if (item.unlockType === 'score' && currentPts >= item.reqValue && !playerData.unlockedSkins.includes(item.id)) {
+                    playerData.unlockedSkins.push(item.id);
+                    unlockedAnything = true;
+                    if (notify) showUnlockToast(item.icon, `Color: ${item.name}`);
+                }
+            });
+
+            CUSTOMIZATION_CATALOG.hats.forEach(item => {
+                if (item.unlockType === 'score' && currentPts >= item.reqValue && !playerData.unlockedHats.includes(item.id)) {
+                    playerData.unlockedHats.push(item.id);
+                    unlockedAnything = true;
+                    if (notify) showUnlockToast(item.icon, `Sombrero: ${item.name}`);
+                }
+            });
+
+            CUSTOMIZATION_CATALOG.trails.forEach(item => {
+                if (item.unlockType === 'score' && currentPts >= item.reqValue && !playerData.unlockedTrails.includes(item.id)) {
+                    playerData.unlockedTrails.push(item.id);
+                    unlockedAnything = true;
+                    if (notify) showUnlockToast(item.icon, `Estela: ${item.name}`);
+                }
+            });
+
+            if (unlockedAnything) {
+                savePlayerData();
+            }
+        }
+
+        // Calcula cuál es la siguiente recompensa por distancia aún no desbloqueada
+        function getNextScoreReward(currentReferenceScore) {
+            const allScoreItems = [
+                ...CUSTOMIZATION_CATALOG.skins.filter(i => i.unlockType === 'score' && !playerData.unlockedSkins.includes(i.id)),
+                ...CUSTOMIZATION_CATALOG.hats.filter(i => i.unlockType === 'score' && !playerData.unlockedHats.includes(i.id)),
+                ...CUSTOMIZATION_CATALOG.trails.filter(i => i.unlockType === 'score' && !playerData.unlockedTrails.includes(i.id))
+            ].sort((a, b) => a.reqValue - b.reqValue);
+
+            return allScoreItems.length > 0 ? allScoreItems[0] : null;
+        }
+
+        function updateHeaderUnlockCounter() {
+            const totalItems = CUSTOMIZATION_CATALOG.skins.length + CUSTOMIZATION_CATALOG.hats.length + CUSTOMIZATION_CATALOG.trails.length;
+            const unlockedCount = playerData.unlockedSkins.length + playerData.unlockedHats.length + playerData.unlockedTrails.length;
+            const badge = document.getElementById('headerUnlockCount');
+            if (badge) badge.textContent = `${unlockedCount}/${totalItems}`;
+            const startBank = document.getElementById('startBankFlies');
+            if (startBank) startBank.textContent = playerData.flyBank;
+        }
+
+        /**
+         * ============================================================================
+         * 4. CONFIGURACIÓN DEL CANVAS Y ESCALADO RESPONSIVO
+         * ============================================================================
+         */
+        const canvas = document.getElementById('gameCanvas');
+        const canvasContainer = document.getElementById('canvasContainer');
+        const ctx = canvas.getContext('2d');
+        const sound = new RetroSoundEngine();
+
+        let LOGICAL_WIDTH = 800;
+        const LOGICAL_HEIGHT = 300;
+        const GROUND_Y = 252;
+        let dismissPortraitWarning = false;
+
+        function checkMobileOrientation() {
+            const rotateOverlay = document.getElementById('rotatePromptOverlay');
+            if (!rotateOverlay) return;
+
+            const isMobileViewport = window.innerWidth < 920 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+            const isPortrait = window.innerHeight > window.innerWidth;
+
+            if (isMobileViewport && isPortrait && !dismissPortraitWarning) {
+                rotateOverlay.classList.remove('hidden');
+                rotateOverlay.classList.add('flex');
+            } else {
+                rotateOverlay.classList.add('hidden');
+                rotateOverlay.classList.remove('flex');
+            }
+        }
+
+        async function toggleFullscreenLandscape() {
+            try {
+                if (!document.fullscreenElement) {
+                    const elem = document.documentElement;
+                    if (elem.requestFullscreen) {
+                        await elem.requestFullscreen();
+                    } else if (elem.webkitRequestFullscreen) {
+                        elem.webkitRequestFullscreen();
+                    }
+                    document.body.classList.add('force-fullscreen');
+                    if (screen.orientation && screen.orientation.lock) {
+                        await screen.orientation.lock('landscape').catch(() => {});
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        await document.exitFullscreen();
+                    }
+                    document.body.classList.remove('force-fullscreen');
+                }
+            } catch (err) {
+                document.body.classList.toggle('force-fullscreen');
+            }
+            setTimeout(() => {
+                updateCanvasSize();
+                checkMobileOrientation();
+            }, 150);
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const isFs = !!document.fullscreenElement;
+            document.body.classList.toggle('force-fullscreen', isFs);
+            updateCanvasSize();
+        });
+
+        function updateCanvasSize() {
+            const rect = canvasContainer.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) return;
+
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            const aspect = rect.width / rect.height;
+
+            LOGICAL_WIDTH = Math.round(Math.max(520, Math.min(1060, LOGICAL_HEIGHT * aspect)));
+
+            canvas.width = Math.round(LOGICAL_WIDTH * dpr);
+            canvas.height = Math.round(LOGICAL_HEIGHT * dpr);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.imageSmoothingEnabled = false;
+            checkMobileOrientation();
+        }
+
+        const resizeObserver = new ResizeObserver(() => {
+            updateCanvasSize();
+        });
+        resizeObserver.observe(canvasContainer);
+        window.addEventListener('orientationchange', () => setTimeout(updateCanvasSize, 120));
+        window.addEventListener('resize', checkMobileOrientation);
+        updateCanvasSize();
+
+        const PALETTE_DAY = {
+            skyTop: [228, 242, 230],
+            skyBottom: [246, 250, 244],
+            hillsFar: [195, 222, 200],
+            hillsNear: [163, 201, 171],
+            groundMain: [92, 74, 56],
+            groundGrass: [68, 138, 80]
+        };
+
+        const PALETTE_NIGHT = {
+            skyTop: [13, 20, 38],
+            skyBottom: [26, 39, 66],
+            hillsFar: [22, 34, 56],
+            hillsNear: [30, 49, 72],
+            groundMain: [28, 33, 48],
+            groundGrass: [34, 92, 78]
+        };
+
+        function lerp(a, b, t) {
+            return a + (b - a) * t;
+        }
+
+        function lerpColorRGB(rgbA, rgbB, t) {
+            const r = Math.round(lerp(rgbA[0], rgbB[0], t));
+            const g = Math.round(lerp(rgbA[1], rgbB[1], t));
+            const b = Math.round(lerp(rgbA[2], rgbB[2], t));
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function formatScore(num) {
+            return Math.floor(num).toString().padStart(5, '0');
+        }
+
+        function getActiveSkinColors() {
+            const found = CUSTOMIZATION_CATALOG.skins.find(s => s.id === playerData.equippedSkin);
+            return found ? found.colors : CUSTOMIZATION_CATALOG.skins[0].colors;
+        }
+
+        /**
+         * ============================================================================
+         * 5. DIBUJADO PIXEL-ART DE SOMBREROS Y ACCESORIOS PARA KERO
+         * ============================================================================
+         */
+        function drawKeroHat(ctx, hatId, pxHelper, isDucking, animFrame) {
+            if (!hatId || hatId === 'none') return;
+
+            // Desplazamiento cuando Kero se agacha
+            const ox = isDucking ? 11 : 0;
+            const oy = isDucking ? 1 : 0;
+
+            if (hatId === 'leaf_hat') {
+                pxHelper(6 + ox, -3 + oy, 11, 2, '#15803d');
+                pxHelper(7 + ox, -4 + oy, 9, 2, '#22c55e');
+                pxHelper(9 + ox, -5 + oy, 5, 1, '#86efac');
+                pxHelper(11 + ox, -2 + oy, 2, 2, '#166534');
+            } else if (hatId === ' headband_ninja') {
+                pxHelper(4 + ox, 3 + oy, 15, 2, '#dc2626');
+                pxHelper(16 + ox, 3 + oy, 2, 2, '#fef08a');
+                const wave = animFrame === 0 ? 0 : 1;
+                pxHelper(0 + ox, 2 + oy + wave, 4, 2, '#ef4444');
+                pxHelper(-2 + ox, 4 + oy - wave, 3, 2, '#b91c1c');
+            } else if (hatId === 'mushroom_cap') {
+                pxHelper(4 + ox, -4 + oy, 15, 4, '#dc2626');
+                pxHelper(6 + ox, -6 + oy, 11, 2, '#ef4444');
+                pxHelper(5 + ox, -3 + oy, 3, 2, '#ffffff');
+                pxHelper(11 + ox, -5 + oy, 3, 2, '#ffffff');
+                pxHelper(15 + ox, -3 + oy, 2, 2, '#ffffff');
+            } else if (hatId === 'explorer_straw') {
+                // Sombrero de paja aventurero con cinta roja
+                pxHelper(2 + ox, -2 + oy, 19, 2, '#eab308');
+                pxHelper(6 + ox, -5 + oy, 11, 3, '#facc15');
+                pxHelper(6 + ox, -3 + oy, 11, 1, '#dc2626');
+                pxHelper(8 + ox, -6 + oy, 7, 1, '#fef08a');
+            } else if (hatId === 'cool_shades') {
+                if (isDucking) {
+                    pxHelper(18, 2, 7, 3, '#0f172a');
+                    pxHelper(20, 2, 2, 1, '#38bdf8');
+                } else {
+                    pxHelper(5, 1, 14, 1, '#0f172a');
+                    pxHelper(6, 2, 5, 3, '#0f172a');
+                    pxHelper(13, 2, 5, 3, '#0f172a');
+                    pxHelper(7, 2, 2, 1, '#38bdf8');
+                    pxHelper(14, 2, 2, 1, '#38bdf8');
+                }
+            } else if (hatId === 'viking_helm') {
+                // Casco vikingo metálico con cuernos blancos
+                pxHelper(5 + ox, -4 + oy, 13, 4, '#64748b');
+                pxHelper(7 + ox, -5 + oy, 9, 2, '#94a3b8');
+                pxHelper(11 + ox, -5 + oy, 2, 5, '#cbd5e1');
+                // Cuernos laterales
+                pxHelper(2 + ox, -5 + oy, 3, 2, '#fef3c7');
+                pxHelper(1 + ox, -7 + oy, 2, 2, '#ffffff');
+                pxHelper(18 + ox, -5 + oy, 3, 2, '#fef3c7');
+                pxHelper(20 + ox, -7 + oy, 2, 2, '#ffffff');
+            } else if (hatId === 'royal_crown') {
+                pxHelper(6 + ox, -3 + oy, 11, 3, '#eab308');
+                pxHelper(6 + ox, -5 + oy, 2, 2, '#facc15');
+                pxHelper(10 + ox, -6 + oy, 3, 3, '#facc15');
+                pxHelper(15 + ox, -5 + oy, 2, 2, '#facc15');
+                pxHelper(7 + ox, -2 + oy, 2, 1, '#ef4444');
+                pxHelper(11 + ox, -2 + oy, 2, 1, '#3b82f6');
+                pxHelper(15 + ox, -2 + oy, 1, 1, '#22c55e');
+            } else if (hatId === 'wizard_hat') {
+                pxHelper(3 + ox, -2 + oy, 17, 2, '#4c1d95');
+                pxHelper(6 + ox, -4 + oy, 11, 2, '#6d28d9');
+                pxHelper(7 + ox, -5 + oy, 9, 1, '#facc15');
+                pxHelper(8 + ox, -8 + oy, 7, 3, '#5b21b6');
+                pxHelper(9 + ox, -11 + oy, 4, 3, '#7c3aed');
+            } else if (hatId === 'samurai_kabuto') {
+                // Casco Kabuto Samurái con emblema de media luna dorada
+                pxHelper(3 + ox, -2 + oy, 17, 2, '#991b1b');
+                pxHelper(5 + ox, -5 + oy, 13, 3, '#1e293b');
+                pxHelper(7 + ox, -6 + oy, 9, 1, '#334155');
+                // Cresta dorada (Kuwagata)
+                pxHelper(10 + ox, -7 + oy, 3, 3, '#facc15');
+                pxHelper(7 + ox, -9 + oy, 3, 2, '#fde047');
+                pxHelper(13 + ox, -9 + oy, 3, 2, '#fde047');
+            } else if (hatId === 'angel_halo') {
+                const floatY = animFrame === 0 ? 0 : -1;
+                pxHelper(7 + ox, -6 + oy + floatY, 9, 1, '#fde047');
+                pxHelper(5 + ox, -5 + oy + floatY, 2, 1, '#eab308');
+                pxHelper(16 + ox, -5 + oy + floatY, 2, 1, '#eab308');
+                pxHelper(7 + ox, -4 + oy + floatY, 9, 1, '#ca8a04');
+            }
+        }
+
+        /**
+         * ============================================================================
+         * 6. PROTAGONISTA: KERO LA RANA
+         * ============================================================================
+         */
+        class KeroPlayer {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.round(LOGICAL_WIDTH * 0.22);
+                this.normalWidth = 44;
+                this.normalHeight = 42;
+                this.duckWidth = 56;
+                this.duckHeight = 26;
+
+                this.width = this.normalWidth;
+                this.height = this.normalHeight;
+                this.y = GROUND_Y - this.height;
+                this.vy = 0;
+
+                this.gravity = 0.58;
+                this.jumpVelocity = -12.4;
+                this.isGrounded = true;
+                this.isDucking = false;
+                this.isDead = false;
+
+                this.animTimer = 0;
+                this.animFrame = 0;
+                this.blinkTimer = 0;
+                this.tongueTimer = 0;
+                this.tongueTarget = null;
+            }
+
+            update(input, gameSpeed, dtScale) {
+                this.x = Math.round(LOGICAL_WIDTH * 0.22);
+
+                if (input.down) {
+                    if (!this.isDucking && this.isGrounded) {
+                        sound.playDuck();
+                    }
+                    this.isDucking = true;
+                    if (!this.isGrounded) {
+                        this.vy += this.gravity * 2.5 * dtScale;
+                    }
+                } else {
+                    this.isDucking = false;
+                }
+
+                if (this.isGrounded && this.isDucking) {
+                    this.width = this.duckWidth;
+                    this.height = this.duckHeight;
+                } else {
+                    this.width = this.normalWidth;
+                    this.height = this.normalHeight;
+                }
+
+                if (input.jump && this.isGrounded && !this.isDucking) {
+                    this.vy = this.jumpVelocity;
+                    this.isGrounded = false;
+                    sound.playJump();
+                    spawnTrailParticles(this.x + 16, GROUND_Y, 7);
+                }
+
+                if (!input.jump && !this.isGrounded && this.vy < -4.0) {
+                    this.vy *= Math.pow(0.84, dtScale);
+                }
+
+                if (!this.isGrounded) {
+                    this.vy += this.gravity * dtScale;
+                    this.y += this.vy * dtScale;
+
+                    // Emitir estela en el aire si lleva una estela especial equipada
+                    if (playerData.equippedTrail !== 'default' && Math.random() < 0.45 * dtScale) {
+                        spawnTrailParticles(this.x + 10, this.y + this.height - 6, 1);
+                    }
+
+                    if (this.y >= GROUND_Y - this.height) {
+                        this.y = GROUND_Y - this.height;
+                        this.vy = 0;
+                        this.isGrounded = true;
+                        spawnTrailParticles(this.x + 18, GROUND_Y, 5);
+                    }
+                } else {
+                    this.y = GROUND_Y - this.height;
+                }
+
+                const cadenceMultiplier = 0.025 + (gameSpeed / 13.5) * 0.024;
+                this.animTimer += gameSpeed * cadenceMultiplier * dtScale;
+                this.animFrame = Math.floor(this.animTimer) % 2;
+
+                if (this.isGrounded && !this.isDead && (gameSpeed > 6.0 || playerData.equippedTrail !== 'default')) {
+                    const rate = playerData.equippedTrail !== 'default' ? 0.28 : ((gameSpeed - 6.0) / 30);
+                    if (Math.random() < rate * dtScale) {
+                        spawnTrailParticles(this.x + 6, GROUND_Y, 1);
+                    }
+                }
+
+                if (this.tongueTimer > 0) {
+                    this.tongueTimer -= dtScale;
+                }
+
+                this.blinkTimer += dtScale;
+                if (this.blinkTimer > 180) {
+                    this.blinkTimer = 0;
+                }
+            }
+
+            triggerTongue(targetX, targetY) {
+                this.tongueTimer = 9;
+                this.tongueTarget = { x: targetX, y: targetY };
+            }
+
+            getHitbox() {
+                if (this.isDucking && this.isGrounded) {
+                    return {
+                        x: this.x + 6,
+                        y: this.y + 4,
+                        width: this.width - 12,
+                        height: this.height - 6
+                    };
+                }
+                return {
+                    x: this.x + 7,
+                    y: this.y + 5,
+                    width: this.width - 14,
+                    height: this.height - 8
+                };
+            }
+
+            draw(ctx, customX = null, customY = null, scaleP = 2) {
+                ctx.save();
+
+                const colors = getActiveSkinColors();
+                let hopBounce = 0;
+                if (this.isGrounded && !this.isDucking && !this.isDead && customX === null) {
+                    hopBounce = this.animFrame === 0 ? 0 : -3;
+                }
+
+                const drawX = customX !== null ? customX : Math.round(this.x);
+                const drawY = customY !== null ? customY : Math.round(this.y + hopBounce);
+
+                // Sombra en el suelo
+                if (customX === null) {
+                    const distFromGround = Math.max(0, (GROUND_Y - (this.y + this.height)));
+                    const shadowWidth = Math.max(14, 38 - distFromGround * 0.22);
+                    ctx.fillStyle = 'rgba(15, 23, 42, 0.25)';
+                    ctx.fillRect(drawX + 6, GROUND_Y - 2, shadowWidth, 4);
+                }
+
+                // Lengua rosa al atrapar mosca
+                if (this.tongueTimer > 0 && this.tongueTarget && customX === null) {
+                    ctx.strokeStyle = '#fb7185';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(drawX + this.width - 6, drawY + 16);
+                    ctx.lineTo(this.tongueTarget.x, this.tongueTarget.y);
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#f43f5e';
+                    ctx.fillRect(this.tongueTarget.x - 4, this.tongueTarget.y - 4, 8, 8);
+                }
+
+                const p = scaleP;
+                const px = (gx, gy, gw, gh, color) => {
+                    ctx.fillStyle = color;
+                    ctx.fillRect(drawX + gx * p, drawY + gy * p, gw * p, gh * p);
+                };
+
+                if (this.isDucking && this.isGrounded && customX === null) {
+                    // SPRITE DE KERO AGACHADO CON SKIN PERSONALIZADO
+                    px(2, 4, 22, 7, colors.bodyDark);
+                    px(3, 5, 21, 5, colors.bodyMain);
+                    px(6, 8, 16, 3, colors.bellyMain);
+
+                    px(18, 1, 5, 4, colors.bodyDark);
+                    px(19, 2, 4, 3, '#ffffff');
+                    px(21, 3, 2, 2, '#0f172a');
+
+                    px(20, 6, 3, 2, colors.cheek);
+                    px(22, 7, 3, 1, colors.outline);
+
+                    if (this.animFrame === 0) {
+                        px(0, 9, 6, 4, colors.outline);
+                        px(17, 10, 6, 3, colors.outline);
+                    } else {
+                        px(3, 10, 6, 3, colors.outline);
+                        px(20, 9, 6, 4, colors.outline);
+                    }
+
+                    drawKeroHat(ctx, playerData.equippedHat, px, true, this.animFrame);
+                } else {
+                    // SPRITE DE KERO NORMAL / SALTANDO CON SKIN PERSONALIZADO
+                    px(6, 0, 5, 5, colors.outline);
+                    px(13, 0, 5, 5, colors.outline);
+                    px(7, 1, 4, 4, '#ffffff');
+                    px(14, 1, 4, 4, '#ffffff');
+
+                    if (this.isDead && customX === null) {
+                        px(7, 1, 1, 1, '#0f172a');
+                        px(10, 1, 1, 1, '#0f172a');
+                        px(8, 2, 2, 2, '#0f172a');
+                        px(7, 4, 1, 1, '#0f172a');
+                        px(10, 4, 1, 1, '#0f172a');
+
+                        px(14, 1, 1, 1, '#0f172a');
+                        px(17, 1, 1, 1, '#0f172a');
+                        px(15, 2, 2, 2, '#0f172a');
+                        px(14, 4, 1, 1, '#0f172a');
+                        px(17, 4, 1, 1, '#0f172a');
+                    } else if (this.blinkTimer > 174) {
+                        px(7, 2, 4, 2, colors.bodyMain);
+                        px(14, 2, 4, 2, colors.bodyMain);
+                    } else {
+                        px(9, 2, 2, 2, '#0f172a');
+                        px(16, 2, 2, 2, '#0f172a');
+                        px(9, 2, 1, 1, '#ffffff');
+                        px(16, 2, 1, 1, '#ffffff');
+                    }
+
+                    // Cabeza y torso
+                    px(3, 4, 17, 11, colors.bodyDark);
+                    px(4, 5, 15, 9, colors.bodyMain);
+                    px(5, 4, 13, 2, colors.highlight);
+
+                    // Panza
+                    px(7, 9, 11, 6, colors.bellyTop);
+                    px(8, 10, 9, 4, colors.bellyMain);
+
+                    // Mejillas
+                    px(5, 7, 2, 2, colors.cheek);
+                    px(16, 7, 3, 2, colors.cheek);
+
+                    // Sonrisa
+                    if (this.isDead && customX === null) {
+                        px(12, 8, 5, 2, '#0f172a');
+                    } else {
+                        px(11, 8, 7, 1, colors.outline);
+                    }
+
+                    // Manchas espalda
+                    px(4, 6, 2, 2, colors.outline);
+                    px(3, 9, 2, 2, colors.outline);
+
+                    // Patas
+                    if (!this.isGrounded && customX === null) {
+                        if (this.vy < 0) {
+                            px(1, 15, 4, 5, colors.outline);
+                            px(0, 19, 4, 2, colors.outline);
+                            px(16, 13, 4, 3, colors.bodyDark);
+                        } else {
+                            px(2, 14, 5, 4, colors.outline);
+                            px(14, 14, 4, 4, colors.bodyDark);
+                        }
+                    } else {
+                        if (this.animFrame === 0) {
+                            px(2, 14, 6, 5, colors.outline);
+                            px(1, 19, 8, 2, colors.outline);
+                            px(14, 15, 4, 6, colors.bodyDark);
+                            px(14, 19, 6, 2, colors.outline);
+                        } else {
+                            px(4, 15, 5, 6, colors.outline);
+                            px(3, 19, 7, 2, colors.outline);
+                            px(12, 14, 4, 5, colors.bodyDark);
+                            px(13, 18, 5, 2, colors.outline);
+                        }
+                    }
+
+                    // Dibujar sombrero o accesorio equipado
+                    drawKeroHat(ctx, playerData.equippedHat, px, false, this.animFrame);
+                }
+
+                ctx.restore();
+            }
+        }
+
+        /**
+         * ============================================================================
+         * 7. OBSTÁCULOS Y MOSCAS DORADAS
+         * ============================================================================
+         */
+        class Obstacle {
+            constructor(type, subtype, x, groupCount = 1) {
+                this.type = type;
+                this.subtype = subtype;
+                this.x = x;
+                this.groupCount = groupCount;
+                this.animTimer = Math.random() * 10;
+
+                if (type === 'CARNIVORE') {
+                    this.singleWidth = subtype === 'LARGE' ? 30 : 24;
+                    this.height = subtype === 'LARGE' ? 50 : 38;
+                    this.width = this.singleWidth * groupCount + (groupCount - 1) * 4;
+                    this.y = GROUND_Y - this.height;
+                } else if (type === 'LOG') {
+                    this.singleWidth = 28;
+                    this.height = subtype === 'LARGE' ? 46 : 34;
+                    this.width = this.singleWidth * groupCount + (groupCount - 1) * 4;
+                    this.y = GROUND_Y - this.height;
+                } else if (type === 'ROCK') {
+                    this.singleWidth = 34;
+                    this.height = 32;
+                    this.width = this.singleWidth * groupCount + (groupCount - 1) * 2;
+                    this.y = GROUND_Y - this.height;
+                } else if (type === 'DRAGONFLY') {
+                    this.width = 48;
+                    this.height = 28;
+                    if (subtype === 'LOW') {
+                        this.y = GROUND_Y - 34;
+                    } else if (subtype === 'MID') {
+                        this.y = GROUND_Y - 64;
+                    } else {
+                        this.y = GROUND_Y - 98;
+                    }
+                }
+            }
+
+            update(gameSpeed, dtScale) {
+                const speedMultiplier = this.type === 'DRAGONFLY' ? 1.12 : 1.0;
+                this.x -= gameSpeed * speedMultiplier * dtScale;
+                this.animTimer += 0.22 * dtScale;
+            }
+
+            getHitbox() {
+                return {
+                    x: this.x + 5,
+                    y: this.y + 5,
+                    width: this.width - 10,
+                    height: this.height - 8
+                };
+            }
+
+            draw(ctx) {
+                ctx.save();
+                const baseX = Math.round(this.x);
+                const baseY = Math.round(this.y);
+
+                if (this.type === 'CARNIVORE') {
+                    for (let i = 0; i < this.groupCount; i++) {
+                        const ox = baseX + i * (this.singleWidth + 4);
+                        const h = (i % 2 === 1 && this.groupCount > 1) ? this.height - 6 : this.height;
+                        const oy = GROUND_Y - h;
+
+                        ctx.fillStyle = '#15803d';
+                        ctx.fillRect(ox + this.singleWidth / 2 - 4, oy + 16, 8, h - 16);
+                        ctx.fillStyle = '#22c55e';
+                        ctx.fillRect(ox + 2, GROUND_Y - 10, this.singleWidth - 4, 8);
+
+                        ctx.fillStyle = '#be123c';
+                        ctx.fillRect(ox + 2, oy, this.singleWidth - 4, 20);
+                        ctx.fillStyle = '#f43f5e';
+                        ctx.fillRect(ox + 4, oy + 2, this.singleWidth - 8, 14);
+
+                        ctx.fillStyle = '#4c0519';
+                        ctx.fillRect(ox + 6, oy + 6, this.singleWidth - 12, 8);
+
+                        ctx.fillStyle = '#ffffff';
+                        for (let t = ox + 7; t < ox + this.singleWidth - 8; t += 5) {
+                            ctx.fillRect(t, oy + 6, 3, 3);
+                            ctx.fillRect(t + 1, oy + 11, 3, 3);
+                        }
+                    }
+                } else if (this.type === 'LOG') {
+                    for (let i = 0; i < this.groupCount; i++) {
+                        const ox = baseX + i * (this.singleWidth + 4);
+                        const h = (i === 1 && this.groupCount === 3) ? this.height + 6 : this.height;
+                        const oy = GROUND_Y - h;
+
+                        ctx.fillStyle = '#451a03';
+                        ctx.fillRect(ox + 4, oy, this.singleWidth - 8, h);
+                        ctx.fillStyle = '#78350f';
+                        ctx.fillRect(ox + 7, oy + 3, this.singleWidth - 14, h - 3);
+
+                        ctx.fillStyle = '#451a03';
+                        ctx.fillRect(ox + 11, oy + 8, 3, h - 14);
+
+                        ctx.fillStyle = '#fde047';
+                        ctx.fillRect(ox, oy + 8, 4, 4);
+                        ctx.fillRect(ox + this.singleWidth - 4, oy + 14, 4, 4);
+                        ctx.fillRect(ox, oy + 22, 4, 4);
+                        ctx.fillRect(ox + this.singleWidth / 2 - 2, oy - 4, 4, 4);
+
+                        ctx.fillStyle = '#22c55e';
+                        ctx.fillRect(ox + 4, oy, this.singleWidth - 8, 5);
+                    }
+                } else if (this.type === 'ROCK') {
+                    for (let i = 0; i < this.groupCount; i++) {
+                        const ox = baseX + i * (this.singleWidth + 2);
+                        const oy = baseY;
+
+                        ctx.fillStyle = '#334155';
+                        ctx.fillRect(ox + 2, oy + 6, this.singleWidth - 4, this.height - 6);
+                        ctx.fillStyle = '#475569';
+                        ctx.fillRect(ox + 6, oy + 2, this.singleWidth - 12, this.height - 6);
+                        ctx.fillStyle = '#64748b';
+                        ctx.fillRect(ox + 8, oy + 4, this.singleWidth - 18, 10);
+
+                        ctx.fillStyle = '#16a34a';
+                        ctx.fillRect(ox + 5, oy + 1, this.singleWidth - 10, 6);
+                        ctx.fillStyle = '#4ade80';
+                        ctx.fillRect(ox + 8, oy + 1, this.singleWidth - 16, 3);
+                    }
+                } else if (this.type === 'DRAGONFLY') {
+                    const wingUp = Math.floor(this.animTimer) % 2 === 0;
+
+                    ctx.fillStyle = '#0284c7';
+                    ctx.fillRect(baseX + 20, baseY + 12, 26, 6);
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(baseX + 24, baseY + 13, 4, 4);
+                    ctx.fillRect(baseX + 32, baseY + 13, 4, 4);
+                    ctx.fillRect(baseX + 40, baseY + 13, 4, 4);
+
+                    ctx.fillStyle = '#0369a1';
+                    ctx.fillRect(baseX + 8, baseY + 10, 14, 10);
+                    ctx.fillStyle = '#0ea5e9';
+                    ctx.fillRect(baseX + 2, baseY + 9, 9, 10);
+
+                    ctx.fillStyle = '#facc15';
+                    ctx.fillRect(baseX + 3, baseY + 11, 4, 4);
+                    ctx.fillStyle = '#0f172a';
+                    ctx.fillRect(baseX + 3, baseY + 12, 2, 2);
+
+                    ctx.fillStyle = 'rgba(186, 230, 253, 0.85)';
+                    if (wingUp) {
+                        ctx.fillRect(baseX + 12, baseY, 16, 10);
+                        ctx.fillRect(baseX + 18, baseY + 2, 14, 8);
+                    } else {
+                        ctx.fillRect(baseX + 12, baseY + 18, 16, 9);
+                        ctx.fillRect(baseX + 18, baseY + 16, 14, 8);
+                    }
+                }
+
+                ctx.restore();
+            }
+        }
+
+        class GoldenFly {
+            constructor(x, y) {
+                this.x = x;
+                this.baseY = y;
+                this.y = y;
+                this.width = 22;
+                this.height = 20;
+                this.collected = false;
+                this.timer = Math.random() * Math.PI * 2;
+            }
+
+            update(gameSpeed, dtScale) {
+                this.x -= gameSpeed * 0.95 * dtScale;
+                this.timer += 0.14 * dtScale;
+                this.y = this.baseY + Math.sin(this.timer) * 10;
+            }
+
+            getHitbox() {
+                return {
+                    x: this.x - 8,
+                    y: this.y - 8,
+                    width: this.width + 16,
+                    height: this.height + 16
+                };
+            }
+
+            draw(ctx) {
+                if (this.collected) return;
+                ctx.save();
+                const bx = Math.round(this.x);
+                const by = Math.round(this.y);
+                const wingFlip = Math.floor(this.timer * 3) % 2 === 0;
+
+                ctx.fillStyle = 'rgba(250, 204, 21, 0.22)';
+                ctx.fillRect(bx - 3, by - 3, 26, 24);
+
+                ctx.fillStyle = '#ffffff';
+                if (wingFlip) {
+                    ctx.fillRect(bx + 4, by, 6, 6);
+                    ctx.fillRect(bx + 12, by, 6, 6);
+                } else {
+                    ctx.fillRect(bx + 2, by + 3, 6, 5);
+                    ctx.fillRect(bx + 14, by + 3, 6, 5);
+                }
+
+                ctx.fillStyle = '#eab308';
+                ctx.fillRect(bx + 4, by + 6, 14, 10);
+                ctx.fillStyle = '#fef08a';
+                ctx.fillRect(bx + 6, by + 7, 10, 6);
+
+                ctx.fillStyle = '#ef4444';
+                ctx.fillRect(bx + 3, by + 8, 3, 4);
+
+                ctx.restore();
+            }
+        }
+
+        /**
+         * ============================================================================
+         * 8. PARTÍCULAS Y ESTELAS PERSONALIZADAS
+         * ============================================================================
+         */
+        let particles = [];
+        let floatingTexts = [];
+        let speedLines = [];
+
+        function spawnTrailParticles(x, y, count) {
+            const trailId = playerData.equippedTrail || 'default';
+            const rainbowPalette = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7'];
+
+            for (let i = 0; i < count; i++) {
+                let color = isNight ? '#34d399' : '#86efac';
+                let size = Math.random() * 3 + 2;
+
+                if (trailId === 'bubbles') {
+                    color = Math.random() > 0.4 ? '#38bdf8' : '#bae6fd';
+                    size = Math.random() * 4 + 3;
+                } else if (trailId === 'sakura_petals') {
+                    color = Math.random() > 0.4 ? '#f472b6' : '#fbcfe8';
+                    size = Math.random() * 4 + 2.5;
+                } else if (trailId === 'sparkles') {
+                    color = Math.random() > 0.35 ? '#facc15' : '#fef08a';
+                    size = Math.random() * 4 + 2;
+                } else if (trailId === 'fire_steps') {
+                    color = Math.random() > 0.4 ? '#f97316' : '#ef4444';
+                    size = Math.random() * 4 + 2;
+                } else if (trailId === 'toxic_spore') {
+                    color = Math.random() > 0.4 ? '#a3e635' : '#22c55e';
+                    size = Math.random() * 4 + 2.5;
+                } else if (trailId === 'electric_sparks') {
+                    color = Math.random() > 0.45 ? '#22d3ee' : '#fde047';
+                    size = Math.random() * 4 + 2.5;
+                } else if (trailId === 'rainbow_trail') {
+                    color = rainbowPalette[Math.floor(Math.random() * rainbowPalette.length)];
+                    size = Math.random() * 4 + 3;
+                }
+
+                particles.push({
+                    x: x + (Math.random() * 14 - 7),
+                    y: y - Math.random() * 5,
+                    vx: -Math.random() * 2.6 - 0.6,
+                    vy: -Math.random() * 2.2 - 0.3,
+                    size,
+                    alpha: 1,
+                    color
+                });
+            }
+        }
+
+        function createDustParticles(x, y, count, color) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x + (Math.random() * 12 - 6),
+                    y: y - Math.random() * 4,
+                    vx: -Math.random() * 2.5 - 0.5,
+                    vy: -Math.random() * 2.2 - 0.3,
+                    size: Math.random() * 3 + 2,
+                    alpha: 1,
+                    color: color
+                });
+            }
+        }
+
+        function createFloatingText(text, x, y, color = '#facc15') {
+            floatingTexts.push({
+                text,
+                x,
+                y,
+                vy: -1.3,
+                alpha: 1.0,
+                life: 48,
+                color
+            });
+        }
+
+        function spawnSpeedLine(currentSpeed) {
+            const intensity = Math.max(0, (currentSpeed - 7.5) / (MAX_SPEED - 7.5));
+            speedLines.push({
+                x: LOGICAL_WIDTH + 20,
+                y: 25 + Math.random() * (GROUND_Y - 45),
+                length: 25 + Math.random() * 45 + intensity * 45,
+                speed: currentSpeed * (1.65 + Math.random() * 0.4),
+                alpha: 0.14 + intensity * 0.28
+            });
+        }
+
+        const clouds = Array.from({ length: 6 }, (_, i) => ({
+            x: i * 170 + Math.random() * 60,
+            y: 32 + Math.random() * 75,
+            w: 46 + Math.random() * 28,
+            speed: 0.35 + Math.random() * 0.3
+        }));
+
+        const stars = Array.from({ length: 36 }, () => ({
+            x: Math.random() * 960,
+            y: 15 + Math.random() * 145,
+            size: Math.random() > 0.7 ? 3 : 2,
+            blinkOffset: Math.random() * 10
+        }));
+
+        const fireflies = Array.from({ length: 15 }, () => ({
+            x: Math.random() * 960,
+            y: 90 + Math.random() * (GROUND_Y - 110),
+            vx: -0.25 - Math.random() * 0.45,
+            phase: Math.random() * Math.PI * 2
+        }));
+
+        const groundBumps = Array.from({ length: 44 }, (_, i) => ({
+            x: i * 24 + Math.random() * 12,
+            yOffset: 4 + Math.floor(Math.random() * 14),
+            w: 4 + Math.floor(Math.random() * 8),
+            isTuft: Math.random() > 0.65
+        }));
+
+        /**
+         * ============================================================================
+         * 9. LÓGICA DEL JUEGO Y BUCLE PRINCIPAL
+         * ============================================================================
+         */
+        const kero = new KeroPlayer();
+        let obstacles = [];
+        let goldenFlies = [];
+
+        let gameState = 'START';
+        let score = 0;
+        let fliesCollected = 0;
+        let lastMilestone = 0;
+        let milestoneFlashTimer = 0;
+        let milestoneDisplayScore = 0;
+
+        const INITIAL_SPEED = 3.7;
+        const MAX_SPEED = 13.5;
+        const ACCELERATION = 0.00055;
+        const MILESTONE_BOOST = 0.22;
+
+        let gameSpeed = INITIAL_SPEED;
+        let spawnTimer = 0;
+        let flySpawnTimer = 180;
+
+        let isNight = false;
+        let nightLerp = 0;
+
+        const input = {
+            jump: false,
+            down: false
+        };
+
+        loadPlayerData();
+        document.getElementById('hiScoreText').textContent = formatScore(playerData.highScore);
+        updateHeaderUnlockCounter();
+
+        function checkCollision(rectA, rectB) {
+            return (
+                rectA.x < rectB.x + rectB.width &&
+                rectA.x + rectA.width > rectB.x &&
+                rectA.y < rectB.y + rectB.height &&
+                rectA.y + rectB.height > rectB.y
+            );
+        }
+
+        function spawnObstacle() {
+            const canSpawnDragonfly = score >= 250;
+            const roll = Math.random();
+            let createdObs = null;
+
+            if (canSpawnDragonfly && roll < 0.28) {
+                const heights = ['LOW', 'MID', 'HIGH'];
+                const chosenHeight = heights[Math.floor(Math.random() * heights.length)];
+                createdObs = new Obstacle('DRAGONFLY', chosenHeight, LOGICAL_WIDTH + 24, 1);
+            } else {
+                const groundTypes = ['CARNIVORE', 'LOG', 'ROCK'];
+                const chosenType = groundTypes[Math.floor(Math.random() * groundTypes.length)];
+
+                const sizeSubtype = (score < 60 && Math.random() < 0.75)
+                    ? 'SMALL'
+                    : (Math.random() > 0.45 ? 'LARGE' : 'SMALL');
+
+                let groupCount = 1;
+                const groupRoll = Math.random();
+
+                if (score >= 250 && gameSpeed >= 6.2 && groupRoll < 0.25) {
+                    groupCount = 3;
+                } else if (score >= 80 && groupRoll < 0.48) {
+                    groupCount = 2;
+                }
+
+                createdObs = new Obstacle(chosenType, sizeSubtype, LOGICAL_WIDTH + 24, groupCount);
+            }
+
+            obstacles.push(createdObs);
+            return createdObs;
+        }
+
+        function spawnGoldenFly() {
+            const lastObs = obstacles[obstacles.length - 1];
+            let spawnX = LOGICAL_WIDTH + 36;
+            if (lastObs && Math.abs(lastObs.x - spawnX) < 120) {
+                spawnX = lastObs.x + lastObs.width + 95;
+            }
+            const flyY = GROUND_Y - (52 + Math.random() * 62);
+            goldenFlies.push(new GoldenFly(spawnX, flyY));
+        }
+
+        function updateSpeedometerHUD() {
+            const multiplier = gameSpeed / INITIAL_SPEED;
+            const pct = Math.min(100, Math.max(6, ((gameSpeed - INITIAL_SPEED) / (MAX_SPEED - INITIAL_SPEED)) * 94 + 6));
+
+            const speedTextEl = document.getElementById('speedText');
+            const speedBarEl = document.getElementById('speedBarFill');
+            const speedBadgeEl = document.getElementById('speedBadgeHud');
+            const phaseLabelEl = document.getElementById('phaseLabel');
+
+            speedTextEl.textContent = `SPD ${multiplier.toFixed(1)}x`;
+            speedBarEl.style.width = `${pct}%`;
+
+            if (phaseLabelEl) {
+                if (score < 80) {
+                    phaseLabelEl.textContent = 'INICIO SUAVE';
+                } else if (score < 250) {
+                    phaseLabelEl.textContent = 'RITMO MEDIO';
+                } else if (gameSpeed < 9.5) {
+                    phaseLabelEl.textContent = 'VELOZ';
+                } else {
+                    phaseLabelEl.textContent = 'TURBO PANTANO';
+                }
+            }
+
+            // Actualizar meta de próximo premio en el HUD superior
+            const nextRewardHudText = document.getElementById('nextRewardHudText');
+            if (nextRewardHudText) {
+                const nextReward = getNextScoreReward(Math.floor(score));
+                if (nextReward) {
+                    nextRewardHudText.textContent = `${nextReward.icon} ${nextReward.reqValue}m`;
+                } else {
+                    nextRewardHudText.textContent = `🏆 ¡Todo desbloqueado!`;
+                }
+            }
+
+            if (gameSpeed >= 9.8) {
+                speedTextEl.className = 'font-pixel text-[8px] sm:text-[10px] text-rose-400 transition-colors duration-300';
+                speedBarEl.className = 'h-full bg-rose-500 transition-all duration-150';
+                speedBadgeEl.style.borderColor = 'rgba(244, 63, 94, 0.65)';
+            } else if (gameSpeed >= 6.4) {
+                speedTextEl.className = 'font-pixel text-[8px] sm:text-[10px] text-amber-400 transition-colors duration-300';
+                speedBarEl.className = 'h-full bg-amber-400 transition-all duration-150';
+                speedBadgeEl.style.borderColor = 'rgba(251, 191, 36, 0.6)';
+            } else {
+                speedTextEl.className = 'font-pixel text-[8px] sm:text-[10px] text-emerald-400 transition-colors duration-300';
+                speedBarEl.className = 'h-full bg-emerald-400 transition-all duration-150';
+                speedBadgeEl.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+            }
+        }
+
+        function startGame() {
+            sound.init();
+            closeWardrobe();
+            updateCanvasSize();
+            kero.reset();
+            obstacles = [];
+            goldenFlies = [];
+            particles = [];
+            floatingTexts = [];
+            speedLines = [];
+
+            score = 0;
+            fliesCollected = 0;
+            lastMilestone = 0;
+            milestoneFlashTimer = 0;
+            gameSpeed = INITIAL_SPEED;
+            spawnTimer = 42;
+            flySpawnTimer = 150;
+            isNight = false;
+
+            document.getElementById('startOverlay').classList.add('hidden');
+            document.getElementById('gameOverOverlay').classList.add('hidden');
+            document.getElementById('newRecordBadge').classList.add('hidden');
+            document.getElementById('flyCountText').textContent = '00';
+            document.getElementById('scoreHud').style.opacity = '1';
+            updateSpeedometerHUD();
+
+            gameState = 'PLAYING';
+            sound.playJump();
+        }
+
+        function triggerGameOver(obstacleType) {
+            gameState = 'GAMEOVER';
+            kero.isDead = true;
+            sound.playGameOver();
+
+            const finalScore = Math.floor(score);
+            let isNewRecord = false;
+            if (finalScore > playerData.highScore) {
+                playerData.highScore = finalScore;
+                isNewRecord = true;
+            }
+            checkAllScoreUnlocks(finalScore, true);
+            savePlayerData();
+
+            const reasons = {
+                'CARNIVORE': '¡Una planta carnívora atrapó a Kero!',
+                'LOG': '¡Kero tropezó con un tronco espinoso!',
+                'ROCK': '¡Kero chocó contra una roca musgosa!',
+                'DRAGONFLY': '¡Kero chocó con una libélula gigante!'
+            };
+            document.getElementById('deathReasonText').textContent = reasons[obstacleType] || 'Kero chocó en el pantano';
+            document.getElementById('finalScoreText').textContent = formatScore(finalScore);
+            document.getElementById('finalHiScoreText').textContent = formatScore(playerData.highScore);
+            document.getElementById('hiScoreText').textContent = formatScore(playerData.highScore);
+            document.getElementById('finalTotalFliesText').textContent = playerData.flyBank;
+
+            // Actualizar barra de progreso hacia el próximo premio por distancia
+            const nextReward = getNextScoreReward(playerData.highScore);
+            const nextLabel = document.getElementById('nextMilestoneLabel');
+            const nextPct = document.getElementById('nextMilestonePercent');
+            const nextFill = document.getElementById('nextMilestoneFill');
+
+            if (nextReward) {
+                const progress = Math.min(100, Math.round((playerData.highScore / nextReward.reqValue) * 100));
+                nextLabel.textContent = `${nextReward.icon} Próximo: ${nextReward.name} (${nextReward.reqValue} pts)`;
+                nextPct.textContent = `${progress}%`;
+                nextFill.style.width = `${progress}%`;
+            } else {
+                nextLabel.textContent = '🎉 ¡Todos los premios de distancia desbloqueados!';
+                nextPct.textContent = '100%';
+                nextFill.style.width = '100%';
+            }
+
+            if (isNewRecord && finalScore > 0) {
+                document.getElementById('newRecordBadge').classList.remove('hidden');
+            }
+
+            document.getElementById('gameOverOverlay').classList.remove('hidden');
+        }
+
+        let lastTime = performance.now();
+
+        function updateGame(now) {
+            const dt = Math.min(40, Math.max(1, now - lastTime));
+            lastTime = now;
+            const dtScale = dt / 16.667;
+
+            if (gameState === 'PLAYING') {
+                if (gameSpeed < MAX_SPEED) {
+                    gameSpeed = Math.min(MAX_SPEED, gameSpeed + ACCELERATION * dtScale);
+                }
+
+                score += gameSpeed * 0.032 * dtScale;
+                const currentFloorScore = Math.floor(score);
+
+                // Comprobar en vivo si alcanzó una distancia de premio
+                checkAllScoreUnlocks(currentFloorScore, true);
+
+                const currentHundred = Math.floor(currentFloorScore / 100);
+                if (currentHundred > lastMilestone && currentFloorScore >= 100) {
+                    lastMilestone = currentHundred;
+                    milestoneDisplayScore = currentHundred * 100;
+                    milestoneFlashTimer = 90;
+
+                    if (gameSpeed < MAX_SPEED) {
+                        gameSpeed = Math.min(MAX_SPEED, gameSpeed + MILESTONE_BOOST);
+                    }
+
+                    sound.playMilestone();
+                    createFloatingText('⚡ +VELOCIDAD', kero.x + 8, Math.max(48, kero.y - 14), '#38bdf8');
+                }
+
+                const cyclePhase = Math.floor(currentFloorScore / 700) % 2;
+                isNight = cyclePhase === 1;
+
+                kero.update(input, gameSpeed, dtScale);
+
+                spawnTimer -= dtScale;
+                if (spawnTimer <= 0) {
+                    const spawned = spawnObstacle();
+                    const speedProgress = (gameSpeed - INITIAL_SPEED) / (MAX_SPEED - INITIAL_SPEED);
+
+                    const minGapPx = spawned.width + lerp(165, 390, speedProgress);
+                    const maxGapPx = minGapPx + lerp(115, 195, 1 - speedProgress * 0.45);
+                    const chosenGapPx = minGapPx + Math.random() * (maxGapPx - minGapPx);
+
+                    spawnTimer = chosenGapPx / gameSpeed;
+                }
+
+                flySpawnTimer -= dtScale;
+                if (flySpawnTimer <= 0) {
+                    spawnGoldenFly();
+                    flySpawnTimer = 190 + Math.random() * 170;
+                }
+
+                if (gameSpeed > 7.5) {
+                    const windChance = ((gameSpeed - 7.5) / (MAX_SPEED - 7.5)) * 0.45 * dtScale;
+                    if (Math.random() < windChance) {
+                        spawnSpeedLine(gameSpeed);
+                    }
+                }
+
+                const keroBox = kero.getHitbox();
+
+                for (let i = obstacles.length - 1; i >= 0; i--) {
+                    const obs = obstacles[i];
+                    obs.update(gameSpeed, dtScale);
+
+                    if (checkCollision(keroBox, obs.getHitbox())) {
+                        document.getElementById('scoreHud').style.opacity = '1';
+                        triggerGameOver(obs.type);
+                        break;
+                    }
+
+                    if (obs.x + obs.width < -50) {
+                        obstacles.splice(i, 1);
+                    }
+                }
+
+                for (let i = goldenFlies.length - 1; i >= 0; i--) {
+                    const fly = goldenFlies[i];
+                    fly.update(gameSpeed, dtScale);
+
+                    if (!fly.collected && checkCollision(keroBox, fly.getHitbox())) {
+                        fly.collected = true;
+                        fliesCollected++;
+                        playerData.flyBank++;
+                        playerData.lifetimeFlies++;
+                        score += 50;
+                        savePlayerData();
+
+                        kero.triggerTongue(fly.x + 10, fly.y + 10);
+                        sound.playBonusFly();
+                        createDustParticles(fly.x + 10, fly.y + 10, 10, '#facc15');
+                        createFloatingText('+50 PTS / +1🪰', fly.x - 10, fly.y - 8, '#facc15');
+                        document.getElementById('flyCountText').textContent = String(fliesCollected).padStart(2, '0');
+                        goldenFlies.splice(i, 1);
+                        continue;
+                    }
+
+                    if (fly.x + fly.width < -40) {
+                        goldenFlies.splice(i, 1);
+                    }
+                }
+
+                const scoreHudEl = document.getElementById('scoreHud');
+                if (milestoneFlashTimer > 0) {
+                    milestoneFlashTimer -= dtScale;
+                    document.getElementById('scoreText').textContent = formatScore(milestoneDisplayScore);
+                    scoreHudEl.style.opacity = Math.floor(milestoneFlashTimer / 11) % 2 === 0 ? '0.15' : '1';
+                } else {
+                    scoreHudEl.style.opacity = '1';
+                    document.getElementById('scoreText').textContent = formatScore(score);
+                }
+
+                if (score > playerData.highScore) {
+                    document.getElementById('hiScoreText').textContent = formatScore(score);
+                }
+
+                updateSpeedometerHUD();
+            } else {
+                kero.blinkTimer += dtScale;
+                if (kero.blinkTimer > 180) kero.blinkTimer = 0;
+                kero.animTimer += 0.08 * dtScale;
+                kero.animFrame = Math.floor(kero.animTimer) % 2;
+            }
+
+            const targetNight = isNight ? 1 : 0;
+            nightLerp += (targetNight - nightLerp) * 0.035 * dtScale;
+
+            const timeIcon = document.getElementById('timeIcon');
+            const timeLabel = document.getElementById('timeLabel');
+            if (isNight) {
+                timeIcon.textContent = '🌙';
+                timeLabel.textContent = 'NOCHE';
+            } else {
+                timeIcon.textContent = '☀️';
+                timeLabel.textContent = 'DÍA';
+            }
+
+            const envSpeed = gameState === 'PLAYING' ? gameSpeed : 0.6;
+            clouds.forEach(c => {
+                c.x -= c.speed * (envSpeed * 0.18) * dtScale;
+                if (c.x + c.w < -20) {
+                    c.x = LOGICAL_WIDTH + 30;
+                    c.y = 30 + Math.random() * 80;
+                }
+            });
+
+            if (gameState === 'PLAYING') {
+                groundBumps.forEach(b => {
+                    b.x -= gameSpeed * dtScale;
+                    if (b.x + b.w < 0) {
+                        b.x = LOGICAL_WIDTH + Math.random() * 25;
+                    }
+                });
+            }
+
+            fireflies.forEach(f => {
+                f.x += (f.vx - (gameState === 'PLAYING' ? gameSpeed * 0.12 : 0)) * dtScale;
+                f.phase += 0.08 * dtScale;
+                if (f.x < -10) f.x = LOGICAL_WIDTH + 10;
+            });
+
+            for (let i = speedLines.length - 1; i >= 0; i--) {
+                const sl = speedLines[i];
+                sl.x -= sl.speed * dtScale;
+                if (sl.x + sl.length < -20) {
+                    speedLines.splice(i, 1);
+                }
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx * dtScale;
+                p.y += p.vy * dtScale;
+                p.alpha -= 0.035 * dtScale;
+                if (p.alpha <= 0) particles.splice(i, 1);
+            }
+
+            for (let i = floatingTexts.length - 1; i >= 0; i--) {
+                const ft = floatingTexts[i];
+                ft.y += ft.vy * dtScale;
+                ft.life -= dtScale;
+                ft.alpha = Math.max(0, ft.life / 48);
+                if (ft.life <= 0) floatingTexts.splice(i, 1);
+            }
+        }
+
+        function drawGame(now) {
+            ctx.clearRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+
+            const skyGrad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
+            skyGrad.addColorStop(0, lerpColorRGB(PALETTE_DAY.skyTop, PALETTE_NIGHT.skyTop, nightLerp));
+            skyGrad.addColorStop(1, lerpColorRGB(PALETTE_DAY.skyBottom, PALETTE_NIGHT.skyBottom, nightLerp));
+            ctx.fillStyle = skyGrad;
+            ctx.fillRect(0, 0, LOGICAL_WIDTH, GROUND_Y);
+
+            if (nightLerp > 0.05) {
+                ctx.save();
+                ctx.globalAlpha = nightLerp;
+
+                stars.forEach(s => {
+                    if (s.x <= LOGICAL_WIDTH) {
+                        const twinkle = 0.55 + 0.45 * Math.sin(now * 0.004 + s.blinkOffset);
+                        ctx.fillStyle = `rgba(254, 249, 195, ${twinkle})`;
+                        ctx.fillRect(s.x, s.y, s.size, s.size);
+                    }
+                });
+
+                const moonX = LOGICAL_WIDTH - 130;
+                const moonY = 48;
+                ctx.fillStyle = '#fef08a';
+                ctx.fillRect(moonX, moonY, 26, 26);
+                ctx.fillStyle = lerpColorRGB(PALETTE_DAY.skyTop, PALETTE_NIGHT.skyTop, nightLerp);
+                ctx.fillRect(moonX - 6, moonY - 4, 20, 20);
+
+                ctx.restore();
+            }
+
+            if (nightLerp < 0.95) {
+                const sunX = LOGICAL_WIDTH - 136;
+                ctx.save();
+                ctx.globalAlpha = 1 - nightLerp;
+                ctx.fillStyle = 'rgba(253, 224, 71, 0.35)';
+                ctx.fillRect(sunX, 42, 36, 36);
+                ctx.fillStyle = '#fde047';
+                ctx.fillRect(sunX + 6, 48, 24, 24);
+                ctx.restore();
+            }
+
+            ctx.fillStyle = nightLerp > 0.5 ? 'rgba(148, 163, 184, 0.22)' : 'rgba(255, 255, 255, 0.85)';
+            clouds.forEach(c => {
+                ctx.fillRect(Math.round(c.x), Math.round(c.y), c.w, 12);
+                ctx.fillRect(Math.round(c.x + 8), Math.round(c.y - 6), c.w - 16, 8);
+            });
+
+            ctx.fillStyle = lerpColorRGB(PALETTE_DAY.hillsFar, PALETTE_NIGHT.hillsFar, nightLerp);
+            for (let x = 0; x < LOGICAL_WIDTH; x += 160) {
+                ctx.fillRect(x, GROUND_Y - 28, 110, 28);
+                ctx.fillRect(x + 20, GROUND_Y - 38, 70, 10);
+            }
+
+            ctx.fillStyle = lerpColorRGB(PALETTE_DAY.hillsNear, PALETTE_NIGHT.hillsNear, nightLerp);
+            for (let x = 40; x < LOGICAL_WIDTH; x += 140) {
+                ctx.fillRect(x, GROUND_Y - 18, 95, 18);
+            }
+
+            if (nightLerp > 0.1) {
+                ctx.save();
+                fireflies.forEach(f => {
+                    const glow = (0.4 + 0.6 * Math.sin(f.phase)) * nightLerp;
+                    ctx.fillStyle = `rgba(190, 242, 100, ${glow * 0.35})`;
+                    ctx.fillRect(Math.round(f.x - 2), Math.round(f.y + Math.sin(f.phase) * 4 - 2), 7, 7);
+                    ctx.fillStyle = `rgba(236, 252, 203, ${glow})`;
+                    ctx.fillRect(Math.round(f.x), Math.round(f.y + Math.sin(f.phase) * 4), 3, 3);
+                });
+                ctx.restore();
+            }
+
+            if (speedLines.length > 0) {
+                ctx.save();
+                speedLines.forEach(sl => {
+                    ctx.fillStyle = nightLerp > 0.5
+                        ? `rgba(186, 230, 253, ${sl.alpha})`
+                        : `rgba(71, 85, 105, ${sl.alpha * 0.65})`;
+                    ctx.fillRect(Math.round(sl.x), Math.round(sl.y), Math.round(sl.length), 2);
+                });
+                ctx.restore();
+            }
+
+            ctx.fillStyle = lerpColorRGB(PALETTE_DAY.groundMain, PALETTE_NIGHT.groundMain, nightLerp);
+            ctx.fillRect(0, GROUND_Y, LOGICAL_WIDTH, LOGICAL_HEIGHT - GROUND_Y);
+
+            ctx.fillStyle = lerpColorRGB(PALETTE_DAY.groundGrass, PALETTE_NIGHT.groundGrass, nightLerp);
+            ctx.fillRect(0, GROUND_Y, LOGICAL_WIDTH, 6);
+
+            groundBumps.forEach(b => {
+                if (b.isTuft) {
+                    ctx.fillStyle = nightLerp > 0.5 ? '#15803d' : '#22c55e';
+                    ctx.fillRect(Math.round(b.x), GROUND_Y - 4, 3, 4);
+                    ctx.fillRect(Math.round(b.x + 4), GROUND_Y - 6, 3, 6);
+                } else {
+                    ctx.fillStyle = nightLerp > 0.5 ? '#475569' : '#78716c';
+                    ctx.fillRect(Math.round(b.x), GROUND_Y + b.yOffset, b.w, 3);
+                }
+            });
+
+            goldenFlies.forEach(fly => fly.draw(ctx));
+            obstacles.forEach(obs => obs.draw(ctx));
+            kero.draw(ctx);
+
+            particles.forEach(p => {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, p.alpha);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size, p.size);
+                ctx.restore();
+            });
+
+            floatingTexts.forEach(ft => {
+                ctx.save();
+                ctx.globalAlpha = ft.alpha;
+                ctx.font = 'bold 11px "Press Start 2P", monospace';
+                ctx.fillStyle = '#0f172a';
+                ctx.fillText(ft.text, Math.round(ft.x) + 2, Math.round(ft.y) + 2);
+                ctx.fillStyle = ft.color;
+                ctx.fillText(ft.text, Math.round(ft.x), Math.round(ft.y));
+                ctx.restore();
+            });
+
+            // Si el armario está abierto, animar la vista previa de Kero
+            if (!document.getElementById('wardrobeOverlay').classList.contains('hidden')) {
+                drawWardrobePreview();
+            }
+        }
+
+        function gameLoop(now) {
+            updateGame(now);
+            drawGame(now);
+            requestAnimationFrame(gameLoop);
+        }
+
+        /**
+         * ============================================================================
+         * 10. INTERFAZ DEL ARMARIO Y SISTEMA DE TIENDA / EQUIPAMIENTO
+         * ============================================================================
+         */
+        let currentWardrobeTab = 'skins';
+        const previewCanvas = document.getElementById('keroPreviewCanvas');
+        const previewCtx = previewCanvas.getContext('2d');
+
+        function drawWardrobePreview() {
+            previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+            previewCtx.imageSmoothingEnabled = false;
+
+            // Fondo de pedestal del pantano
+            previewCtx.fillStyle = '#1e293b';
+            previewCtx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+            previewCtx.fillStyle = '#15803d';
+            previewCtx.fillRect(14, 74, 82, 6);
+            previewCtx.fillStyle = '#451a03';
+            previewCtx.fillRect(18, 80, 74, 8);
+
+            // Dibujar a Kero centrado a escala 2.4x
+            kero.draw(previewCtx, 31, 25, 2.3);
+        }
+
+        function updatePreviewLabels() {
+            const skinObj = CUSTOMIZATION_CATALOG.skins.find(s => s.id === playerData.equippedSkin);
+            const hatObj = CUSTOMIZATION_CATALOG.hats.find(h => h.id === playerData.equippedHat);
+            const trailObj = CUSTOMIZATION_CATALOG.trails.find(t => t.id === playerData.equippedTrail);
+
+            document.getElementById('previewSkinName').textContent = skinObj ? skinObj.name : 'Clásico';
+            document.getElementById('previewHatName').textContent = hatObj ? hatObj.name : 'Sin Sombrero';
+            document.getElementById('previewTrailName').textContent = `Estela: ${trailObj ? trailObj.name : 'Polvo'}`;
+            document.getElementById('wardrobeFlyBank').textContent = playerData.flyBank;
+            document.getElementById('wardrobeHiScore').textContent = `${Math.floor(playerData.highScore)} pts`;
+        }
+
+        function renderWardrobeItems() {
+            const grid = document.getElementById('wardrobeItemsGrid');
+            grid.innerHTML = '';
+            updatePreviewLabels();
+
+            if (currentWardrobeTab === 'badges') {
+                CUSTOMIZATION_CATALOG.badges.forEach(badge => {
+                    const achieved = badge.check(playerData);
+                    const card = document.createElement('div');
+                    card.className = `p-2.5 rounded-xl border flex items-center gap-2.5 ${
+                        achieved
+                            ? 'bg-emerald-950/40 border-emerald-500/60 text-slate-100'
+                            : 'bg-slate-950/60 border-slate-800 text-slate-500 opacity-75'
+                    }`;
+                    card.innerHTML = `
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 ${
+                            achieved ? 'bg-emerald-500/20 border border-emerald-400' : 'bg-slate-900 border border-slate-800'
+                        }">${badge.icon}</div>
+                        <div class="min-w-0 flex-1">
+                            <div class="text-xs font-bold truncate ${achieved ? 'text-emerald-300' : 'text-slate-400'}">${badge.name}</div>
+                            <div class="text-[10px] text-slate-400">${badge.reqText}</div>
+                            <div class="mt-1 font-pixel text-[8px] ${achieved ? 'text-amber-400' : 'text-slate-500'}">
+                                ${achieved ? '★ COMPLETADO ★' : '🔒 PENDIENTE'}
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+                return;
+            }
+
+            const items = CUSTOMIZATION_CATALOG[currentWardrobeTab];
+            const unlockedList = currentWardrobeTab === 'skins'
+                ? playerData.unlockedSkins
+                : currentWardrobeTab === 'hats'
+                    ? playerData.unlockedHats
+                    : playerData.unlockedTrails;
+
+            const equippedId = currentWardrobeTab === 'skins'
+                ? playerData.equippedSkin
+                : currentWardrobeTab === 'hats'
+                    ? playerData.equippedHat
+                    : playerData.equippedTrail;
+
+            items.forEach(item => {
+                const isUnlocked = unlockedList.includes(item.id);
+                const isEquipped = equippedId === item.id;
+
+                const rarityColors = {
+                    'COMÚN': 'bg-slate-700 text-slate-200',
+                    'RARO': 'bg-sky-500/20 text-sky-300 border border-sky-400/40',
+                    'ÉPICO': 'bg-purple-500/20 text-purple-300 border border-purple-400/40',
+                    'MÍTICO': 'bg-rose-500/20 text-rose-300 border border-rose-400/40',
+                    'LEYENDA': 'bg-amber-500/25 text-amber-300 border border-amber-400/60'
+                };
+                const rarityBadgeClass = rarityColors[item.rarity] || rarityColors['COMÚN'];
+
+                const card = document.createElement('div');
+                card.className = `p-2.5 rounded-xl border flex flex-col justify-between gap-2 transition-all ${
+                    isEquipped
+                        ? 'bg-emerald-950/50 border-2 border-emerald-400 shadow-lg'
+                        : isUnlocked
+                            ? 'bg-slate-800/80 border-slate-700 hover:border-slate-500'
+                            : 'bg-slate-950/70 border-slate-800/90 opacity-90'
+                }`;
+
+                let actionBtnHTML = '';
+                if (isEquipped) {
+                    actionBtnHTML = `
+                        <button class="w-full py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-pixel text-[8px] font-bold cursor-default">
+                            ✓ EQUIPADO
+                        </button>
+                    `;
+                } else if (isUnlocked) {
+                    actionBtnHTML = `
+                        <button data-action="equip" data-id="${item.id}" class="w-full py-1.5 rounded-lg bg-slate-700 hover:bg-emerald-400 hover:text-slate-950 text-slate-100 font-pixel text-[8px] font-bold cursor-pointer transition-colors">
+                            EQUIPAR
+                        </button>
+                    `;
+                } else if (item.unlockType === 'flies') {
+                    const canAfford = playerData.flyBank >= item.reqValue;
+                    const flyPct = Math.min(100, Math.floor((playerData.flyBank / item.reqValue) * 100));
+                    actionBtnHTML = `
+                        <div class="flex flex-col gap-1">
+                            <button data-action="buy" data-id="${item.id}" class="w-full py-1.5 rounded-lg ${
+                                canAfford
+                                    ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 cursor-pointer shadow'
+                                    : 'bg-slate-800 text-slate-400 cursor-not-allowed'
+                            } font-pixel text-[8px] font-bold transition-colors">
+                                🪰 CANJEAR (${playerData.flyBank}/${item.reqValue})
+                            </button>
+                            <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-amber-400" style="width: ${flyPct}%"></div>
+                            </div>
+                        </div>
+                    `;
+                } else if (item.unlockType === 'score') {
+                    const pct = Math.min(100, Math.floor((playerData.highScore / item.reqValue) * 100));
+                    actionBtnHTML = `
+                        <div class="w-full">
+                            <div class="flex justify-between text-[9px] text-amber-300 font-bold mb-0.5">
+                                <span>🔒 Meta: ${item.reqValue} pts</span>
+                                <span>${pct}%</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-emerald-500 to-amber-400" style="width: ${pct}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Muestra de color si es una skin
+                let colorSwatch = '';
+                if (currentWardrobeTab === 'skins' && item.colors) {
+                    colorSwatch = `
+                        <span class="inline-block w-3.5 h-3.5 rounded-full border border-white/40 shrink-0" style="background:${item.colors.bodyMain}"></span>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-start gap-2">
+                        <div class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center text-base shrink-0">
+                            ${item.icon}
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center justify-between gap-1">
+                                <div class="flex items-center gap-1.5 min-w-0">
+                                    ${colorSwatch}
+                                    <span class="text-xs font-bold text-white truncate">${item.name}</span>
+                                </div>
+                                <span class="text-[8px] font-bold px-1.5 py-0.5 rounded ${rarityBadgeClass} shrink-0">${item.rarity || 'COMÚN'}</span>
+                            </div>
+                            <p class="text-[10px] text-slate-400 leading-tight mt-0.5">${item.desc}</p>
+                        </div>
+                    </div>
+                    <div class="mt-1">${actionBtnHTML}</div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            // Eventos para botones de Equipar o Canjear con moscas
+            grid.querySelectorAll('button[data-action]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const action = btn.getAttribute('data-action');
+                    const id = btn.getAttribute('data-id');
+                    handleWardrobeItemAction(action, id);
+                });
+            });
+        }
+
+        function handleWardrobeItemAction(action, itemId) {
+            const list = CUSTOMIZATION_CATALOG[currentWardrobeTab];
+            const item = list.find(i => i.id === itemId);
+            if (!item) return;
+
+            if (action === 'equip') {
+                if (currentWardrobeTab === 'skins') playerData.equippedSkin = itemId;
+                if (currentWardrobeTab === 'hats') playerData.equippedHat = itemId;
+                if (currentWardrobeTab === 'trails') playerData.equippedTrail = itemId;
+                sound.playJump();
+                savePlayerData();
+                renderWardrobeItems();
+            } else if (action === 'buy') {
+                if (playerData.flyBank >= item.reqValue) {
+                    playerData.flyBank -= item.reqValue;
+                    if (currentWardrobeTab === 'skins') {
+                        playerData.unlockedSkins.push(itemId);
+                        playerData.equippedSkin = itemId;
+                    } else if (currentWardrobeTab === 'hats') {
+                        playerData.unlockedHats.push(itemId);
+                        playerData.equippedHat = itemId;
+                    } else if (currentWardrobeTab === 'trails') {
+                        playerData.unlockedTrails.push(itemId);
+                        playerData.equippedTrail = itemId;
+                    }
+                    sound.playUnlockFanfare();
+                    savePlayerData();
+                    renderWardrobeItems();
+                }
+            }
+        }
+
+        function openWardrobe() {
+            if (gameState === 'PLAYING') return; // Solo abrir en pausa/inicio/gameover
+            renderWardrobeItems();
+            drawWardrobePreview();
+            document.getElementById('wardrobeOverlay').classList.remove('hidden');
+        }
+
+        function closeWardrobe() {
+            document.getElementById('wardrobeOverlay').classList.add('hidden');
+            updateHeaderUnlockCounter();
+        }
+
+        // Pestañas del armario
+        document.querySelectorAll('.wardrobe-tab').forEach(tabBtn => {
+            tabBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                currentWardrobeTab = tabBtn.getAttribute('data-tab');
+                document.querySelectorAll('.wardrobe-tab').forEach(b => {
+                    b.className = 'wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors';
+                });
+                tabBtn.className = 'wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-emerald-500 text-slate-950 font-bold cursor-pointer transition-colors';
+                renderWardrobeItems();
+            });
+        });
+
+        document.getElementById('startWardrobeBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            openWardrobe();
+        });
+        document.getElementById('gameOverWardrobeBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            openWardrobe();
+        });
+        document.getElementById('hudWardrobeBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (gameState !== 'PLAYING') openWardrobe();
+        });
+        document.getElementById('headerWardrobeBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (gameState !== 'PLAYING') openWardrobe();
+        });
+        document.getElementById('closeWardrobeBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeWardrobe();
+        });
+        document.getElementById('wardrobePlayBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeWardrobe();
+        });
+
+        /**
+         * ============================================================================
+         * 11. EVENTOS DE TECLADO, CLIC Y CONTROLES TÁCTILES
+         * ============================================================================
+         */
+        const touchJumpBtn = document.getElementById('touchJumpBtn');
+        const touchDuckBtn = document.getElementById('touchDuckBtn');
+
+        function handleJumpPress() {
+            if (!document.getElementById('wardrobeOverlay').classList.contains('hidden')) return;
+            if (gameState === 'START' || gameState === 'GAMEOVER') {
+                startGame();
+                return;
+            }
+            input.down = false;
+            touchDuckBtn.classList.remove('active-press');
+            input.jump = true;
+            touchJumpBtn.classList.add('active-press');
+        }
+
+        function handleJumpRelease() {
+            input.jump = false;
+            touchJumpBtn.classList.remove('active-press');
+        }
+
+        function handleDuckPress() {
+            if (gameState === 'PLAYING') {
+                input.jump = false;
+                touchJumpBtn.classList.remove('active-press');
+                input.down = true;
+                touchDuckBtn.classList.add('active-press');
+            }
+        }
+
+        function handleDuckRelease() {
+            input.down = false;
+            touchDuckBtn.classList.remove('active-press');
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Escape') {
+                closeWardrobe();
+                return;
+            }
+            if (e.code === 'KeyC' && gameState !== 'PLAYING') {
+                openWardrobe();
+                return;
+            }
+            if (['Space', 'ArrowUp', 'KeyW'].includes(e.code)) {
+                e.preventDefault();
+                if (!e.repeat) {
+                    handleJumpPress();
+                }
+            } else if (['ArrowDown', 'KeyS'].includes(e.code)) {
+                e.preventDefault();
+                handleDuckPress();
+            } else if (e.code === 'KeyM') {
+                toggleSoundUI();
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (['Space', 'ArrowUp', 'KeyW'].includes(e.code)) {
+                e.preventDefault();
+                handleJumpRelease();
+            } else if (['ArrowDown', 'KeyS'].includes(e.code)) {
+                e.preventDefault();
+                handleDuckRelease();
+            }
+        });
+
+        document.getElementById('startBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            startGame();
+        });
+
+        document.getElementById('restartBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            startGame();
+        });
+
+        function toggleSoundUI() {
+            const isMuted = sound.toggleMute();
+            document.getElementById('soundIcon').textContent = isMuted ? '🔇' : '🔊';
+        }
+
+        document.getElementById('muteBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleSoundUI();
+        });
+
+        document.getElementById('fullscreenBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFullscreenLandscape();
+        });
+
+        document.getElementById('enterLandscapeBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            dismissPortraitWarning = true;
+            toggleFullscreenLandscape();
+        });
+
+        document.getElementById('dismissRotateBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            dismissPortraitWarning = true;
+            checkMobileOrientation();
+        });
+
+        let canvasTouchStartY = null;
+
+        canvas.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            canvasTouchStartY = e.clientY;
+            handleJumpPress();
+        });
+
+        canvas.addEventListener('pointermove', (e) => {
+            if (canvasTouchStartY !== null && gameState === 'PLAYING') {
+                const deltaY = e.clientY - canvasTouchStartY;
+                if (deltaY > 24) {
+                    handleDuckPress();
+                }
+            }
+        });
+
+        window.addEventListener('pointerup', () => {
+            canvasTouchStartY = null;
+            handleJumpRelease();
+            handleDuckRelease();
+        });
+
+        touchJumpBtn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleJumpPress();
+        });
+        touchJumpBtn.addEventListener('pointerup', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleJumpRelease();
+        });
+        touchJumpBtn.addEventListener('pointercancel', handleJumpRelease);
+        touchJumpBtn.addEventListener('pointerleave', handleJumpRelease);
+
+        touchDuckBtn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleDuckPress();
+        });
+        touchDuckBtn.addEventListener('pointerup', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleDuckRelease();
+        });
+        touchDuckBtn.addEventListener('pointercancel', handleDuckRelease);
+        touchDuckBtn.addEventListener('pointerleave', handleDuckRelease);
+
+        window.onload = function () {
+            updateCanvasSize();
+            lastTime = performance.now();
+            requestAnimationFrame(gameLoop);
+        };
+    </script>
+    <script>
+        // Registro del Service Worker (PWA / modo sin conexión)
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch((err) => console.warn('SW no registrado:', err));
+            });
+        }
+    </script>
+</body>
+</html>
