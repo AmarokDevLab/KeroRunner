@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -15,17 +16,21 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Kero Runner">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@500;700;900&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --pixel-font: 'Press Start 2P', monospace;
             --ui-font: 'Inter', sans-serif;
         }
+
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-        html, body {
+
+        html,
+        body {
             margin: 0;
             padding: 0;
             width: 100vw;
@@ -37,6 +42,7 @@
             touch-action: none;
             background-color: #020617;
         }
+
         .font-pixel {
             font-family: var(--pixel-font);
         }
@@ -59,6 +65,7 @@
                 padding: 1rem 1.25rem;
                 gap: 0.75rem;
             }
+
             body:not(.force-fullscreen) #canvasContainer {
                 border-radius: 1.25rem;
                 border-width: 4px;
@@ -67,15 +74,18 @@
         }
 
         /* MODO CONSOLA MÓVIL / PANTALLA COMPLETA */
-        @media (max-width: 1023px), (max-height: 619px) {
+        @media (max-width: 1023px),
+        (max-height: 619px) {
             .desktop-chrome {
                 display: none !important;
             }
+
             .app-shell {
                 max-width: none !important;
                 padding: 0 !important;
                 margin: 0 !important;
             }
+
             #canvasContainer {
                 width: 100vw !important;
                 height: 100dvh !important;
@@ -88,11 +98,13 @@
         body.force-fullscreen .desktop-chrome {
             display: none !important;
         }
+
         body.force-fullscreen .app-shell {
             max-width: none !important;
             padding: 0 !important;
             margin: 0 !important;
         }
+
         body.force-fullscreen #canvasContainer {
             width: 100vw !important;
             height: 100dvh !important;
@@ -113,44 +125,54 @@
             bottom: max(0.75rem, env(safe-area-inset-bottom));
             left: max(0.85rem, env(safe-area-inset-left));
         }
+
         .floating-btn-right {
             bottom: max(0.75rem, env(safe-area-inset-bottom));
             right: max(0.85rem, env(safe-area-inset-right));
         }
 
         .touch-arcade-pad {
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            transition: transform 0.06s ease, background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.08s ease;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+            opacity: 0.45;
+            transition: transform 0.06s ease, background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.08s ease, opacity 0.12s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.2);
         }
+
         .touch-arcade-pad:active,
         .touch-arcade-pad.active-press {
+            opacity: 0.85;
             transform: scale(0.93) translateY(3px);
         }
 
         /* Efecto de botón arcade tradicional para menús */
         .btn-arcade {
             transition: transform 0.06s ease, box-shadow 0.06s ease, background-color 0.15s ease;
-            box-shadow: 0 4px 0 #1e293b, 0 8px 14px rgba(0,0,0,0.35);
+            box-shadow: 0 4px 0 #1e293b, 0 8px 14px rgba(0, 0, 0, 0.35);
         }
-        .btn-arcade:active, .btn-arcade.active-press {
+
+        .btn-arcade:active,
+        .btn-arcade.active-press {
             transform: translateY(3px);
-            box-shadow: 0 1px 0 #1e293b, 0 3px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 1px 0 #1e293b, 0 3px 6px rgba(0, 0, 0, 0.3);
         }
+
         .btn-arcade-green {
-            box-shadow: 0 4px 0 #14532d, 0 8px 14px rgba(0,0,0,0.35);
+            box-shadow: 0 4px 0 #14532d, 0 8px 14px rgba(0, 0, 0, 0.35);
         }
-        .btn-arcade-green:active, .btn-arcade-green.active-press {
+
+        .btn-arcade-green:active,
+        .btn-arcade-green.active-press {
             transform: translateY(3px);
-            box-shadow: 0 1px 0 #14532d, 0 3px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 1px 0 #14532d, 0 3px 6px rgba(0, 0, 0, 0.3);
         }
+
         .btn-arcade-amber {
-            box-shadow: 0 4px 0 #78350f, 0 8px 14px rgba(0,0,0,0.35);
+            box-shadow: 0 4px 0 #78350f, 0 8px 14px rgba(0, 0, 0, 0.35);
         }
-        .btn-arcade-amber:active, .btn-arcade-amber.active-press {
+
+        .btn-arcade-amber:active,
+        .btn-arcade-amber.active-press {
             transform: translateY(3px);
-            box-shadow: 0 1px 0 #78350f, 0 3px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 1px 0 #78350f, 0 3px 6px rgba(0, 0, 0, 0.3);
         }
 
         /* Sutil efecto CRT retro */
@@ -176,61 +198,106 @@
             width: 6px;
             height: 6px;
         }
+
         .custom-scroll::-webkit-scrollbar-track {
             background: rgba(15, 23, 42, 0.6);
             border-radius: 8px;
         }
+
         .custom-scroll::-webkit-scrollbar-thumb {
             background: rgba(16, 185, 129, 0.5);
             border-radius: 8px;
         }
 
         @keyframes pulse-slow {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.85; transform: scale(0.98); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.85;
+                transform: scale(0.98);
+            }
         }
+
         .animate-pulse-slow {
             animation: pulse-slow 1.8s infinite ease-in-out;
         }
 
         @keyframes rotate-phone {
-            0%, 100% { transform: rotate(0deg); }
-            40%, 60% { transform: rotate(-90deg); }
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            40%,
+            60% {
+                transform: rotate(-90deg);
+            }
         }
+
         .animate-rotate-phone {
             animation: rotate-phone 2.4s infinite ease-in-out;
         }
 
         @keyframes toast-slide {
-            0% { transform: translate(-50%, -140%); opacity: 0; }
-            12% { transform: translate(-50%, 0); opacity: 1; }
-            85% { transform: translate(-50%, 0); opacity: 1; }
-            100% { transform: translate(-50%, -140%); opacity: 0; }
+            0% {
+                transform: translate(-50%, -140%);
+                opacity: 0;
+            }
+
+            12% {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+
+            85% {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -140%);
+                opacity: 0;
+            }
         }
+
         .animate-toast {
             animation: toast-slide 3.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
     </style>
 </head>
+
 <body class="bg-slate-950 text-slate-100">
 
     <!-- AVISO INTERACTIVO PARA GIRAR EL CELULAR A HORIZONTAL -->
-    <div id="rotatePromptOverlay" class="hidden fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex-col items-center justify-center p-6 text-center select-none">
-        <div class="bg-slate-900 border-2 border-emerald-500/70 rounded-3xl p-6 max-w-xs w-full flex flex-col items-center gap-4 shadow-2xl">
-            <div class="w-16 h-16 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
-                <svg class="w-10 h-10 animate-rotate-phone" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <div id="rotatePromptOverlay"
+        class="hidden fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex-col items-center justify-center p-6 text-center select-none">
+        <div
+            class="bg-slate-900 border-2 border-emerald-500/70 rounded-3xl p-6 max-w-xs w-full flex flex-col items-center gap-4 shadow-2xl">
+            <div
+                class="w-16 h-16 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                <svg class="w-10 h-10 animate-rotate-phone" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
                     <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
                     <line x1="12" y1="18" x2="12.01" y2="18"></line>
                 </svg>
             </div>
             <h3 class="font-pixel text-xs text-emerald-400 leading-relaxed">MODO HORIZONTAL RECOMENDADO</h3>
             <p class="text-xs text-slate-300 leading-relaxed">
-                Gira tu celular horizontalmente para disfrutar de <b>Kero Runner</b> a pantalla completa con los botones en las esquinas.
+                Gira tu celular horizontalmente para disfrutar de <b>Kero Runner</b> a pantalla completa con los botones
+                en las esquinas.
             </p>
-            <button id="enterLandscapeBtn" class="btn-arcade btn-arcade-green bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[10px] py-3 px-4 rounded-xl font-bold w-full cursor-pointer">
+            <button id="enterLandscapeBtn"
+                class="btn-arcade btn-arcade-green bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[10px] py-3 px-4 rounded-xl font-bold w-full cursor-pointer">
                 ⛶ ACTIVAR PANTALLA COMPLETA
             </button>
-            <button id="dismissRotateBtn" class="text-xs text-slate-400 hover:text-slate-200 underline py-1 cursor-pointer">
+            <button id="dismissRotateBtn"
+                class="text-xs text-slate-400 hover:text-slate-200 underline py-1 cursor-pointer">
                 Continuar en vertical
             </button>
         </div>
@@ -238,24 +305,30 @@
 
     <div class="app-shell">
         <!-- HEADER DE ESCRITORIO -->
-        <header class="desktop-chrome w-full flex items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 px-4 py-2.5 rounded-2xl shadow-lg shrink-0">
+        <header
+            class="desktop-chrome w-full flex items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 px-4 py-2.5 rounded-2xl shadow-lg shrink-0">
             <div class="flex items-center gap-3 min-w-0">
-                <div class="w-10 h-10 bg-emerald-500/20 border-2 border-emerald-500 rounded-xl flex items-center justify-center shadow-inner shrink-0">
+                <div
+                    class="w-10 h-10 bg-emerald-500/20 border-2 border-emerald-500 rounded-xl flex items-center justify-center shadow-inner shrink-0">
                     <span class="text-xl">🐸</span>
                 </div>
                 <div class="truncate">
                     <h1 class="font-pixel text-base text-emerald-400 tracking-wider truncate">KERO RUNNER</h1>
-                    <p class="text-xs text-slate-400 truncate">¡Avanza más lejos, atrapa moscas doradas y desbloquea trajes para Kero!</p>
+                    <p class="text-xs text-slate-400 truncate">¡Avanza más lejos, atrapa moscas doradas y desbloquea
+                        trajes para Kero!</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2.5 shrink-0">
-                <button id="headerWardrobeBtn" class="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/60 text-amber-300 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors">
+                <button id="headerWardrobeBtn"
+                    class="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/60 text-amber-300 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors">
                     <span>👑</span>
                     <span>Armario & Premios</span>
-                    <span id="headerUnlockCount" class="bg-amber-400 text-slate-950 px-1.5 py-0.2 rounded-md font-pixel text-[9px]">3/30</span>
+                    <span id="headerUnlockCount"
+                        class="bg-amber-400 text-slate-950 px-1.5 py-0.2 rounded-md font-pixel text-[9px]">3/30</span>
                 </button>
-                <div class="flex items-center gap-1.5 bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-bold text-emerald-300">
+                <div
+                    class="flex items-center gap-1.5 bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-bold text-emerald-300">
                     <span>🌱</span>
                     <span id="phaseLabel">INICIO SUAVE</span>
                 </div>
@@ -264,62 +337,83 @@
 
         <!-- CONTENEDOR PRINCIPAL DEL JUEGO -->
         <main class="w-full flex-1 min-h-0 flex flex-col items-center justify-center">
-            <div id="canvasContainer" class="relative w-full h-full bg-[#f4f7f0] border-slate-800 shadow-2xl overflow-hidden crt-overlay select-none flex items-center justify-center">
-                
+            <div id="canvasContainer"
+                class="relative w-full h-full bg-[#f4f7f0] border-slate-800 shadow-2xl overflow-hidden crt-overlay select-none flex items-center justify-center">
+
                 <!-- NOTIFICACIÓN TOAST DE PREMIO DESBLOQUEADO EN TIEMPO REAL -->
-                <div id="unlockToast" class="hidden absolute top-14 left-1/2 z-40 pointer-events-none bg-slate-900/95 border-2 border-amber-400 text-amber-300 px-4 py-2 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[250px] max-w-[90vw]">
-                    <div class="w-9 h-9 rounded-xl bg-amber-400/20 border border-amber-400 flex items-center justify-center text-lg shrink-0" id="toastIcon">🎁</div>
+                <div id="unlockToast"
+                    class="hidden absolute top-14 left-1/2 z-40 pointer-events-none bg-slate-900/95 border-2 border-amber-400 text-amber-300 px-4 py-2 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[250px] max-w-[90vw]">
+                    <div class="w-9 h-9 rounded-xl bg-amber-400/20 border border-amber-400 flex items-center justify-center text-lg shrink-0"
+                        id="toastIcon">🎁</div>
                     <div class="text-left overflow-hidden">
-                        <div class="font-pixel text-[8px] sm:text-[9px] text-amber-400 uppercase tracking-wider">¡PREMIO DESBLOQUEADO!</div>
+                        <div class="font-pixel text-[8px] sm:text-[9px] text-amber-400 uppercase tracking-wider">¡PREMIO
+                            DESBLOQUEADO!</div>
                         <div class="text-xs font-bold text-white truncate" id="toastTitle">Corona del Rey</div>
                     </div>
                 </div>
 
                 <!-- BARRA HUD FLOTANTE SUPERIOR -->
-                <div class="floating-hud-top absolute z-20 flex items-center justify-between gap-1.5 sm:gap-2 pointer-events-none">
-                    
+                <div
+                    class="floating-hud-top absolute z-20 flex items-center justify-between gap-1.5 sm:gap-2 pointer-events-none">
+
                     <!-- Izquierda: Velocímetro, Meta Próximo Premio, Audio, Armario y Pantalla Completa -->
                     <div class="flex items-center gap-1 sm:gap-1.5 pointer-events-auto">
                         <!-- Velocímetro en vivo -->
-                        <div id="speedBadgeHud" class="flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md border border-emerald-500/50 px-2 py-1.5 rounded-xl shadow-md transition-colors duration-300">
-                            <span class="font-pixel text-[8px] sm:text-[10px] text-emerald-400 transition-colors duration-300" id="speedText">SPD 1.0x</span>
-                            <div class="w-8 sm:w-12 h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700 hidden sm:block">
-                                <div id="speedBarFill" class="h-full bg-emerald-400 transition-all duration-150" style="width: 6%"></div>
+                        <div id="speedBadgeHud"
+                            class="flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md border border-emerald-500/50 px-2 py-1.5 rounded-xl shadow-md transition-colors duration-300">
+                            <span
+                                class="font-pixel text-[8px] sm:text-[10px] text-emerald-400 transition-colors duration-300"
+                                id="speedText">SPD 1.0x</span>
+                            <div
+                                class="w-8 sm:w-12 h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700 hidden sm:block">
+                                <div id="speedBarFill" class="h-full bg-emerald-400 transition-all duration-150"
+                                    style="width: 6%"></div>
                             </div>
                         </div>
 
                         <!-- Indicador de Próximo Premio por Distancia -->
-                        <div id="nextRewardHud" class="hidden md:flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-amber-500/40 text-[10px] font-bold text-amber-300 shadow-md" title="Próximo premio por distancia">
+                        <div id="nextRewardHud"
+                            class="hidden md:flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-amber-500/40 text-[10px] font-bold text-amber-300 shadow-md"
+                            title="Próximo premio por distancia">
                             <span>🎁</span>
                             <span id="nextRewardHudText">Meta: 150m</span>
                         </div>
 
                         <!-- Indicador Día/Noche -->
-                        <div id="timeBadge" class="flex items-center gap-1 bg-slate-900/80 backdrop-blur-md px-2 py-1.5 rounded-xl border border-slate-700/80 text-[10px] sm:text-xs font-bold text-amber-300 shadow-md">
+                        <div id="timeBadge"
+                            class="flex items-center gap-1 bg-slate-900/80 backdrop-blur-md px-2 py-1.5 rounded-xl border border-slate-700/80 text-[10px] sm:text-xs font-bold text-amber-300 shadow-md">
                             <span id="timeIcon">☀️</span>
                             <span id="timeLabel" class="hidden lg:inline">DÍA</span>
                         </div>
 
                         <!-- Botón Rápido al Armario -->
-                        <button id="hudWardrobeBtn" class="bg-slate-900/85 hover:bg-slate-800 backdrop-blur-md text-amber-300 border border-amber-500/50 px-2.5 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform" title="Personalizar a Kero">
+                        <button id="hudWardrobeBtn"
+                            class="bg-slate-900/85 hover:bg-slate-800 backdrop-blur-md text-amber-300 border border-amber-500/50 px-2.5 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform"
+                            title="Personalizar a Kero">
                             <span>👕</span>
                             <span class="hidden sm:inline text-[10px] font-pixel">SKINS</span>
                         </button>
 
                         <!-- Botón de Sonido -->
-                        <button id="muteBtn" class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md text-slate-100 border border-slate-700/80 px-2 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform" title="Activar/Silenciar Sonido (Tecla M)">
+                        <button id="muteBtn"
+                            class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md text-slate-100 border border-slate-700/80 px-2 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform"
+                            title="Activar/Silenciar Sonido (Tecla M)">
                             <span id="soundIcon">🔊</span>
                         </button>
 
                         <!-- Botón de Pantalla Completa -->
-                        <button id="fullscreenBtn" class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md text-emerald-400 border border-slate-700/80 px-2 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform" title="Pantalla Completa Horizontal">
+                        <button id="fullscreenBtn"
+                            class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md text-emerald-400 border border-slate-700/80 px-2 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform"
+                            title="Pantalla Completa Horizontal">
                             <span id="fullscreenIcon">⛶</span>
                         </button>
                     </div>
 
                     <!-- Derecha: Banco de Moscas, Récord HI y Metros -->
-                    <div class="flex items-center gap-2 sm:gap-3.5 bg-slate-900/80 backdrop-blur-md px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-700/70 shadow-md font-pixel text-[9px] sm:text-xs tracking-wider pointer-events-auto">
-                        <div id="flyCounterHud" class="flex items-center gap-1 text-amber-400" title="Moscas Doradas en esta partida (Banco total guardado)">
+                    <div
+                        class="flex items-center gap-2 sm:gap-3.5 bg-slate-900/80 backdrop-blur-md px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-700/70 shadow-md font-pixel text-[9px] sm:text-xs tracking-wider pointer-events-auto">
+                        <div id="flyCounterHud" class="flex items-center gap-1 text-amber-400"
+                            title="Moscas Doradas en esta partida (Banco total guardado)">
                             <span>🪰</span>
                             <span id="flyCountText">00</span>
                         </div>
@@ -336,36 +430,51 @@
                 <canvas id="gameCanvas" width="800" height="300" class="w-full h-full block"></canvas>
 
                 <!-- CONTROLES FLOTANTES EN LAS ESQUINAS INFERIORES -->
-                <button id="touchDuckBtn" aria-label="Agacharse" class="floating-btn-left absolute z-25 touch-arcade-pad bg-amber-500/30 hover:bg-amber-500/45 active:bg-amber-400/65 border-2 border-amber-300/70 text-slate-950 rounded-2xl sm:rounded-3xl w-28 h-20 sm:w-36 sm:h-24 flex flex-col items-center justify-center gap-1 select-none cursor-pointer">
-                    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-amber-950 drop-shadow" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <button id="touchDuckBtn" aria-label="Agacharse"
+                    class="floating-btn-left absolute z-25 touch-arcade-pad bg-amber-500/30 hover:bg-amber-500/45 active:bg-amber-400/65 border-2 border-amber-300/70 text-slate-950 rounded-2xl sm:rounded-3xl w-28 h-20 sm:w-36 sm:h-24 flex flex-col items-center justify-center gap-1 select-none cursor-pointer">
+                    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-amber-950 drop-shadow" fill="none" stroke="currentColor"
+                        stroke-width="3" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
-                    <span class="font-pixel text-[9px] sm:text-[10px] text-amber-950 font-black tracking-tighter drop-shadow-sm">AGACHARSE</span>
+                    <span
+                        class="font-pixel text-[9px] sm:text-[10px] text-amber-950 font-black tracking-tighter drop-shadow-sm">AGACHARSE</span>
                 </button>
 
-                <button id="touchJumpBtn" aria-label="Saltar" class="floating-btn-right absolute z-25 touch-arcade-pad bg-emerald-500/35 hover:bg-emerald-500/50 active:bg-emerald-400/70 border-2 border-emerald-300/75 text-slate-950 rounded-2xl sm:rounded-3xl w-32 h-24 sm:w-40 sm:h-28 flex flex-col items-center justify-center gap-1 select-none cursor-pointer">
-                    <svg class="w-8 h-8 sm:w-10 sm:h-10 text-emerald-950 drop-shadow" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <button id="touchJumpBtn" aria-label="Saltar"
+                    class="floating-btn-right absolute z-25 touch-arcade-pad bg-emerald-500/35 hover:bg-emerald-500/50 active:bg-emerald-400/70 border-2 border-emerald-300/75 text-slate-950 rounded-2xl sm:rounded-3xl w-32 h-24 sm:w-40 sm:h-28 flex flex-col items-center justify-center gap-1 select-none cursor-pointer">
+                    <svg class="w-8 h-8 sm:w-10 sm:h-10 text-emerald-950 drop-shadow" fill="none" stroke="currentColor"
+                        stroke-width="3" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
                     </svg>
-                    <span class="font-pixel text-[10px] sm:text-xs text-emerald-950 font-black tracking-wider drop-shadow-sm">SALTAR</span>
+                    <span
+                        class="font-pixel text-[10px] sm:text-xs text-emerald-950 font-black tracking-wider drop-shadow-sm">SALTAR</span>
                 </button>
 
                 <!-- OVERLAY DE INICIO -->
-                <div id="startOverlay" class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-[2px] p-3 text-center transition-opacity duration-200">
-                    <div class="bg-slate-900/95 border-2 border-emerald-500/80 px-4 sm:px-6 py-3 sm:py-5 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center gap-2 sm:gap-2.5">
+                <div id="startOverlay"
+                    class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-[2px] p-3 text-center transition-opacity duration-200">
+                    <div
+                        class="bg-slate-900/95 border-2 border-emerald-500/80 px-4 sm:px-6 py-3 sm:py-5 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center gap-2 sm:gap-2.5">
                         <div class="flex items-center gap-2">
-                            <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">Premios por Distancia</span>
-                            <span class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold">🪰 Banco: <b id="startBankFlies">0</b></span>
+                            <span
+                                class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">Premios
+                                por Distancia</span>
+                            <span
+                                class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold">🪰
+                                Banco: <b id="startBankFlies">0</b></span>
                         </div>
                         <h2 class="font-pixel text-sm sm:text-xl text-emerald-400 drop-shadow">KERO RUNNER</h2>
                         <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
-                            Supera récords de distancia y atrapa <b>Moscas Doradas</b> para desbloquear colores, sombreros y estelas mágicas para tu ranita.
+                            Supera récords de distancia y atrapa <b>Moscas Doradas</b> para desbloquear colores,
+                            sombreros y estelas mágicas para tu ranita.
                         </p>
                         <div class="flex flex-wrap items-center justify-center gap-2 w-full mt-1">
-                            <button id="startBtn" class="btn-arcade btn-arcade-green bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[10px] sm:text-xs px-4 py-3 rounded-xl font-bold tracking-wider uppercase flex-1 min-w-[140px] cursor-pointer animate-pulse-slow">
+                            <button id="startBtn"
+                                class="btn-arcade btn-arcade-green bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[10px] sm:text-xs px-4 py-3 rounded-xl font-bold tracking-wider uppercase flex-1 min-w-[140px] cursor-pointer animate-pulse-slow">
                                 ▶ JUGAR AHORA
                             </button>
-                            <button id="startWardrobeBtn" class="btn-arcade btn-arcade-amber bg-amber-400 hover:bg-amber-300 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-3.5 py-3 rounded-xl font-bold tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer">
+                            <button id="startWardrobeBtn"
+                                class="btn-arcade btn-arcade-amber bg-amber-400 hover:bg-amber-300 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-3.5 py-3 rounded-xl font-bold tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer">
                                 <span>👑</span>
                                 <span>PERSONALIZAR</span>
                             </button>
@@ -374,49 +483,68 @@
                 </div>
 
                 <!-- OVERLAY DE GAME OVER CON PROGRESO DE PREMIOS -->
-                <div id="gameOverOverlay" class="hidden absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/75 backdrop-blur-[2px] p-2.5 text-center">
-                    <div class="bg-slate-900/95 border-2 border-rose-500/80 px-4 sm:px-5 py-3 sm:py-4 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center gap-2 transform transition-all">
+                <div id="gameOverOverlay"
+                    class="hidden absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/75 backdrop-blur-[2px] p-2.5 text-center">
+                    <div
+                        class="bg-slate-900/95 border-2 border-rose-500/80 px-4 sm:px-5 py-3 sm:py-4 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center gap-2 transform transition-all">
                         <div class="flex items-center justify-between w-full">
-                            <h2 class="font-pixel text-xs sm:text-base text-rose-400 tracking-widest">¡FIN DEL JUEGO!</h2>
-                            <div id="newRecordBadge" class="hidden bg-amber-500/20 border border-amber-400 text-amber-300 font-pixel text-[8px] px-2 py-0.5 rounded-full">
+                            <h2 class="font-pixel text-xs sm:text-base text-rose-400 tracking-widest">¡FIN DEL JUEGO!
+                            </h2>
+                            <div id="newRecordBadge"
+                                class="hidden bg-amber-500/20 border border-amber-400 text-amber-300 font-pixel text-[8px] px-2 py-0.5 rounded-full">
                                 ★ NUEVO RÉCORD ★
                             </div>
                         </div>
                         <p id="deathReasonText" class="text-[11px] text-slate-400 -mt-1">Kero chocó en el pantano</p>
-                        
+
                         <!-- Marcadores de la partida -->
-                        <div class="w-full grid grid-cols-3 gap-1.5 bg-slate-800/90 p-2 rounded-xl border border-slate-700">
+                        <div
+                            class="w-full grid grid-cols-3 gap-1.5 bg-slate-800/90 p-2 rounded-xl border border-slate-700">
                             <div class="flex flex-col items-center border-r border-slate-700 pr-1">
                                 <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Metros</span>
-                                <span id="finalScoreText" class="font-pixel text-[10px] sm:text-xs text-emerald-400 mt-0.5">00000</span>
+                                <span id="finalScoreText"
+                                    class="font-pixel text-[10px] sm:text-xs text-emerald-400 mt-0.5">00000</span>
                             </div>
                             <div class="flex flex-col items-center border-r border-slate-700 px-1">
-                                <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Récord HI</span>
-                                <span id="finalHiScoreText" class="font-pixel text-[10px] sm:text-xs text-amber-400 mt-0.5">00000</span>
+                                <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Récord
+                                    HI</span>
+                                <span id="finalHiScoreText"
+                                    class="font-pixel text-[10px] sm:text-xs text-amber-400 mt-0.5">00000</span>
                             </div>
                             <div class="flex flex-col items-center pl-1">
-                                <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Banco 🪰</span>
-                                <span id="finalTotalFliesText" class="font-pixel text-[10px] sm:text-xs text-yellow-300 mt-0.5">0</span>
+                                <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Banco
+                                    🪰</span>
+                                <span id="finalTotalFliesText"
+                                    class="font-pixel text-[10px] sm:text-xs text-yellow-300 mt-0.5">0</span>
                             </div>
                         </div>
 
                         <!-- Barra hacia el próximo premio por distancia -->
-                        <div id="nextMilestoneBox" class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-1.5 text-left">
+                        <div id="nextMilestoneBox"
+                            class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-1.5 text-left">
                             <div class="flex items-center justify-between text-[10px] text-slate-300 mb-1">
-                                <span id="nextMilestoneLabel" class="font-bold text-amber-300 truncate">🎁 Próximo premio: 150 m</span>
+                                <span id="nextMilestoneLabel" class="font-bold text-amber-300 truncate">🎁 Próximo
+                                    premio: 150 m</span>
                                 <span id="nextMilestonePercent" class="font-pixel text-[8px] text-emerald-400">0%</span>
                             </div>
                             <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                                <div id="nextMilestoneFill" class="h-full bg-gradient-to-r from-emerald-500 to-amber-400 transition-all duration-300" style="width: 0%"></div>
+                                <div id="nextMilestoneFill"
+                                    class="h-full bg-gradient-to-r from-emerald-500 to-amber-400 transition-all duration-300"
+                                    style="width: 0%"></div>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-2 w-full mt-0.5">
-                            <button id="restartBtn" class="btn-arcade btn-arcade-green bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-4 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1.5 flex-1 cursor-pointer">
-                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"/></svg>
+                            <button id="restartBtn"
+                                class="btn-arcade btn-arcade-green bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-4 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1.5 flex-1 cursor-pointer">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" />
+                                </svg>
                                 <span>REINTENTAR</span>
                             </button>
-                            <button id="gameOverWardrobeBtn" class="btn-arcade btn-arcade-amber bg-amber-400 hover:bg-amber-300 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-3.5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1 cursor-pointer">
+                            <button id="gameOverWardrobeBtn"
+                                class="btn-arcade btn-arcade-amber bg-amber-400 hover:bg-amber-300 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-3.5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1 cursor-pointer">
                                 <span>👑</span>
                                 <span>ARMARIO</span>
                             </button>
@@ -425,25 +553,32 @@
                 </div>
 
                 <!-- MODAL DEL ARMARIO DE PERSONALIZACIÓN Y PREMIOS -->
-                <div id="wardrobeOverlay" class="hidden absolute inset-0 z-40 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-2 sm:p-4 select-none">
-                    <div class="bg-slate-900 border-2 border-emerald-500/80 rounded-2xl shadow-2xl w-full max-w-2xl h-full max-h-[96%] flex flex-col overflow-hidden">
-                        
+                <div id="wardrobeOverlay"
+                    class="hidden absolute inset-0 z-40 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-2 sm:p-4 select-none">
+                    <div
+                        class="bg-slate-900 border-2 border-emerald-500/80 rounded-2xl shadow-2xl w-full max-w-2xl h-full max-h-[96%] flex flex-col overflow-hidden">
+
                         <!-- Cabecera del Armario -->
-                        <div class="flex items-center justify-between px-3.5 py-2.5 bg-slate-950/90 border-b border-slate-800 shrink-0">
+                        <div
+                            class="flex items-center justify-between px-3.5 py-2.5 bg-slate-950/90 border-b border-slate-800 shrink-0">
                             <div class="flex items-center gap-2">
                                 <span class="text-lg">👑</span>
-                                <h3 class="font-pixel text-[10px] sm:text-xs text-emerald-400">ARMARIO DE KERO & PREMIOS</h3>
+                                <h3 class="font-pixel text-[10px] sm:text-xs text-emerald-400">ARMARIO DE KERO & PREMIOS
+                                </h3>
                             </div>
                             <div class="flex items-center gap-2">
-                                <div class="bg-amber-500/20 border border-amber-400/50 text-amber-300 px-2.5 py-1 rounded-lg text-[10px] sm:text-xs font-bold flex items-center gap-1" title="Moscas Doradas disponibles para canjear">
+                                <div class="bg-amber-500/20 border border-amber-400/50 text-amber-300 px-2.5 py-1 rounded-lg text-[10px] sm:text-xs font-bold flex items-center gap-1"
+                                    title="Moscas Doradas disponibles para canjear">
                                     <span>🪰</span>
                                     <span id="wardrobeFlyBank">0</span>
                                 </div>
-                                <div class="hidden sm:flex bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 px-2.5 py-1 rounded-lg text-[10px] font-bold items-center gap-1">
+                                <div
+                                    class="hidden sm:flex bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 px-2.5 py-1 rounded-lg text-[10px] font-bold items-center gap-1">
                                     <span>🏆 HI:</span>
                                     <span id="wardrobeHiScore">0m</span>
                                 </div>
-                                <button id="closeWardrobeBtn" class="bg-rose-500/20 hover:bg-rose-500/40 border border-rose-500/50 text-rose-300 font-pixel text-[10px] px-2.5 py-1 rounded-lg cursor-pointer">
+                                <button id="closeWardrobeBtn"
+                                    class="bg-rose-500/20 hover:bg-rose-500/40 border border-rose-500/50 text-rose-300 font-pixel text-[10px] px-2.5 py-1 rounded-lg cursor-pointer">
                                     ✕
                                 </button>
                             </div>
@@ -451,16 +586,23 @@
 
                         <!-- Cuerpo del Armario: Vista Previa en Vivo + Catálogo por Pestañas -->
                         <div class="flex-1 min-h-0 flex flex-col sm:flex-row overflow-hidden">
-                            
+
                             <!-- Panel Izquierdo / Superior: Vista Previa Animada de Kero -->
-                            <div class="sm:w-52 bg-slate-950/60 border-b sm:border-b-0 sm:border-r border-slate-800 p-2.5 flex sm:flex-col items-center justify-between sm:justify-center gap-2 shrink-0">
-                                <div class="relative bg-slate-900 border-2 border-slate-700 rounded-xl p-1.5 flex items-center justify-center shadow-inner">
-                                    <canvas id="keroPreviewCanvas" width="110" height="90" class="w-[92px] h-[76px] sm:w-[125px] sm:h-[102px] block"></canvas>
+                            <div
+                                class="sm:w-52 bg-slate-950/60 border-b sm:border-b-0 sm:border-r border-slate-800 p-2.5 flex sm:flex-col items-center justify-between sm:justify-center gap-2 shrink-0">
+                                <div
+                                    class="relative bg-slate-900 border-2 border-slate-700 rounded-xl p-1.5 flex items-center justify-center shadow-inner">
+                                    <canvas id="keroPreviewCanvas" width="110" height="90"
+                                        class="w-[92px] h-[76px] sm:w-[125px] sm:h-[102px] block"></canvas>
                                 </div>
-                                <div class="flex flex-col items-start sm:items-center text-left sm:text-center flex-1 sm:flex-initial">
-                                    <span class="text-[10px] text-emerald-400 font-pixel" id="previewSkinName">Verde Clásico</span>
-                                    <span class="text-[10px] text-amber-300 font-bold mt-0.5" id="previewHatName">Sin Sombrero</span>
-                                    <span class="text-[9px] text-sky-300 mt-0.5" id="previewTrailName">Estela: Polvo</span>
+                                <div
+                                    class="flex flex-col items-start sm:items-center text-left sm:text-center flex-1 sm:flex-initial">
+                                    <span class="text-[10px] text-emerald-400 font-pixel" id="previewSkinName">Verde
+                                        Clásico</span>
+                                    <span class="text-[10px] text-amber-300 font-bold mt-0.5" id="previewHatName">Sin
+                                        Sombrero</span>
+                                    <span class="text-[9px] text-sky-300 mt-0.5" id="previewTrailName">Estela:
+                                        Polvo</span>
                                 </div>
                             </div>
 
@@ -468,31 +610,39 @@
                             <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
                                 <!-- Pestañas -->
                                 <div class="flex border-b border-slate-800 bg-slate-900/60 px-2 pt-1.5 gap-1 shrink-0">
-                                    <button data-tab="skins" class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-emerald-500 text-slate-950 font-bold cursor-pointer transition-colors">
+                                    <button data-tab="skins"
+                                        class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-emerald-500 text-slate-950 font-bold cursor-pointer transition-colors">
                                         🎨 COLORES
                                     </button>
-                                    <button data-tab="hats" class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
+                                    <button data-tab="hats"
+                                        class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
                                         🎩 SOMBREROS
                                     </button>
-                                    <button data-tab="trails" class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
+                                    <button data-tab="trails"
+                                        class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
                                         ✨ ESTELAS
                                     </button>
-                                    <button data-tab="badges" class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
+                                    <button data-tab="badges"
+                                        class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
                                         🏆 LOGROS
                                     </button>
                                 </div>
 
                                 <!-- Lista de Ítems -->
-                                <div id="wardrobeItemsGrid" class="flex-1 overflow-y-auto custom-scroll p-2.5 grid grid-cols-2 sm:grid-cols-2 gap-2 content-start">
+                                <div id="wardrobeItemsGrid"
+                                    class="flex-1 overflow-y-auto custom-scroll p-2.5 grid grid-cols-2 sm:grid-cols-2 gap-2 content-start">
                                     <!-- Generado dinámicamente por JS -->
                                 </div>
                             </div>
                         </div>
 
                         <!-- Pie del Armario -->
-                        <div class="px-3.5 py-2 bg-slate-950/90 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400 shrink-0">
-                            <span>💡 <b>Tip:</b> Los premios por récord se desbloquean automáticamente al avanzar más lejos.</span>
-                            <button id="wardrobePlayBtn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[9px] px-3 py-1.5 rounded-lg font-bold cursor-pointer shrink-0">
+                        <div
+                            class="px-3.5 py-2 bg-slate-950/90 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400 shrink-0">
+                            <span>💡 <b>Tip:</b> Los premios por récord se desbloquean automáticamente al avanzar más
+                                lejos.</span>
+                            <button id="wardrobePlayBtn"
+                                class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[9px] px-3 py-1.5 rounded-lg font-bold cursor-pointer shrink-0">
                                 ¡LISTO!
                             </button>
                         </div>
@@ -502,10 +652,15 @@
         </main>
 
         <!-- LEYENDA INFERIOR SOLO PARA ESCRITORIO -->
-        <footer class="desktop-chrome w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300 shrink-0">
+        <footer
+            class="desktop-chrome w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300 shrink-0">
             <div class="flex flex-wrap items-center gap-4">
-                <span class="flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span> <b>150–5000 m:</b> 30 Premios progresivos por distancia y maestría</span>
-                <span class="flex items-center gap-1.5"><span class="inline-block w-2 h-2 rounded-full bg-amber-400"></span> <b>🪰 Moscas Doradas:</b> moneda para comprar objetos exclusivos</span>
+                <span class="flex items-center gap-1.5"><span
+                        class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span> <b>150–5000 m:</b> 30 Premios
+                    progresivos por distancia y maestría</span>
+                <span class="flex items-center gap-1.5"><span
+                        class="inline-block w-2 h-2 rounded-full bg-amber-400"></span> <b>🪰 Moscas Doradas:</b> moneda
+                    para comprar objetos exclusivos</span>
             </div>
             <div class="flex items-center gap-3 text-slate-400 text-[11px] ml-auto">
                 <span>Tecla <b>C</b>: Abrir Armario</span>
@@ -1173,7 +1328,7 @@
             try {
                 localStorage.setItem('kero_runner_save_v2', JSON.stringify(playerData));
                 localStorage.setItem('kero_runner_highscore', String(Math.floor(playerData.highScore)));
-            } catch (e) {}
+            } catch (e) { }
             updateHeaderUnlockCounter();
         }
 
@@ -1300,7 +1455,7 @@
                     }
                     document.body.classList.add('force-fullscreen');
                     if (screen.orientation && screen.orientation.lock) {
-                        await screen.orientation.lock('landscape').catch(() => {});
+                        await screen.orientation.lock('landscape').catch(() => { });
                     }
                 } else {
                     if (document.exitFullscreen) {
@@ -1403,7 +1558,6 @@
                 pxHelper(9 + ox, -5 + oy, 5, 1, '#86efac');
                 pxHelper(11 + ox, -2 + oy, 2, 2, '#166534');
             } else if (hatId === ' headband_ninja') {
-                // Cinta sobre la frente, por encima de los ojos (los ojos ocupan y 0–4)
                 pxHelper(4 + ox, -2 + oy, 15, 2, '#dc2626');
                 pxHelper(16 + ox, -2 + oy, 2, 2, '#fef08a');
                 const wave = animFrame === 0 ? 0 : 1;
@@ -1416,7 +1570,6 @@
                 pxHelper(11 + ox, -5 + oy, 3, 2, '#ffffff');
                 pxHelper(15 + ox, -3 + oy, 2, 2, '#ffffff');
             } else if (hatId === 'explorer_straw') {
-                // Sombrero de paja aventurero con cinta roja
                 pxHelper(2 + ox, -2 + oy, 19, 2, '#eab308');
                 pxHelper(6 + ox, -5 + oy, 11, 3, '#facc15');
                 pxHelper(6 + ox, -3 + oy, 11, 1, '#dc2626');
@@ -2673,14 +2826,12 @@
                 CUSTOMIZATION_CATALOG.badges.forEach(badge => {
                     const achieved = badge.check(playerData);
                     const card = document.createElement('div');
-                    card.className = `p-2.5 rounded-xl border flex items-center gap-2.5 ${
-                        achieved
+                    card.className = `p-2.5 rounded-xl border flex items-center gap-2.5 ${achieved
                             ? 'bg-emerald-950/40 border-emerald-500/60 text-slate-100'
                             : 'bg-slate-950/60 border-slate-800 text-slate-500 opacity-75'
-                    }`;
+                        }`;
                     card.innerHTML = `
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 ${
-                            achieved ? 'bg-emerald-500/20 border border-emerald-400' : 'bg-slate-900 border border-slate-800'
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 ${achieved ? 'bg-emerald-500/20 border border-emerald-400' : 'bg-slate-900 border border-slate-800'
                         }">${badge.icon}</div>
                         <div class="min-w-0 flex-1">
                             <div class="text-xs font-bold truncate ${achieved ? 'text-emerald-300' : 'text-slate-400'}">${badge.name}</div>
@@ -2722,13 +2873,12 @@
                 const rarityBadgeClass = rarityColors[item.rarity] || rarityColors['COMÚN'];
 
                 const card = document.createElement('div');
-                card.className = `p-2.5 rounded-xl border flex flex-col justify-between gap-2 transition-all ${
-                    isEquipped
+                card.className = `p-2.5 rounded-xl border flex flex-col justify-between gap-2 transition-all ${isEquipped
                         ? 'bg-emerald-950/50 border-2 border-emerald-400 shadow-lg'
                         : isUnlocked
                             ? 'bg-slate-800/80 border-slate-700 hover:border-slate-500'
                             : 'bg-slate-950/70 border-slate-800/90 opacity-90'
-                }`;
+                    }`;
 
                 let actionBtnHTML = '';
                 if (isEquipped) {
@@ -2748,11 +2898,10 @@
                     const flyPct = Math.min(100, Math.floor((playerData.flyBank / item.reqValue) * 100));
                     actionBtnHTML = `
                         <div class="flex flex-col gap-1">
-                            <button data-action="buy" data-id="${item.id}" class="w-full py-1.5 rounded-lg ${
-                                canAfford
-                                    ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 cursor-pointer shadow'
-                                    : 'bg-slate-800 text-slate-400 cursor-not-allowed'
-                            } font-pixel text-[8px] font-bold transition-colors">
+                            <button data-action="buy" data-id="${item.id}" class="w-full py-1.5 rounded-lg ${canAfford
+                            ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 cursor-pointer shadow'
+                            : 'bg-slate-800 text-slate-400 cursor-not-allowed'
+                        } font-pixel text-[8px] font-bold transition-colors">
                                 🪰 CANJEAR (${playerData.flyBank}/${item.reqValue})
                             </button>
                             <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
@@ -3070,4 +3219,5 @@
         }
     </script>
 </body>
+
 </html>
