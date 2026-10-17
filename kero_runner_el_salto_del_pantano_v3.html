@@ -347,54 +347,32 @@
                 <div
                     class="floating-hud-top absolute z-20 flex items-center justify-between gap-1.5 sm:gap-2 pointer-events-none">
 
-                    <!-- Izquierda: Velocímetro, Meta de Escenario, Día/Noche, Botones -->
-                    <div class="flex items-center gap-1 sm:gap-1.5 pointer-events-auto">
+                    <!-- Izquierda: Velocímetro, Sonido/Música y Pantalla Completa -->
+                    <div class="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
                         <!-- Velocímetro en vivo -->
                         <div id="speedBadgeHud"
-                            class="flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md border border-emerald-500/50 px-2 py-1.5 rounded-xl shadow-md transition-colors duration-300">
+                            class="flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md border border-emerald-500/50 px-2.5 py-1.5 rounded-xl shadow-md transition-colors duration-300">
                             <span
                                 class="font-pixel text-[8px] sm:text-[10px] text-emerald-400 transition-colors duration-300"
                                 id="speedText">SPD 1.0x</span>
                             <div
-                                class="w-7 sm:w-10 h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700 hidden sm:block">
+                                class="w-8 sm:w-12 h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700 hidden sm:block">
                                 <div id="speedBarFill" class="h-full bg-emerald-400 transition-all duration-150"
                                     style="width: 6%"></div>
                             </div>
                         </div>
 
-                        <!-- Indicador de Próximo Escenario por Distancia -->
-                        <div id="nextStageHud"
-                            class="hidden md:flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-md border border-purple-500/50 px-2.5 py-1.5 rounded-xl text-[10px] font-bold text-purple-300 shadow-md"
-                            title="Llega a esta distancia para desbloquear el siguiente escenario">
-                            <span id="nextStageHudIcon">🌸</span>
-                            <span id="nextStageHudText">Mundo: 2000m</span>
-                        </div>
-
-                        <!-- Indicador de Escenario Actual y Hora -->
-                        <div id="timeBadge"
-                            class="flex items-center gap-1 bg-slate-900/80 backdrop-blur-md px-2 py-1.5 rounded-xl border border-slate-700/80 text-[10px] sm:text-xs font-bold text-amber-300 shadow-md">
-                            <span id="timeIcon">☀️</span>
-                            <span id="timeLabel" class="hidden xl:inline">PANTANO</span>
-                        </div>
-
-                        <!-- Botón Rápido al Armario y Escenarios -->
-                        <button id="hudWardrobeBtn"
-                            class="bg-slate-900/85 hover:bg-slate-800 backdrop-blur-md text-amber-300 border border-amber-500/50 px-2.5 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform"
-                            title="Personalizar a Kero y Cambiar Escenario">
-                            <span>🗺️</span>
-                            <span class="hidden sm:inline text-[9px] font-pixel">MUNDOS</span>
-                        </button>
-
-                        <!-- Botón de Sonido -->
+                        <!-- Botón de Música y Sonido -->
                         <button id="muteBtn"
-                            class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md text-slate-100 border border-slate-700/80 px-2 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform"
-                            title="Activar/Silenciar Sonido (Tecla M)">
+                            class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md text-slate-100 border border-slate-700/80 px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform"
+                            title="Activar/Silenciar Música y Sonido (Tecla M)">
                             <span id="soundIcon">🔊</span>
+                            <span id="musicNoteBadge" class="hidden sm:inline font-pixel text-[8px] text-emerald-400">♫</span>
                         </button>
 
                         <!-- Botón de Pantalla Completa -->
                         <button id="fullscreenBtn"
-                            class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md text-emerald-400 border border-slate-700/80 px-2 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform"
+                            class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md text-emerald-400 border border-slate-700/80 px-2.5 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform"
                             title="Pantalla Completa Horizontal">
                             <span id="fullscreenIcon">⛶</span>
                         </button>
@@ -1330,13 +1308,140 @@
 
         /**
          * ============================================================================
-         * 2. SINTETIZADOR DE SONIDO RETRO (Web Audio API)
+         * 2. SINTETIZADOR DE SONIDO RETRO Y MELODÍAS TEMÁTICAS POR ESCENARIO
          * ============================================================================
          */
+        const STAGE_MUSIC_THEMES = {
+            // 1. Pantano Esmeralda: Alegre, saltarín y aventurero
+            emerald_swamp: {
+                tempo: 190,
+                leadWave: 'square',
+                bassWave: 'triangle',
+                leadGain: 0.045,
+                bassGain: 0.06,
+                melody: [
+                    392.00, 440.00, 493.88, 587.33, 523.25, 493.88, 440.00, 392.00,
+                    329.63, 392.00, 440.00, 523.25, 493.88, 440.00, 392.00, 0,
+                    392.00, 440.00, 493.88, 659.25, 587.33, 523.25, 493.88, 440.00,
+                    392.00, 329.63, 293.66, 392.00, 440.00, 493.88, 392.00, 0
+                ],
+                bass: [
+                    196.00, 0, 196.00, 293.66, 164.81, 0, 164.81, 246.94,
+                    130.81, 0, 130.81, 196.00, 146.83, 0, 146.83, 220.00,
+                    196.00, 0, 196.00, 293.66, 164.81, 0, 164.81, 246.94,
+                    146.83, 0, 146.83, 220.00, 196.00, 146.83, 196.00, 0
+                ]
+            },
+            // 2. Laguna de Cerezos: Escala pentatónica japonesa (Hirajoshi / Sakura)
+            sakura_lagoon: {
+                tempo: 205,
+                leadWave: 'triangle',
+                bassWave: 'sine',
+                leadGain: 0.075,
+                bassGain: 0.07,
+                melody: [
+                    440.00, 493.88, 523.25, 659.25, 493.88, 523.25, 440.00, 0,
+                    659.25, 783.99, 659.25, 523.25, 493.88, 440.00, 329.63, 0,
+                    440.00, 523.25, 659.25, 880.00, 783.99, 659.25, 523.25, 493.88,
+                    523.25, 493.88, 440.00, 329.63, 440.00, 493.88, 440.00, 0
+                ],
+                bass: [
+                    220.00, 0, 329.63, 0, 220.00, 0, 329.63, 0,
+                    174.61, 0, 261.63, 0, 164.81, 0, 246.94, 0,
+                    220.00, 0, 329.63, 0, 261.63, 0, 329.63, 0,
+                    174.61, 0, 164.81, 0, 220.00, 0, 220.00, 0
+                ]
+            },
+            // 3. Desierto Dorado: Escala Frigia Dominante / Árabe exótica
+            golden_dunes: {
+                tempo: 175,
+                leadWave: 'sawtooth',
+                bassWave: 'triangle',
+                leadGain: 0.038,
+                bassGain: 0.065,
+                melody: [
+                    329.63, 349.23, 415.30, 440.00, 493.88, 440.00, 415.30, 349.23,
+                    329.63, 415.30, 493.88, 523.25, 493.88, 440.00, 415.30, 0,
+                    587.33, 523.25, 493.88, 440.00, 415.30, 440.00, 493.88, 415.30,
+                    349.23, 415.30, 349.23, 329.63, 293.66, 349.23, 329.63, 0
+                ],
+                bass: [
+                    164.81, 164.81, 0, 246.94, 164.81, 0, 174.61, 164.81,
+                    164.81, 164.81, 0, 246.94, 174.61, 0, 146.83, 0,
+                    146.83, 146.83, 0, 220.00, 164.81, 0, 246.94, 0,
+                    174.61, 0, 146.83, 0, 164.81, 164.81, 164.81, 0
+                ]
+            },
+            // 4. Caverna Glacial: Arpegios cristalinos y brillantes
+            crystal_glacier: {
+                tempo: 185,
+                leadWave: 'triangle',
+                bassWave: 'sine',
+                leadGain: 0.08,
+                bassGain: 0.06,
+                melody: [
+                    523.25, 659.25, 783.99, 1046.50, 987.77, 783.99, 659.25, 523.25,
+                    587.33, 698.46, 880.00, 1174.66, 1046.50, 880.00, 698.46, 0,
+                    659.25, 783.99, 987.77, 1318.51, 1174.66, 987.77, 783.99, 659.25,
+                    523.25, 783.99, 659.25, 987.77, 1046.50, 783.99, 1046.50, 0
+                ],
+                bass: [
+                    261.63, 0, 392.00, 0, 220.00, 0, 329.63, 0,
+                    293.66, 0, 440.00, 0, 246.94, 0, 392.00, 0,
+                    164.81, 0, 246.94, 0, 196.00, 0, 293.66, 0,
+                    174.61, 0, 246.94, 0, 261.63, 0, 261.63, 0
+                ]
+            },
+            // 5. Volcán de Magma: Intenso, rápido y enérgico estilo jefe arcade
+            magma_volcano: {
+                tempo: 145,
+                leadWave: 'sawtooth',
+                bassWave: 'square',
+                leadGain: 0.04,
+                bassGain: 0.04,
+                melody: [
+                    293.66, 293.66, 349.23, 293.66, 440.00, 415.30, 392.00, 349.23,
+                    293.66, 349.23, 392.00, 415.30, 440.00, 392.00, 349.23, 261.63,
+                    293.66, 293.66, 440.00, 293.66, 523.25, 466.16, 440.00, 392.00,
+                    415.30, 392.00, 349.23, 329.63, 293.66, 349.23, 293.66, 0
+                ],
+                bass: [
+                    146.83, 146.83, 146.83, 146.83, 146.83, 146.83, 174.61, 196.00,
+                    146.83, 146.83, 146.83, 146.83, 207.65, 196.00, 174.61, 130.81,
+                    146.83, 146.83, 146.83, 146.83, 146.83, 146.83, 233.08, 220.00,
+                    207.65, 196.00, 174.61, 164.81, 146.83, 146.83, 146.83, 0
+                ]
+            },
+            // 6. Ciber Metrópolis: Arpegio Synthwave / Outrun electrónico
+            neon_metropolis: {
+                tempo: 155,
+                leadWave: 'square',
+                bassWave: 'sawtooth',
+                leadGain: 0.045,
+                bassGain: 0.045,
+                melody: [
+                    329.63, 392.00, 493.88, 659.25, 587.33, 493.88, 392.00, 493.88,
+                    329.63, 392.00, 493.88, 783.99, 739.99, 659.25, 587.33, 493.88,
+                    261.63, 329.63, 392.00, 523.25, 493.88, 392.00, 329.63, 392.00,
+                    293.66, 369.99, 440.00, 587.33, 659.25, 587.33, 493.88, 0
+                ],
+                bass: [
+                    164.81, 164.81, 329.63, 164.81, 164.81, 164.81, 329.63, 164.81,
+                    146.83, 146.83, 293.66, 146.83, 146.83, 146.83, 293.66, 146.83,
+                    130.81, 130.81, 261.63, 130.81, 130.81, 130.81, 261.63, 130.81,
+                    146.83, 146.83, 293.66, 146.83, 123.47, 123.47, 246.94, 123.47
+                ]
+            }
+        };
+
         class RetroSoundEngine {
             constructor() {
                 this.ctx = null;
                 this.muted = false;
+                this.bgmTimer = null;
+                this.bgmStep = 0;
+                this.currentStageTheme = 'emerald_swamp';
+                this.isBgmPlaying = false;
             }
 
             init() {
@@ -1353,7 +1458,93 @@
 
             toggleMute() {
                 this.muted = !this.muted;
+                if (this.muted) {
+                    this.stopBGM();
+                } else if (typeof gameState !== 'undefined' && gameState === 'PLAYING') {
+                    this.startBGM(activeStageId);
+                }
                 return this.muted;
+            }
+
+            startBGM(stageId) {
+                if (stageId) this.currentStageTheme = stageId;
+                this.init();
+                if (this.muted || !this.ctx) return;
+
+                if (this.bgmTimer) {
+                    clearTimeout(this.bgmTimer);
+                    this.bgmTimer = null;
+                }
+                this.isBgmPlaying = true;
+                this.scheduleNextNote();
+            }
+
+            setStageBGM(stageId) {
+                if (this.currentStageTheme !== stageId) {
+                    this.currentStageTheme = stageId;
+                    this.bgmStep = 0;
+                    if (this.isBgmPlaying && !this.muted) {
+                        this.startBGM(stageId);
+                    }
+                }
+            }
+
+            stopBGM() {
+                this.isBgmPlaying = false;
+                if (this.bgmTimer) {
+                    clearTimeout(this.bgmTimer);
+                    this.bgmTimer = null;
+                }
+            }
+
+            scheduleNextNote() {
+                if (!this.isBgmPlaying || this.muted || !this.ctx) return;
+
+                const theme = STAGE_MUSIC_THEMES[this.currentStageTheme] || STAGE_MUSIC_THEMES.emerald_swamp;
+                const step = this.bgmStep % theme.melody.length;
+                const leadFreq = theme.melody[step];
+                const bassFreq = theme.bass[step % theme.bass.length];
+
+                // Ligero aumento de ritmo conforme Kero acelera
+                const speedFactor = (typeof gameSpeed !== 'undefined' && typeof INITIAL_SPEED !== 'undefined')
+                    ? Math.min(1.25, 1 + (gameSpeed - INITIAL_SPEED) * 0.02)
+                    : 1;
+                const stepDurationMs = Math.max(95, Math.round(theme.tempo / speedFactor));
+                const noteLengthSec = (stepDurationMs / 1000) * 0.85;
+                const now = this.ctx.currentTime;
+
+                if (leadFreq > 0) {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = theme.leadWave;
+                    osc.frequency.setValueAtTime(leadFreq, now);
+
+                    gain.gain.setValueAtTime(theme.leadGain, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + noteLengthSec);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + noteLengthSec);
+                }
+
+                if (bassFreq > 0) {
+                    const bOsc = this.ctx.createOscillator();
+                    const bGain = this.ctx.createGain();
+                    bOsc.type = theme.bassWave;
+                    bOsc.frequency.setValueAtTime(bassFreq, now);
+
+                    bGain.gain.setValueAtTime(theme.bassGain, now);
+                    bGain.gain.exponentialRampToValueAtTime(0.001, now + noteLengthSec * 0.95);
+
+                    bOsc.connect(bGain);
+                    bGain.connect(this.ctx.destination);
+                    bOsc.start(now);
+                    bOsc.stop(now + noteLengthSec);
+                }
+
+                this.bgmStep++;
+                this.bgmTimer = setTimeout(() => this.scheduleNextNote(), stepDurationMs);
             }
 
             playJump() {
@@ -1600,6 +1791,7 @@
                         if (typeof gameState !== 'undefined' && gameState === 'PLAYING') {
                             activeStageId = stage.id;
                             portalFlashAlpha = 0.7;
+                            sound.setStageBGM(stage.id);
                             updateActiveStageHUD();
                             createFloatingText(`🗺️ ¡${stage.name.toUpperCase()}!`, Math.max(20, kero.x - 20), Math.max(45, kero.y - 18), '#e879f9');
                         }
@@ -2518,28 +2710,9 @@
             const st = getActiveStageObj();
             const phaseLabelEl = document.getElementById('phaseLabel');
             const biomeIconEl = document.getElementById('currentBiomeIcon');
-            const timeLabelEl = document.getElementById('timeLabel');
 
             if (phaseLabelEl) phaseLabelEl.textContent = st.name.toUpperCase();
             if (biomeIconEl) biomeIconEl.textContent = st.icon;
-            if (timeLabelEl) timeLabelEl.textContent = st.name.split(' ')[0].toUpperCase();
-
-            updateNextStageHUD();
-        }
-
-        function updateNextStageHUD() {
-            const nextLockedStage = STAGES_CATALOG.find(s => !playerData.unlockedStages.includes(s.id));
-            const iconEl = document.getElementById('nextStageHudIcon');
-            const textEl = document.getElementById('nextStageHudText');
-            if (!iconEl || !textEl) return;
-
-            if (nextLockedStage) {
-                iconEl.textContent = nextLockedStage.icon;
-                textEl.textContent = `Mundo: ${nextLockedStage.reqScore}m`;
-            } else {
-                iconEl.textContent = '🗺️';
-                textEl.textContent = '¡6/6 Mundos!';
-            }
         }
 
         function checkCollision(rectA, rectB) {
@@ -2653,11 +2826,13 @@
 
             gameState = 'PLAYING';
             sound.playJump();
+            sound.startBGM(activeStageId);
         }
 
         function triggerGameOver(obstacleType) {
             gameState = 'GAMEOVER';
             kero.isDead = true;
+            sound.stopBGM();
             sound.playGameOver();
 
             const finalScore = Math.floor(score);
@@ -2836,13 +3011,6 @@
 
             const targetNight = isNight ? 1 : 0;
             nightLerp += (targetNight - nightLerp) * 0.035 * dtScale;
-
-            const timeIcon = document.getElementById('timeIcon');
-            if (isNight) {
-                timeIcon.textContent = '🌙';
-            } else {
-                timeIcon.textContent = '☀️';
-            }
 
             const envSpeed = gameState === 'PLAYING' ? gameSpeed : 0.6;
             clouds.forEach(c => {
@@ -3229,6 +3397,7 @@
                             playerData.equippedStage = id;
                             activeStageId = id;
                             sound.playJump();
+                            sound.setStageBGM(id);
                             savePlayerData();
                             updateActiveStageHUD();
                             renderWardrobeItems();
@@ -3238,6 +3407,7 @@
                             playerData.equippedStage = id;
                             activeStageId = id;
                             sound.playUnlockFanfare();
+                            sound.setStageBGM(id);
                             savePlayerData();
                             updateActiveStageHUD();
                             renderWardrobeItems();
@@ -3460,10 +3630,6 @@
             e.stopPropagation();
             openWardrobe('stages');
         });
-        document.getElementById('hudWardrobeBtn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (gameState !== 'PLAYING') openWardrobe('stages');
-        });
         document.getElementById('headerStagesBtn').addEventListener('click', (e) => {
             e.stopPropagation();
             if (gameState !== 'PLAYING') openWardrobe('stages');
@@ -3565,6 +3731,10 @@
         function toggleSoundUI() {
             const isMuted = sound.toggleMute();
             document.getElementById('soundIcon').textContent = isMuted ? '🔇' : '🔊';
+            const noteBadge = document.getElementById('musicNoteBadge');
+            if (noteBadge) {
+                noteBadge.style.opacity = isMuted ? '0.3' : '1';
+            }
         }
 
         document.getElementById('muteBtn').addEventListener('click', (e) => {
