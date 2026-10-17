@@ -295,15 +295,22 @@
             <div class="flex items-center gap-3 min-w-0">
                 <div
                     class="w-10 h-10 bg-emerald-500/20 border-2 border-emerald-500 rounded-xl flex items-center justify-center shadow-inner shrink-0">
-                    <span class="text-xl">🐸</span>
+                    <span class="text-xl" id="headerCharEmoji">🐸</span>
                 </div>
                 <div class="truncate">
                     <h1 class="font-pixel text-base text-emerald-400 tracking-wider truncate">KERO RUNNER</h1>
-                    <p class="text-xs text-slate-400 truncate">¡Llega más lejos o ahorra <b>Moscas Doradas 🪰</b> para desbloquear nuevos Escenarios!</p>
+                    <p class="text-xs text-slate-400 truncate">¡Corre, salta y desbloquea héroes, mundos y trajes!</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2.5 shrink-0">
+                <button id="headerCharsBtn"
+                    class="bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/60 text-cyan-300 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors">
+                    <span>🐾</span>
+                    <span>Personajes</span>
+                    <span id="headerCharsCount"
+                        class="bg-cyan-400 text-slate-950 px-1.5 py-0.2 rounded-md font-pixel text-[9px]">1/6</span>
+                </button>
                 <button id="headerStagesBtn"
                     class="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/60 text-purple-300 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors">
                     <span>🗺️</span>
@@ -314,15 +321,10 @@
                 <button id="headerWardrobeBtn"
                     class="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/60 text-amber-300 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors">
                     <span>👑</span>
-                    <span>Armario & Premios</span>
+                    <span>Armario</span>
                     <span id="headerUnlockCount"
-                        class="bg-amber-400 text-slate-950 px-1.5 py-0.2 rounded-md font-pixel text-[9px]">4/36</span>
+                        class="bg-amber-400 text-slate-950 px-1.5 py-0.2 rounded-md font-pixel text-[9px]">5/42</span>
                 </button>
-                <div
-                    class="flex items-center gap-1.5 bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-bold text-emerald-300">
-                    <span id="currentBiomeIcon">🌿</span>
-                    <span id="phaseLabel">PANTANO ESMERALDA</span>
-                </div>
             </div>
         </header>
 
@@ -426,14 +428,16 @@
                         class="bg-slate-900/95 border-2 border-emerald-500/80 px-4 sm:px-6 py-3 sm:py-5 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center gap-2 sm:gap-2.5">
                         <div class="flex flex-wrap items-center justify-center gap-1.5">
                             <span
-                                class="bg-purple-500/20 text-purple-300 border border-purple-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">🗺️ 6 Escenarios Desbloqueables</span>
+                                class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">🐾 6 Personajes</span>
+                            <span
+                                class="bg-purple-500/20 text-purple-300 border border-purple-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">🗺️ 6 Escenarios</span>
                             <span
                                 class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold">🪰
                                 Banco: <b id="startBankFlies">0</b></span>
                         </div>
                         <h2 class="font-pixel text-sm sm:text-xl text-emerald-400 drop-shadow">KERO RUNNER</h2>
                         <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
-                            ¡Llega cada vez <b>más lejos</b> para descubrir y ganar nuevos <b>Escenarios</b> en plena carrera, o ahorra <b>Moscas Doradas (🪰)</b> para comprarlos en la tienda!
+                            ¡Salta los obstáculos, llega más lejos y demuestra que eres el rey indiscutible del pantano!
                         </p>
                         <div class="flex flex-wrap items-center justify-center gap-2 w-full mt-1">
                             <button id="startBtn"
@@ -442,8 +446,8 @@
                             </button>
                             <button id="startWardrobeBtn"
                                 class="btn-arcade btn-arcade-amber bg-amber-400 hover:bg-amber-300 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-3.5 py-3 rounded-xl font-bold tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer">
-                                <span>🗺️</span>
-                                <span>ESCENARIOS & SKINS</span>
+                                <span>👑</span>
+                                <span>ARMARIO</span>
                             </button>
                         </div>
                     </div>
@@ -511,8 +515,8 @@
                             </button>
                             <button id="gameOverWardrobeBtn"
                                 class="btn-arcade btn-arcade-amber bg-amber-400 hover:bg-amber-300 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-3.5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1 cursor-pointer">
-                                <span>🗺️</span>
-                                <span>MUNDOS & SKINS</span>
+                                <span>👑</span>
+                                <span>ARMARIO</span>
                             </button>
                         </div>
                     </div>
@@ -563,8 +567,9 @@
                                 </div>
                                 <div
                                     class="flex flex-col items-start sm:items-center text-left sm:text-center flex-1 sm:flex-initial">
-                                    <span class="text-[10px] text-purple-300 font-pixel" id="previewStageName">Pantano Esmeralda</span>
-                                    <span class="text-[10px] text-emerald-400 font-bold mt-0.5" id="previewSkinName">Verde
+                                    <span class="text-[10px] text-cyan-300 font-pixel" id="previewCharName">🐸 Kero la Rana</span>
+                                    <span class="text-[9px] text-purple-300 font-bold mt-0.5" id="previewStageName">Pantano Esmeralda</span>
+                                    <span class="text-[9px] text-emerald-400 font-bold mt-0.5" id="previewSkinName">Verde
                                         Clásico</span>
                                     <span class="text-[9px] text-amber-300 mt-0.5" id="previewHatName">Sin
                                         Sombrero</span>
@@ -577,8 +582,12 @@
                             <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
                                 <!-- Pestañas -->
                                 <div class="flex border-b border-slate-800 bg-slate-900/60 px-1.5 pt-1.5 gap-1 shrink-0 overflow-x-auto">
-                                    <button data-tab="stages"
+                                    <button data-tab="characters"
                                         class="wardrobe-tab flex-1 py-1.5 px-1.5 rounded-t-lg font-pixel text-[7px] sm:text-[8px] bg-emerald-500 text-slate-950 font-bold cursor-pointer transition-colors whitespace-nowrap">
+                                        🐾 PERSONAJES
+                                    </button>
+                                    <button data-tab="stages"
+                                        class="wardrobe-tab flex-1 py-1.5 px-1.5 rounded-t-lg font-pixel text-[7px] sm:text-[8px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors whitespace-nowrap">
                                         🗺️ ESCENARIOS
                                     </button>
                                     <button data-tab="skins"
@@ -631,7 +640,7 @@
                         class="inline-block w-2 h-2 rounded-full bg-amber-400"></span> <b>🪰 Moscas Doradas:</b> Moneda para comprar escenarios y trajes exclusivos</span>
             </div>
             <div class="flex items-center gap-3 text-slate-400 text-[11px] ml-auto">
-                <span>Tecla <b>C</b>: Abrir Mundos/Armario</span>
+                <span>Tecla <b>C</b>: Abrir Armario</span>
             </div>
         </footer>
     </div>
@@ -639,12 +648,78 @@
     <script>
         /**
          * ============================================================================
-         * 1. CATÁLOGO DE ESCENARIOS (BIOMAS), SKINS, SOMBREROS, ESTELAS Y LOGROS
+         * 1. CATÁLOGO DE PERSONAJES, ESCENARIOS (BIOMAS), SKINS, SOMBREROS Y LOGROS
          * ============================================================================
-         * Cada escenario se desbloquea de 2 maneras:
-         *  1. LLEGANDO MÁS LEJOS: Alcanzando su meta de metros en una partida (desde 2000m hasta 10000m).
-         *  2. COMPRÁNDOLO CON MOSCAS DORADAS: Ahorrando una cantidad alta de moscas en el banco.
          */
+        const CHARACTERS_CATALOG = [
+            {
+                id: 'kero_frog',
+                name: 'Kero la Rana',
+                icon: '🐸',
+                rarity: 'INICIAL',
+                unlockType: 'free',
+                reqScore: 0,
+                flyCost: 0,
+                desc: 'El saltador original del pantano con su veloz lengua atrapamoscas.',
+                accentColor: '#22c55e'
+            },
+            {
+                id: 'axo_axolotl',
+                name: 'Axo el Ajolote',
+                icon: '🦎',
+                rarity: 'RARO',
+                unlockType: 'hybrid',
+                reqScore: 1200,
+                flyCost: 60,
+                desc: 'Ajolote místico con branquias rosadas y cola acuática. ¡Llega a 1200 m o cómpralo por 60 🪰!',
+                accentColor: '#f472b6'
+            },
+            {
+                id: 'kame_turtle',
+                name: 'Kame la Tortuga',
+                icon: '🐢',
+                rarity: 'RARO',
+                unlockType: 'hybrid',
+                reqScore: 2500,
+                flyCost: 120,
+                desc: 'Se esconde y gira dentro de su caparazón al agacharse. ¡Llega a 2500 m o cómpralo por 120 🪰!',
+                accentColor: '#10b981'
+            },
+            {
+                id: 'cuac_duck',
+                name: 'Pato Cuac',
+                icon: '🦆',
+                rarity: 'ÉPICO',
+                unlockType: 'hybrid',
+                reqScore: 4200,
+                flyCost: 200,
+                desc: 'Veloz pato corredor que aletea en el aire al saltar. ¡Llega a 4200 m o cómpralo por 200 🪰!',
+                accentColor: '#facc15'
+            },
+            {
+                id: 'kitsune_fox',
+                name: 'Zorro Kitsune',
+                icon: '🦊',
+                rarity: 'MÍTICO',
+                unlockType: 'hybrid',
+                reqScore: 6000,
+                flyCost: 300,
+                desc: 'Espíritu zorro de orejas puntiagudas y cola esponjosa. ¡Llega a 6000 m o cómpralo por 300 🪰!',
+                accentColor: '#f97316'
+            },
+            {
+                id: 'draco_dragon',
+                name: 'Draco el Dragón',
+                icon: '🐉',
+                rarity: 'LEYENDA',
+                unlockType: 'hybrid',
+                reqScore: 8500,
+                flyCost: 450,
+                desc: 'Pequeño dragón alado con cuernos dorados y aliento ígneo. ¡Llega a 8500 m o cómpralo por 450 🪰!',
+                accentColor: '#a855f7'
+            }
+        ];
+
         const STAGES_CATALOG = [
             {
                 id: 'emerald_swamp',
@@ -1255,6 +1330,13 @@
                     check: (stats) => stats.highScore >= 200
                 },
                 {
+                    id: 'hero_collector',
+                    name: 'Reclutador de Héroes',
+                    icon: '🐾',
+                    reqText: 'Desbloquea 3 Personajes Diferentes',
+                    check: (stats) => (stats.unlockedCharacters || []).length >= 3
+                },
+                {
                     id: 'sakura_traveler',
                     name: 'Viajero de los Cerezos',
                     icon: '🌸',
@@ -1291,17 +1373,10 @@
                 },
                 {
                     id: 'swamp_monarch',
-                    name: 'Rey de los Mundos',
+                    name: 'Maestro de Héroes y Mundos',
                     icon: '👑',
-                    reqText: 'Desbloquea los 6 Escenarios',
-                    check: (stats) => stats.unlockedStages.length >= 6
-                },
-                {
-                    id: 'immortal_kero',
-                    name: 'Leyenda Inmortal',
-                    icon: '🌌',
-                    reqText: 'Alcanza los 4000 metros',
-                    check: (stats) => stats.highScore >= 4000
+                    reqText: 'Desbloquea los 6 Personajes o los 6 Escenarios',
+                    check: (stats) => stats.unlockedStages.length >= 6 || (stats.unlockedCharacters || []).length >= 6
                 }
             ]
         };
@@ -1706,10 +1781,12 @@
             highScore: 0,
             flyBank: 0,
             lifetimeFlies: 0,
+            equippedCharacter: 'kero_frog',
             equippedStage: 'emerald_swamp',
             equippedSkin: 'classic',
             equippedHat: 'none',
             equippedTrail: 'default',
+            unlockedCharacters: ['kero_frog'],
             unlockedStages: ['emerald_swamp'],
             unlockedSkins: ['classic'],
             unlockedHats: ['none'],
@@ -1731,6 +1808,12 @@
                 }
                 if (!Array.isArray(playerData.unlockedStages) || playerData.unlockedStages.length === 0) {
                     playerData.unlockedStages = ['emerald_swamp'];
+                }
+                if (!Array.isArray(playerData.unlockedCharacters) || playerData.unlockedCharacters.length === 0) {
+                    playerData.unlockedCharacters = ['kero_frog'];
+                }
+                if (!playerData.equippedCharacter) {
+                    playerData.equippedCharacter = 'kero_frog';
                 }
             } catch (e) {
                 console.warn('No se pudo leer localStorage');
@@ -1778,6 +1861,19 @@
 
         function checkAllScoreUnlocks(currentPts, notify = true) {
             let unlockedAnything = false;
+
+            // Desbloqueo de Personajes al llegar más lejos (por distancia)
+            CHARACTERS_CATALOG.forEach(charObj => {
+                if (!playerData.unlockedCharacters.includes(charObj.id)) {
+                    if (charObj.reqScore > 0 && currentPts >= charObj.reqScore) {
+                        playerData.unlockedCharacters.push(charObj.id);
+                        unlockedAnything = true;
+                        if (notify) {
+                            showUnlockToast(charObj.icon, `Personaje: ${charObj.name}`, '¡NUEVO PERSONAJE DESBLOQUEADO!');
+                        }
+                    }
+                }
+            });
 
             // Desbloqueo de Escenarios al llegar más lejos (por distancia)
             STAGES_CATALOG.forEach(stage => {
@@ -1833,11 +1929,16 @@
         }
 
         function getNextScoreReward() {
+            const charRewards = CHARACTERS_CATALOG
+                .filter(c => !playerData.unlockedCharacters.includes(c.id) && c.reqScore > 0)
+                .map(c => ({ id: c.id, name: `Héroe ${c.name}`, icon: c.icon, reqValue: c.reqScore }));
+
             const stageRewards = STAGES_CATALOG
                 .filter(s => !playerData.unlockedStages.includes(s.id) && s.reqScore > 0)
                 .map(s => ({ id: s.id, name: `Mundo ${s.name}`, icon: s.icon, reqValue: s.reqScore }));
 
             const allScoreItems = [
+                ...charRewards,
                 ...stageRewards,
                 ...CUSTOMIZATION_CATALOG.skins.filter(i => i.unlockType === 'score' && !playerData.unlockedSkins.includes(i.id)),
                 ...CUSTOMIZATION_CATALOG.hats.filter(i => i.unlockType === 'score' && !playerData.unlockedHats.includes(i.id)),
@@ -1848,13 +1949,20 @@
         }
 
         function updateHeaderUnlockCounter() {
-            const totalItems = STAGES_CATALOG.length + CUSTOMIZATION_CATALOG.skins.length + CUSTOMIZATION_CATALOG.hats.length + CUSTOMIZATION_CATALOG.trails.length;
-            const unlockedCount = playerData.unlockedStages.length + playerData.unlockedSkins.length + playerData.unlockedHats.length + playerData.unlockedTrails.length;
+            const totalItems = CHARACTERS_CATALOG.length + STAGES_CATALOG.length + CUSTOMIZATION_CATALOG.skins.length + CUSTOMIZATION_CATALOG.hats.length + CUSTOMIZATION_CATALOG.trails.length;
+            const unlockedCount = playerData.unlockedCharacters.length + playerData.unlockedStages.length + playerData.unlockedSkins.length + playerData.unlockedHats.length + playerData.unlockedTrails.length;
             const badge = document.getElementById('headerUnlockCount');
             if (badge) badge.textContent = `${unlockedCount}/${totalItems}`;
 
+            const charsBadge = document.getElementById('headerCharsCount');
+            if (charsBadge) charsBadge.textContent = `${playerData.unlockedCharacters.length}/${CHARACTERS_CATALOG.length}`;
+
             const stagesBadge = document.getElementById('headerStagesCount');
             if (stagesBadge) stagesBadge.textContent = `${playerData.unlockedStages.length}/${STAGES_CATALOG.length}`;
+
+            const activeChar = CHARACTERS_CATALOG.find(c => c.id === playerData.equippedCharacter) || CHARACTERS_CATALOG[0];
+            const headerEmoji = document.getElementById('headerCharEmoji');
+            if (headerEmoji && activeChar) headerEmoji.textContent = activeChar.icon;
 
             const startBank = document.getElementById('startBankFlies');
             if (startBank) startBank.textContent = playerData.flyBank;
@@ -2204,6 +2312,7 @@
                 }
 
                 const colors = getActiveSkinColors();
+                const charId = playerData.equippedCharacter || 'kero_frog';
                 let hopBounce = 0;
                 if (this.isGrounded && !this.isDucking && !this.isDead && customX === null) {
                     hopBounce = this.animFrame === 0 ? 0 : -3;
@@ -2219,15 +2328,16 @@
                     ctx.fillRect(drawX + 6, GROUND_Y - 2, shadowWidth, 4);
                 }
 
+                // Efecto al atrapar mosca (lengua o destello de fuego para Draco)
                 if (this.tongueTimer > 0 && this.tongueTarget && customX === null) {
-                    ctx.strokeStyle = '#fb7185';
+                    ctx.strokeStyle = charId === 'draco_dragon' ? '#f97316' : '#fb7185';
                     ctx.lineWidth = 4;
                     ctx.beginPath();
                     ctx.moveTo(drawX + this.width - 6, drawY + 16);
                     ctx.lineTo(this.tongueTarget.x, this.tongueTarget.y);
                     ctx.stroke();
 
-                    ctx.fillStyle = '#f43f5e';
+                    ctx.fillStyle = charId === 'draco_dragon' ? '#fde047' : '#f43f5e';
                     ctx.fillRect(this.tongueTarget.x - 4, this.tongueTarget.y - 4, 8, 8);
                 }
 
@@ -2237,28 +2347,107 @@
                     ctx.fillRect(drawX + gx * p, drawY + gy * p, gw * p, gh * p);
                 };
 
-                if (this.isDucking && this.isGrounded && customX === null) {
-                    px(2, 4, 22, 7, colors.bodyDark);
-                    px(3, 5, 21, 5, colors.bodyMain);
-                    px(6, 8, 16, 3, colors.bellyMain);
+                const isCrouching = this.isDucking && this.isGrounded && customX === null;
+                const wag = this.animFrame === 0 ? 0 : 1;
 
-                    px(18, 1, 5, 4, colors.bodyDark);
-                    px(19, 2, 4, 3, '#ffffff');
-                    px(21, 3, 2, 2, '#0f172a');
+                // Detalles traseros exclusivos según el personaje elegido
+                if (!isCrouching) {
+                    if (charId === 'axo_axolotl') {
+                        // Cola acuática ondulante y branquias externas rosadas de Ajolote
+                        px(-3, 11 + wag, 6, 4, colors.highlight);
+                        px(-2, 12 + wag, 5, 2, colors.bodyMain);
+                        px(2, 2 - wag, 3, 2, '#f43f5e');
+                        px(1, 5, 3, 2, '#fb7185');
+                        px(2, 8 + wag, 3, 2, '#f43f5e');
+                        px(18, 2 - wag, 3, 2, '#f43f5e');
+                        px(19, 5, 3, 2, '#fb7185');
+                    } else if (charId === 'kame_turtle') {
+                        // Caparazón abovedado de Tortuga en la espalda
+                        px(0, 4, 10, 11, '#065f46');
+                        px(1, 5, 8, 9, '#047857');
+                        px(2, 6, 5, 7, '#10b981');
+                        px(9, 4, 2, 11, '#fde68a');
+                    } else if (charId === 'cuac_duck') {
+                        // Cola emplumada y ala batiente de Pato
+                        px(0, 10 - wag, 4, 4, colors.bodyDark);
+                        px(1, 9 - wag, 3, 3, colors.highlight);
+                    } else if (charId === 'kitsune_fox') {
+                        // Gran cola esponjosa de Zorro Kitsune con punta blanca
+                        px(-4, 8 + wag, 7, 6, colors.bodyMain);
+                        px(-6, 6 + wag, 4, 5, '#ffffff');
+                    } else if (charId === 'draco_dragon') {
+                        // Alas de dragón y cola con punta de flecha
+                        const wingY = (!this.isGrounded || wag === 1) ? 1 : 4;
+                        px(-2, wingY, 6, 7, '#7c3aed');
+                        px(-1, wingY + 1, 4, 5, '#c084fc');
+                        px(-4, 13 + wag, 7, 3, colors.bodyDark);
+                        px(-5, 12 + wag, 3, 3, '#facc15');
+                    }
+                }
 
-                    px(20, 6, 3, 2, colors.cheek);
-                    px(22, 7, 3, 1, colors.outline);
-
-                    if (this.animFrame === 0) {
-                        px(0, 9, 6, 4, colors.outline);
-                        px(17, 10, 6, 3, colors.outline);
+                if (isCrouching) {
+                    if (charId === 'kame_turtle') {
+                        // Kame se mete dentro de su caparazón giratorio al agacharse
+                        px(3, 2, 20, 9, '#065f46');
+                        px(5, 3, 16, 7, '#10b981');
+                        px(8 + wag * 2, 4, 4, 5, '#34d399');
+                        px(14 - wag * 2, 4, 4, 5, '#047857');
+                        px(2, 9, 22, 2, '#fde68a');
+                        px(4, 11, 18, 2, colors.outline);
                     } else {
-                        px(3, 10, 6, 3, colors.outline);
-                        px(20, 9, 6, 4, colors.outline);
+                        px(2, 4, 22, 7, colors.bodyDark);
+                        px(3, 5, 21, 5, colors.bodyMain);
+                        px(6, 8, 16, 3, colors.bellyMain);
+
+                        px(18, 1, 5, 4, colors.bodyDark);
+                        px(19, 2, 4, 3, '#ffffff');
+                        px(21, 3, 2, 2, '#0f172a');
+
+                        if (charId === 'cuac_duck') {
+                            px(23, 5, 5, 3, '#f97316');
+                            px(23, 7, 4, 1, '#ea580c');
+                        } else if (charId === 'axo_axolotl') {
+                            px(14, 1, 3, 2, '#f43f5e');
+                            px(13, 4, 3, 2, '#fb7185');
+                        } else if (charId === 'kitsune_fox') {
+                            px(16, -2, 3, 4, colors.outline);
+                            px(20, -2, 3, 4, colors.outline);
+                        } else if (charId === 'draco_dragon') {
+                            px(16, -2, 2, 3, '#facc15');
+                            px(20, -2, 2, 3, '#facc15');
+                        }
+
+                        px(20, 6, 3, 2, colors.cheek);
+                        px(22, 7, 3, 1, colors.outline);
+
+                        if (this.animFrame === 0) {
+                            px(0, 9, 6, 4, colors.outline);
+                            px(17, 10, 6, 3, colors.outline);
+                        } else {
+                            px(3, 10, 6, 3, colors.outline);
+                            px(20, 9, 6, 4, colors.outline);
+                        }
                     }
 
                     drawKeroHat(ctx, playerData.equippedHat, px, true, this.animFrame);
                 } else {
+                    // Orejas / Cuernos / Cresta superiores según personaje
+                    if (charId === 'kitsune_fox') {
+                        px(5, -3, 4, 5, colors.outline);
+                        px(6, -2, 2, 3, '#fef08a');
+                        px(14, -3, 4, 5, colors.outline);
+                        px(15, -2, 2, 3, '#fef08a');
+                    } else if (charId === 'draco_dragon') {
+                        px(5, -3, 3, 4, '#eab308');
+                        px(6, -4, 2, 2, '#fef08a');
+                        px(15, -3, 3, 4, '#eab308');
+                        px(15, -4, 2, 2, '#fef08a');
+                    } else if (charId === 'cuac_duck') {
+                        px(9, -2, 4, 3, colors.highlight);
+                        px(10, -3, 3, 2, colors.bodyMain);
+                    }
+
+                    // Ojos
                     px(6, 0, 5, 5, colors.outline);
                     px(13, 0, 5, 5, colors.outline);
                     px(7, 1, 4, 4, '#ffffff');
@@ -2286,45 +2475,61 @@
                         px(16, 2, 1, 1, '#ffffff');
                     }
 
+                    // Torso principal
                     px(3, 4, 17, 11, colors.bodyDark);
                     px(4, 5, 15, 9, colors.bodyMain);
                     px(5, 4, 13, 2, colors.highlight);
 
+                    // Panza
                     px(7, 9, 11, 6, colors.bellyTop);
                     px(8, 10, 9, 4, colors.bellyMain);
 
+                    // Mejillas
                     px(5, 7, 2, 2, colors.cheek);
                     px(16, 7, 3, 2, colors.cheek);
 
-                    if (this.isDead && customX === null) {
+                    // Boca o Pico según personaje
+                    if (charId === 'cuac_duck') {
+                        px(17, 6, 6, 3, '#f97316');
+                        px(17, 8, 5, 1, '#ea580c');
+                    } else if (this.isDead && customX === null) {
                         px(12, 8, 5, 2, '#0f172a');
                     } else {
                         px(11, 8, 7, 1, colors.outline);
                     }
 
-                    px(4, 6, 2, 2, colors.outline);
-                    px(3, 9, 2, 2, colors.outline);
+                    // Ala lateral para Pato Cuac
+                    if (charId === 'cuac_duck') {
+                        const flap = (!this.isGrounded || wag === 1) ? -2 : 0;
+                        px(5, 8 + flap, 6, 4, colors.highlight);
+                        px(6, 9 + flap, 5, 2, colors.bodyDark);
+                    } else {
+                        px(4, 6, 2, 2, colors.outline);
+                        px(3, 9, 2, 2, colors.outline);
+                    }
 
+                    // Patas
+                    const footColor = charId === 'cuac_duck' ? '#f97316' : colors.outline;
                     if (!this.isGrounded && customX === null) {
                         if (this.vy < 0) {
-                            px(1, 15, 4, 5, colors.outline);
-                            px(0, 19, 4, 2, colors.outline);
+                            px(1, 15, 4, 5, footColor);
+                            px(0, 19, 4, 2, footColor);
                             px(16, 13, 4, 3, colors.bodyDark);
                         } else {
-                            px(2, 14, 5, 4, colors.outline);
+                            px(2, 14, 5, 4, footColor);
                             px(14, 14, 4, 4, colors.bodyDark);
                         }
                     } else {
                         if (this.animFrame === 0) {
-                            px(2, 14, 6, 5, colors.outline);
-                            px(1, 19, 8, 2, colors.outline);
+                            px(2, 14, 6, 5, footColor);
+                            px(1, 19, 8, 2, footColor);
                             px(14, 15, 4, 6, colors.bodyDark);
-                            px(14, 19, 6, 2, colors.outline);
+                            px(14, 19, 6, 2, footColor);
                         } else {
-                            px(4, 15, 5, 6, colors.outline);
-                            px(3, 19, 7, 2, colors.outline);
+                            px(4, 15, 5, 6, footColor);
+                            px(3, 19, 7, 2, footColor);
                             px(12, 14, 4, 5, colors.bodyDark);
-                            px(13, 18, 5, 2, colors.outline);
+                            px(13, 18, 5, 2, footColor);
                         }
                     }
 
@@ -3268,10 +3473,10 @@
 
         /**
          * ============================================================================
-         * 10. INTERFAZ DEL SELECTOR DE ESCENARIOS, ARMARIO Y TIENDA
+         * 10. INTERFAZ DEL SELECTOR DE PERSONAJES, ESCENARIOS, ARMARIO Y TIENDA
          * ============================================================================
          */
-        let currentWardrobeTab = 'stages';
+        let currentWardrobeTab = 'characters';
         const previewCanvas = document.getElementById('keroPreviewCanvas');
         const previewCtx = previewCanvas.getContext('2d');
 
@@ -3295,11 +3500,14 @@
         }
 
         function updatePreviewLabels() {
+            const charObj = CHARACTERS_CATALOG.find(c => c.id === playerData.equippedCharacter);
             const stageObj = STAGES_CATALOG.find(s => s.id === playerData.equippedStage);
             const skinObj = CUSTOMIZATION_CATALOG.skins.find(s => s.id === playerData.equippedSkin);
             const hatObj = CUSTOMIZATION_CATALOG.hats.find(h => h.id === playerData.equippedHat);
             const trailObj = CUSTOMIZATION_CATALOG.trails.find(t => t.id === playerData.equippedTrail);
 
+            const charLabel = document.getElementById('previewCharName');
+            if (charLabel) charLabel.textContent = charObj ? `${charObj.icon} ${charObj.name}` : '🐸 Kero la Rana';
             document.getElementById('previewStageName').textContent = stageObj ? `${stageObj.icon} ${stageObj.name}` : 'Pantano';
             document.getElementById('previewSkinName').textContent = skinObj ? skinObj.name : 'Clásico';
             document.getElementById('previewHatName').textContent = hatObj ? hatObj.name : 'Sin Sombrero';
@@ -3312,6 +3520,101 @@
             const grid = document.getElementById('wardrobeItemsGrid');
             grid.innerHTML = '';
             updatePreviewLabels();
+
+            if (currentWardrobeTab === 'characters') {
+                CHARACTERS_CATALOG.forEach(charObj => {
+                    const isUnlocked = playerData.unlockedCharacters.includes(charObj.id);
+                    const isEquipped = playerData.equippedCharacter === charObj.id;
+                    const canAffordFlies = playerData.flyBank >= charObj.flyCost;
+
+                    const card = document.createElement('div');
+                    card.className = `p-2.5 rounded-xl border flex flex-col justify-between gap-2 transition-all ${isEquipped
+                            ? 'bg-emerald-950/50 border-2 border-emerald-400 shadow-lg'
+                            : isUnlocked
+                                ? 'bg-slate-800/80 border-slate-700 hover:border-slate-500'
+                                : 'bg-slate-950/80 border-slate-800/90'
+                        }`;
+
+                    let actionHTML = '';
+                    if (isEquipped) {
+                        actionHTML = `
+                            <button class="w-full py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-pixel text-[8px] font-bold cursor-default">
+                                ✓ PERSONAJE ACTIVO
+                            </button>
+                        `;
+                    } else if (isUnlocked) {
+                        actionHTML = `
+                            <button data-char-action="equip" data-id="${charObj.id}" class="w-full py-1.5 rounded-lg bg-slate-700 hover:bg-emerald-400 hover:text-slate-950 text-slate-100 font-pixel text-[8px] font-bold cursor-pointer transition-colors">
+                                ELEGIR PERSONAJE
+                            </button>
+                        `;
+                    } else {
+                        const scorePct = Math.min(100, Math.round((playerData.highScore / charObj.reqScore) * 100));
+
+                        actionHTML = `
+                            <div class="flex flex-col gap-1.5">
+                                <div class="text-[9px] text-cyan-300 font-bold flex items-center justify-between">
+                                    <span>🏃 Meta de distancia: <b>${charObj.reqScore} m</b></span>
+                                    <span>${scorePct}% (HI: ${Math.floor(playerData.highScore)}m)</span>
+                                </div>
+                                <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-cyan-500 to-emerald-400" style="width: ${scorePct}%"></div>
+                                </div>
+                                <button data-char-action="buy" data-id="${charObj.id}" class="w-full py-1.5 rounded-lg ${canAffordFlies
+                                ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 cursor-pointer shadow'
+                                : 'bg-slate-800 text-slate-400 cursor-not-allowed'
+                            } font-pixel text-[8px] font-bold transition-colors">
+                                    🪰 COMPRAR POR ${charObj.flyCost} MOSCAS (${playerData.flyBank}/${charObj.flyCost})
+                                </button>
+                            </div>
+                        `;
+                    }
+
+                    card.innerHTML = `
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-11 h-11 rounded-xl bg-slate-900 border-2 flex items-center justify-center text-xl shrink-0 shadow-inner"
+                                 style="border-color: ${charObj.accentColor};">
+                                ${charObj.icon}
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center justify-between gap-1">
+                                    <span class="text-xs font-bold text-white truncate">${charObj.name}</span>
+                                    <span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 shrink-0">${charObj.rarity}</span>
+                                </div>
+                                <p class="text-[10px] text-slate-400 leading-tight mt-0.5">${charObj.desc}</p>
+                            </div>
+                        </div>
+                        <div class="mt-1">${actionHTML}</div>
+                    `;
+
+                    grid.appendChild(card);
+                });
+
+                grid.querySelectorAll('button[data-char-action]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const action = btn.getAttribute('data-char-action');
+                        const id = btn.getAttribute('data-id');
+                        const charObj = CHARACTERS_CATALOG.find(c => c.id === id);
+                        if (!charObj) return;
+
+                        if (action === 'equip') {
+                            playerData.equippedCharacter = id;
+                            sound.playJump();
+                            savePlayerData();
+                            renderWardrobeItems();
+                        } else if (action === 'buy' && playerData.flyBank >= charObj.flyCost) {
+                            playerData.flyBank -= charObj.flyCost;
+                            playerData.unlockedCharacters.push(id);
+                            playerData.equippedCharacter = id;
+                            sound.playUnlockFanfare();
+                            savePlayerData();
+                            renderWardrobeItems();
+                        }
+                    });
+                });
+                return;
+            }
 
             if (currentWardrobeTab === 'stages') {
                 STAGES_CATALOG.forEach(stage => {
@@ -3624,11 +3927,15 @@
 
         document.getElementById('startWardrobeBtn').addEventListener('click', (e) => {
             e.stopPropagation();
-            openWardrobe('stages');
+            openWardrobe('characters');
         });
         document.getElementById('gameOverWardrobeBtn').addEventListener('click', (e) => {
             e.stopPropagation();
-            openWardrobe('stages');
+            openWardrobe('characters');
+        });
+        document.getElementById('headerCharsBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (gameState !== 'PLAYING') openWardrobe('characters');
         });
         document.getElementById('headerStagesBtn').addEventListener('click', (e) => {
             e.stopPropagation();
