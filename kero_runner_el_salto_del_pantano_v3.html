@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>KERO RUNNER - El Juego de la Rana</title>
     <!-- PWA -->
-    <meta name="description" content="Corre, salta y agáchate con Kero, la ranita del pantano.">
+    <meta name="description" content="Corre, salta, llega más lejos y desbloquea nuevos escenarios y trajes con Kero.">
     <meta name="theme-color" content="#020617">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
@@ -47,7 +47,6 @@
             font-family: var(--pixel-font);
         }
 
-        /* Contenedor principal: En escritorio tiene marco arcade, en móvil o pantalla completa ocupa 100vw x 100dvh */
         .app-shell {
             width: 100vw;
             height: 100dvh;
@@ -57,7 +56,6 @@
             position: relative;
         }
 
-        /* Vista de Escritorio (pantallas grandes con mouse) */
         @media (min-width: 1024px) and (min-height: 620px) {
             body:not(.force-fullscreen) .app-shell {
                 max-width: 1080px;
@@ -73,7 +71,6 @@
             }
         }
 
-        /* MODO CONSOLA MÓVIL / PANTALLA COMPLETA */
         @media (max-width: 1023px),
         (max-height: 619px) {
             .desktop-chrome {
@@ -113,14 +110,12 @@
             border: none !important;
         }
 
-        /* HUD Superior Flotante con soporte para Notch / Isla Dinámica */
         .floating-hud-top {
             top: max(0.5rem, env(safe-area-inset-top));
             left: max(0.75rem, env(safe-area-inset-left));
             right: max(0.75rem, env(safe-area-inset-right));
         }
 
-        /* Botones Táctiles Flotantes Semitransparentes en las esquinas inferiores */
         .floating-btn-left {
             bottom: max(0.75rem, env(safe-area-inset-bottom));
             left: max(0.85rem, env(safe-area-inset-left));
@@ -143,7 +138,6 @@
             transform: scale(0.93) translateY(3px);
         }
 
-        /* Efecto de botón arcade tradicional para menús */
         .btn-arcade {
             transition: transform 0.06s ease, box-shadow 0.06s ease, background-color 0.15s ease;
             box-shadow: 0 4px 0 #1e293b, 0 8px 14px rgba(0, 0, 0, 0.35);
@@ -175,7 +169,6 @@
             box-shadow: 0 1px 0 #78350f, 0 3px 6px rgba(0, 0, 0, 0.3);
         }
 
-        /* Sutil efecto CRT retro */
         .crt-overlay::after {
             content: " ";
             display: block;
@@ -193,7 +186,6 @@
             touch-action: none;
         }
 
-        /* Scroll personalizado para el Armario */
         .custom-scroll::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -210,13 +202,11 @@
         }
 
         @keyframes pulse-slow {
-
             0%,
             100% {
                 opacity: 1;
                 transform: scale(1);
             }
-
             50% {
                 opacity: 0.85;
                 transform: scale(0.98);
@@ -228,12 +218,10 @@
         }
 
         @keyframes rotate-phone {
-
             0%,
             100% {
                 transform: rotate(0deg);
             }
-
             40%,
             60% {
                 transform: rotate(-90deg);
@@ -249,17 +237,14 @@
                 transform: translate(-50%, -140%);
                 opacity: 0;
             }
-
             12% {
                 transform: translate(-50%, 0);
                 opacity: 1;
             }
-
             85% {
                 transform: translate(-50%, 0);
                 opacity: 1;
             }
-
             100% {
                 transform: translate(-50%, -140%);
                 opacity: 0;
@@ -314,23 +299,29 @@
                 </div>
                 <div class="truncate">
                     <h1 class="font-pixel text-base text-emerald-400 tracking-wider truncate">KERO RUNNER</h1>
-                    <p class="text-xs text-slate-400 truncate">¡Avanza más lejos, atrapa moscas doradas y desbloquea
-                        trajes para Kero!</p>
+                    <p class="text-xs text-slate-400 truncate">¡Llega más lejos o ahorra <b>Moscas Doradas 🪰</b> para desbloquear nuevos Escenarios!</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2.5 shrink-0">
+                <button id="headerStagesBtn"
+                    class="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/60 text-purple-300 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors">
+                    <span>🗺️</span>
+                    <span>Escenarios</span>
+                    <span id="headerStagesCount"
+                        class="bg-purple-400 text-slate-950 px-1.5 py-0.2 rounded-md font-pixel text-[9px]">1/6</span>
+                </button>
                 <button id="headerWardrobeBtn"
                     class="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/60 text-amber-300 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors">
                     <span>👑</span>
                     <span>Armario & Premios</span>
                     <span id="headerUnlockCount"
-                        class="bg-amber-400 text-slate-950 px-1.5 py-0.2 rounded-md font-pixel text-[9px]">3/30</span>
+                        class="bg-amber-400 text-slate-950 px-1.5 py-0.2 rounded-md font-pixel text-[9px]">4/36</span>
                 </button>
                 <div
                     class="flex items-center gap-1.5 bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-bold text-emerald-300">
-                    <span>🌱</span>
-                    <span id="phaseLabel">INICIO SUAVE</span>
+                    <span id="currentBiomeIcon">🌿</span>
+                    <span id="phaseLabel">PANTANO ESMERALDA</span>
                 </div>
             </div>
         </header>
@@ -340,13 +331,13 @@
             <div id="canvasContainer"
                 class="relative w-full h-full bg-[#f4f7f0] border-slate-800 shadow-2xl overflow-hidden crt-overlay select-none flex items-center justify-center">
 
-                <!-- NOTIFICACIÓN TOAST DE PREMIO DESBLOQUEADO EN TIEMPO REAL -->
+                <!-- NOTIFICACIÓN TOAST DE PREMIO / ESCENARIO DESBLOQUEADO EN TIEMPO REAL -->
                 <div id="unlockToast"
-                    class="hidden absolute top-14 left-1/2 z-40 pointer-events-none bg-slate-900/95 border-2 border-amber-400 text-amber-300 px-4 py-2 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[250px] max-w-[90vw]">
+                    class="hidden absolute top-14 left-1/2 z-40 pointer-events-none bg-slate-900/95 border-2 border-amber-400 text-amber-300 px-4 py-2 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[260px] max-w-[90vw]">
                     <div class="w-9 h-9 rounded-xl bg-amber-400/20 border border-amber-400 flex items-center justify-center text-lg shrink-0"
                         id="toastIcon">🎁</div>
                     <div class="text-left overflow-hidden">
-                        <div class="font-pixel text-[8px] sm:text-[9px] text-amber-400 uppercase tracking-wider">¡PREMIO
+                        <div class="font-pixel text-[8px] sm:text-[9px] text-amber-400 uppercase tracking-wider" id="toastHeader">¡PREMIO
                             DESBLOQUEADO!</div>
                         <div class="text-xs font-bold text-white truncate" id="toastTitle">Corona del Rey</div>
                     </div>
@@ -356,7 +347,7 @@
                 <div
                     class="floating-hud-top absolute z-20 flex items-center justify-between gap-1.5 sm:gap-2 pointer-events-none">
 
-                    <!-- Izquierda: Velocímetro, Meta Próximo Premio, Audio, Armario y Pantalla Completa -->
+                    <!-- Izquierda: Velocímetro, Meta de Escenario, Día/Noche, Botones -->
                     <div class="flex items-center gap-1 sm:gap-1.5 pointer-events-auto">
                         <!-- Velocímetro en vivo -->
                         <div id="speedBadgeHud"
@@ -365,33 +356,33 @@
                                 class="font-pixel text-[8px] sm:text-[10px] text-emerald-400 transition-colors duration-300"
                                 id="speedText">SPD 1.0x</span>
                             <div
-                                class="w-8 sm:w-12 h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700 hidden sm:block">
+                                class="w-7 sm:w-10 h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700 hidden sm:block">
                                 <div id="speedBarFill" class="h-full bg-emerald-400 transition-all duration-150"
                                     style="width: 6%"></div>
                             </div>
                         </div>
 
-                        <!-- Indicador de Próximo Premio por Distancia -->
-                        <div id="nextRewardHud"
-                            class="hidden md:flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-amber-500/40 text-[10px] font-bold text-amber-300 shadow-md"
-                            title="Próximo premio por distancia">
-                            <span>🎁</span>
-                            <span id="nextRewardHudText">Meta: 150m</span>
+                        <!-- Indicador de Próximo Escenario por Distancia -->
+                        <div id="nextStageHud"
+                            class="hidden md:flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-md border border-purple-500/50 px-2.5 py-1.5 rounded-xl text-[10px] font-bold text-purple-300 shadow-md"
+                            title="Llega a esta distancia para desbloquear el siguiente escenario">
+                            <span id="nextStageHudIcon">🌸</span>
+                            <span id="nextStageHudText">Mundo: 2000m</span>
                         </div>
 
-                        <!-- Indicador Día/Noche -->
+                        <!-- Indicador de Escenario Actual y Hora -->
                         <div id="timeBadge"
                             class="flex items-center gap-1 bg-slate-900/80 backdrop-blur-md px-2 py-1.5 rounded-xl border border-slate-700/80 text-[10px] sm:text-xs font-bold text-amber-300 shadow-md">
                             <span id="timeIcon">☀️</span>
-                            <span id="timeLabel" class="hidden lg:inline">DÍA</span>
+                            <span id="timeLabel" class="hidden xl:inline">PANTANO</span>
                         </div>
 
-                        <!-- Botón Rápido al Armario -->
+                        <!-- Botón Rápido al Armario y Escenarios -->
                         <button id="hudWardrobeBtn"
                             class="bg-slate-900/85 hover:bg-slate-800 backdrop-blur-md text-amber-300 border border-amber-500/50 px-2.5 py-1.5 rounded-xl flex items-center gap-1 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform"
-                            title="Personalizar a Kero">
-                            <span>👕</span>
-                            <span class="hidden sm:inline text-[10px] font-pixel">SKINS</span>
+                            title="Personalizar a Kero y Cambiar Escenario">
+                            <span>🗺️</span>
+                            <span class="hidden sm:inline text-[9px] font-pixel">MUNDOS</span>
                         </button>
 
                         <!-- Botón de Sonido -->
@@ -413,7 +404,7 @@
                     <div
                         class="flex items-center gap-2 sm:gap-3.5 bg-slate-900/80 backdrop-blur-md px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-700/70 shadow-md font-pixel text-[9px] sm:text-xs tracking-wider pointer-events-auto">
                         <div id="flyCounterHud" class="flex items-center gap-1 text-amber-400"
-                            title="Moscas Doradas en esta partida (Banco total guardado)">
+                            title="Moscas Doradas en esta partida">
                             <span>🪰</span>
                             <span id="flyCountText">00</span>
                         </div>
@@ -455,18 +446,16 @@
                     class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-[2px] p-3 text-center transition-opacity duration-200">
                     <div
                         class="bg-slate-900/95 border-2 border-emerald-500/80 px-4 sm:px-6 py-3 sm:py-5 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center gap-2 sm:gap-2.5">
-                        <div class="flex items-center gap-2">
+                        <div class="flex flex-wrap items-center justify-center gap-1.5">
                             <span
-                                class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">Premios
-                                por Distancia</span>
+                                class="bg-purple-500/20 text-purple-300 border border-purple-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">🗺️ 6 Escenarios Desbloqueables</span>
                             <span
                                 class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold">🪰
                                 Banco: <b id="startBankFlies">0</b></span>
                         </div>
                         <h2 class="font-pixel text-sm sm:text-xl text-emerald-400 drop-shadow">KERO RUNNER</h2>
                         <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
-                            Supera récords de distancia y atrapa <b>Moscas Doradas</b> para desbloquear colores,
-                            sombreros y estelas mágicas para tu ranita.
+                            ¡Llega cada vez <b>más lejos</b> para descubrir y ganar nuevos <b>Escenarios</b> en plena carrera, o ahorra <b>Moscas Doradas (🪰)</b> para comprarlos en la tienda!
                         </p>
                         <div class="flex flex-wrap items-center justify-center gap-2 w-full mt-1">
                             <button id="startBtn"
@@ -475,14 +464,14 @@
                             </button>
                             <button id="startWardrobeBtn"
                                 class="btn-arcade btn-arcade-amber bg-amber-400 hover:bg-amber-300 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-3.5 py-3 rounded-xl font-bold tracking-wider uppercase flex items-center justify-center gap-1.5 cursor-pointer">
-                                <span>👑</span>
-                                <span>PERSONALIZAR</span>
+                                <span>🗺️</span>
+                                <span>ESCENARIOS & SKINS</span>
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- OVERLAY DE GAME OVER CON PROGRESO DE PREMIOS -->
+                <!-- OVERLAY DE GAME OVER CON PROGRESO DE PREMIOS Y ESCENARIOS -->
                 <div id="gameOverOverlay"
                     class="hidden absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/75 backdrop-blur-[2px] p-2.5 text-center">
                     <div
@@ -512,14 +501,13 @@
                                     class="font-pixel text-[10px] sm:text-xs text-amber-400 mt-0.5">00000</span>
                             </div>
                             <div class="flex flex-col items-center pl-1">
-                                <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Banco
-                                    🪰</span>
+                                <span class="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold">Banco 🪰</span>
                                 <span id="finalTotalFliesText"
                                     class="font-pixel text-[10px] sm:text-xs text-yellow-300 mt-0.5">0</span>
                             </div>
                         </div>
 
-                        <!-- Barra hacia el próximo premio por distancia -->
+                        <!-- Barra hacia el próximo premio o escenario -->
                         <div id="nextMilestoneBox"
                             class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-1.5 text-left">
                             <div class="flex items-center justify-between text-[10px] text-slate-300 mb-1">
@@ -545,14 +533,14 @@
                             </button>
                             <button id="gameOverWardrobeBtn"
                                 class="btn-arcade btn-arcade-amber bg-amber-400 hover:bg-amber-300 text-slate-950 font-pixel text-[9px] sm:text-[10px] px-3.5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1 cursor-pointer">
-                                <span>👑</span>
-                                <span>ARMARIO</span>
+                                <span>🗺️</span>
+                                <span>MUNDOS & SKINS</span>
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- MODAL DEL ARMARIO DE PERSONALIZACIÓN Y PREMIOS -->
+                <!-- MODAL DEL ARMARIO DE PERSONALIZACIÓN, ESCENARIOS Y PREMIOS -->
                 <div id="wardrobeOverlay"
                     class="hidden absolute inset-0 z-40 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-2 sm:p-4 select-none">
                     <div
@@ -562,8 +550,8 @@
                         <div
                             class="flex items-center justify-between px-3.5 py-2.5 bg-slate-950/90 border-b border-slate-800 shrink-0">
                             <div class="flex items-center gap-2">
-                                <span class="text-lg">👑</span>
-                                <h3 class="font-pixel text-[10px] sm:text-xs text-emerald-400">ARMARIO DE KERO & PREMIOS
+                                <span class="text-lg">🗺️</span>
+                                <h3 class="font-pixel text-[9px] sm:text-xs text-emerald-400">MUNDOS, SKINS & PREMIOS
                                 </h3>
                             </div>
                             <div class="flex items-center gap-2">
@@ -587,19 +575,20 @@
                         <!-- Cuerpo del Armario: Vista Previa en Vivo + Catálogo por Pestañas -->
                         <div class="flex-1 min-h-0 flex flex-col sm:flex-row overflow-hidden">
 
-                            <!-- Panel Izquierdo / Superior: Vista Previa Animada de Kero -->
+                            <!-- Panel Izquierdo / Superior: Vista Previa Animada de Kero + Escenario -->
                             <div
                                 class="sm:w-52 bg-slate-950/60 border-b sm:border-b-0 sm:border-r border-slate-800 p-2.5 flex sm:flex-col items-center justify-between sm:justify-center gap-2 shrink-0">
                                 <div
                                     class="relative bg-slate-900 border-2 border-slate-700 rounded-xl p-1.5 flex items-center justify-center shadow-inner">
                                     <canvas id="keroPreviewCanvas" width="110" height="90"
-                                        class="w-[92px] h-[76px] sm:w-[125px] sm:h-[102px] block"></canvas>
+                                        class="w-[92px] h-[76px] sm:w-[125px] sm:h-[102px] block rounded-lg"></canvas>
                                 </div>
                                 <div
                                     class="flex flex-col items-start sm:items-center text-left sm:text-center flex-1 sm:flex-initial">
-                                    <span class="text-[10px] text-emerald-400 font-pixel" id="previewSkinName">Verde
+                                    <span class="text-[10px] text-purple-300 font-pixel" id="previewStageName">Pantano Esmeralda</span>
+                                    <span class="text-[10px] text-emerald-400 font-bold mt-0.5" id="previewSkinName">Verde
                                         Clásico</span>
-                                    <span class="text-[10px] text-amber-300 font-bold mt-0.5" id="previewHatName">Sin
+                                    <span class="text-[9px] text-amber-300 mt-0.5" id="previewHatName">Sin
                                         Sombrero</span>
                                     <span class="text-[9px] text-sky-300 mt-0.5" id="previewTrailName">Estela:
                                         Polvo</span>
@@ -609,28 +598,32 @@
                             <!-- Panel Derecho: Pestañas y Cuadrícula de Objetos -->
                             <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
                                 <!-- Pestañas -->
-                                <div class="flex border-b border-slate-800 bg-slate-900/60 px-2 pt-1.5 gap-1 shrink-0">
+                                <div class="flex border-b border-slate-800 bg-slate-900/60 px-1.5 pt-1.5 gap-1 shrink-0 overflow-x-auto">
+                                    <button data-tab="stages"
+                                        class="wardrobe-tab flex-1 py-1.5 px-1.5 rounded-t-lg font-pixel text-[7px] sm:text-[8px] bg-emerald-500 text-slate-950 font-bold cursor-pointer transition-colors whitespace-nowrap">
+                                        🗺️ ESCENARIOS
+                                    </button>
                                     <button data-tab="skins"
-                                        class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-emerald-500 text-slate-950 font-bold cursor-pointer transition-colors">
+                                        class="wardrobe-tab flex-1 py-1.5 px-1.5 rounded-t-lg font-pixel text-[7px] sm:text-[8px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors whitespace-nowrap">
                                         🎨 COLORES
                                     </button>
                                     <button data-tab="hats"
-                                        class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
+                                        class="wardrobe-tab flex-1 py-1.5 px-1.5 rounded-t-lg font-pixel text-[7px] sm:text-[8px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors whitespace-nowrap">
                                         🎩 SOMBREROS
                                     </button>
                                     <button data-tab="trails"
-                                        class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
+                                        class="wardrobe-tab flex-1 py-1.5 px-1.5 rounded-t-lg font-pixel text-[7px] sm:text-[8px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors whitespace-nowrap">
                                         ✨ ESTELAS
                                     </button>
                                     <button data-tab="badges"
-                                        class="wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors">
+                                        class="wardrobe-tab flex-1 py-1.5 px-1.5 rounded-t-lg font-pixel text-[7px] sm:text-[8px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors whitespace-nowrap">
                                         🏆 LOGROS
                                     </button>
                                 </div>
 
                                 <!-- Lista de Ítems -->
                                 <div id="wardrobeItemsGrid"
-                                    class="flex-1 overflow-y-auto custom-scroll p-2.5 grid grid-cols-2 sm:grid-cols-2 gap-2 content-start">
+                                    class="flex-1 overflow-y-auto custom-scroll p-2.5 grid grid-cols-1 sm:grid-cols-2 gap-2 content-start">
                                     <!-- Generado dinámicamente por JS -->
                                 </div>
                             </div>
@@ -639,11 +632,10 @@
                         <!-- Pie del Armario -->
                         <div
                             class="px-3.5 py-2 bg-slate-950/90 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400 shrink-0">
-                            <span>💡 <b>Tip:</b> Los premios por récord se desbloquean automáticamente al avanzar más
-                                lejos.</span>
+                            <span>🗺️ <b>Desbloquea Escenarios:</b> Llega a la distancia requerida en carrera o cómpralos con Moscas Doradas.</span>
                             <button id="wardrobePlayBtn"
                                 class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[9px] px-3 py-1.5 rounded-lg font-bold cursor-pointer shrink-0">
-                                ¡LISTO!
+                                ¡JUGAR!
                             </button>
                         </div>
                     </div>
@@ -656,15 +648,12 @@
             class="desktop-chrome w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300 shrink-0">
             <div class="flex flex-wrap items-center gap-4">
                 <span class="flex items-center gap-1.5"><span
-                        class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span> <b>150–5000 m:</b> 30 Premios
-                    progresivos por distancia y maestría</span>
+                        class="inline-block w-2 h-2 rounded-full bg-purple-400"></span> <b>🗺️ Escenarios:</b> Desbloquéalos llegando más lejos (2000m - 10000m) o comprándolos con Moscas</span>
                 <span class="flex items-center gap-1.5"><span
-                        class="inline-block w-2 h-2 rounded-full bg-amber-400"></span> <b>🪰 Moscas Doradas:</b> moneda
-                    para comprar objetos exclusivos</span>
+                        class="inline-block w-2 h-2 rounded-full bg-amber-400"></span> <b>🪰 Moscas Doradas:</b> Moneda para comprar escenarios y trajes exclusivos</span>
             </div>
             <div class="flex items-center gap-3 text-slate-400 text-[11px] ml-auto">
-                <span>Tecla <b>C</b>: Abrir Armario</span>
-                <span>🌿 Día/Noche: <b>700 m</b></span>
+                <span>Tecla <b>C</b>: Abrir Mundos/Armario</span>
             </div>
         </footer>
     </div>
@@ -672,9 +661,237 @@
     <script>
         /**
          * ============================================================================
-         * 1. CATÁLOGO EXPANDIDO DE PERSONALIZACIÓN Y SISTEMA DE PREMIOS (30 ÍTEMS + 8 LOGROS)
+         * 1. CATÁLOGO DE ESCENARIOS (BIOMAS), SKINS, SOMBREROS, ESTELAS Y LOGROS
          * ============================================================================
+         * Cada escenario se desbloquea de 2 maneras:
+         *  1. LLEGANDO MÁS LEJOS: Alcanzando su meta de metros en una partida (desde 2000m hasta 10000m).
+         *  2. COMPRÁNDOLO CON MOSCAS DORADAS: Ahorrando una cantidad alta de moscas en el banco.
          */
+        const STAGES_CATALOG = [
+            {
+                id: 'emerald_swamp',
+                name: 'Pantano Esmeralda',
+                icon: '🌿',
+                rarity: 'INICIAL',
+                unlockType: 'free',
+                reqScore: 0,
+                flyCost: 0,
+                weatherType: 'fireflies',
+                desc: 'El hogar húmedo de Kero con plantas carnívoras, troncos musgosos y libélulas.',
+                day: {
+                    skyTop: [224, 242, 230],
+                    skyBottom: [246, 250, 244],
+                    hillsFar: [188, 220, 195],
+                    hillsNear: [152, 198, 162],
+                    groundMain: [92, 74, 56],
+                    groundGrass: [68, 138, 80]
+                },
+                night: {
+                    skyTop: [13, 20, 38],
+                    skyBottom: [26, 39, 66],
+                    hillsFar: [22, 34, 56],
+                    hillsNear: [30, 49, 72],
+                    groundMain: [28, 33, 48],
+                    groundGrass: [34, 92, 78]
+                },
+                obstacleTheme: {
+                    plantHead: '#f43f5e',
+                    plantRim: '#be123c',
+                    stem: '#15803d',
+                    logMain: '#78350f',
+                    logDark: '#451a03',
+                    rockMain: '#475569',
+                    rockTop: '#22c55e',
+                    flyBody: '#0284c7'
+                }
+            },
+            {
+                id: 'sakura_lagoon',
+                name: 'Laguna de Cerezos',
+                icon: '🌸',
+                rarity: 'COMÚN',
+                unlockType: 'hybrid',
+                reqScore: 2000,
+                flyCost: 80,
+                weatherType: 'petals',
+                desc: 'Jardín oriental con lluvia de pétalos rosas. ¡Llega a 2000 m o cómpralo por 80 🪰!',
+                day: {
+                    skyTop: [252, 228, 236],
+                    skyBottom: [255, 245, 248],
+                    hillsFar: [244, 194, 215],
+                    hillsNear: [232, 162, 192],
+                    groundMain: [104, 72, 88],
+                    groundGrass: [236, 72, 153]
+                },
+                night: {
+                    skyTop: [38, 16, 46],
+                    skyBottom: [68, 28, 76],
+                    hillsFar: [58, 24, 68],
+                    hillsNear: [82, 35, 92],
+                    groundMain: [42, 24, 48],
+                    groundGrass: [190, 24, 93]
+                },
+                obstacleTheme: {
+                    plantHead: '#ec4899',
+                    plantRim: '#9d174d',
+                    stem: '#059669',
+                    logMain: '#9a3412',
+                    logDark: '#431407',
+                    rockMain: '#64748b',
+                    rockTop: '#f472b6',
+                    flyBody: '#db2777'
+                }
+            },
+            {
+                id: 'golden_dunes',
+                name: 'Desierto Dorado',
+                icon: '🏜️',
+                rarity: 'RARO',
+                unlockType: 'hybrid',
+                reqScore: 3500,
+                flyCost: 150,
+                weatherType: 'sand',
+                desc: 'Dunas ancestrales con pirámides y tormenta de arena. ¡Llega a 3500 m o cómpralo por 150 🪰!',
+                day: {
+                    skyTop: [254, 215, 170],
+                    skyBottom: [254, 243, 199],
+                    hillsFar: [251, 191, 116],
+                    hillsNear: [217, 148, 78],
+                    groundMain: [146, 92, 42],
+                    groundGrass: [234, 179, 8]
+                },
+                night: {
+                    skyTop: [42, 24, 16],
+                    skyBottom: [78, 42, 24],
+                    hillsFar: [64, 34, 20],
+                    hillsNear: [92, 48, 26],
+                    groundMain: [54, 32, 18],
+                    groundGrass: [161, 98, 7]
+                },
+                obstacleTheme: {
+                    plantHead: '#eab308',
+                    plantRim: '#a16207',
+                    stem: '#15803d',
+                    logMain: '#b45309',
+                    logDark: '#78350f',
+                    rockMain: '#a8a29e',
+                    rockTop: '#facc15',
+                    flyBody: '#d97706'
+                }
+            },
+            {
+                id: 'crystal_glacier',
+                name: 'Caverna Glacial',
+                icon: '❄️',
+                rarity: 'ÉPICO',
+                unlockType: 'hybrid',
+                reqScore: 5000,
+                flyCost: 240,
+                weatherType: 'snow',
+                desc: 'Tundra helada con copos de nieve brillantes. ¡Llega a 5000 m o cómpralo por 240 🪰!',
+                day: {
+                    skyTop: [186, 230, 253],
+                    skyBottom: [240, 249, 255],
+                    hillsFar: [125, 211, 252],
+                    hillsNear: [56, 189, 248],
+                    groundMain: [30, 58, 138],
+                    groundGrass: [34, 211, 238]
+                },
+                night: {
+                    skyTop: [8, 24, 48],
+                    skyBottom: [15, 42, 78],
+                    hillsFar: [14, 52, 92],
+                    hillsNear: [20, 74, 118],
+                    groundMain: [15, 23, 42],
+                    groundGrass: [14, 165, 233]
+                },
+                obstacleTheme: {
+                    plantHead: '#38bdf8',
+                    plantRim: '#0369a1',
+                    stem: '#0284c7',
+                    logMain: '#475569',
+                    logDark: '#1e293b',
+                    rockMain: '#94a3b8',
+                    rockTop: '#e0f2fe',
+                    flyBody: '#06b6d4'
+                }
+            },
+            {
+                id: 'magma_volcano',
+                name: 'Volcán de Magma',
+                icon: '🌋',
+                rarity: 'MÍTICO',
+                unlockType: 'hybrid',
+                reqScore: 7000,
+                flyCost: 350,
+                weatherType: 'embers',
+                desc: 'Ríos de lava ardiente y cenizas volcánicas. ¡Llega a 7000 m o cómpralo por 350 🪰!',
+                day: {
+                    skyTop: [127, 29, 29],
+                    skyBottom: [251, 146, 60],
+                    hillsFar: [88, 24, 24],
+                    hillsNear: [62, 18, 18],
+                    groundMain: [38, 18, 18],
+                    groundGrass: [249, 115, 22]
+                },
+                night: {
+                    skyTop: [24, 8, 12],
+                    skyBottom: [68, 16, 20],
+                    hillsFar: [42, 12, 16],
+                    hillsNear: [58, 16, 20],
+                    groundMain: [20, 10, 12],
+                    groundGrass: [220, 38, 38]
+                },
+                obstacleTheme: {
+                    plantHead: '#f97316',
+                    plantRim: '#b91c1c',
+                    stem: '#7f1d1d',
+                    logMain: '#27272a',
+                    logDark: '#09090b',
+                    rockMain: '#3f3f46',
+                    rockTop: '#ef4444',
+                    flyBody: '#eab308'
+                }
+            },
+            {
+                id: 'neon_metropolis',
+                name: 'Ciber Metrópolis',
+                icon: '🌆',
+                rarity: 'LEYENDA',
+                unlockType: 'hybrid',
+                reqScore: 10000,
+                flyCost: 500,
+                weatherType: 'matrix',
+                desc: 'Ciudad Synthwave con lluvia digital neón. ¡Llega a 10000 m o cómpralo por 500 🪰!',
+                day: {
+                    skyTop: [46, 16, 101],
+                    skyBottom: [112, 26, 117],
+                    hillsFar: [59, 7, 100],
+                    hillsNear: [30, 27, 75],
+                    groundMain: [15, 23, 42],
+                    groundGrass: [34, 211, 238]
+                },
+                night: {
+                    skyTop: [9, 9, 24],
+                    skyBottom: [36, 12, 68],
+                    hillsFar: [24, 10, 48],
+                    hillsNear: [16, 18, 42],
+                    groundMain: [9, 12, 26],
+                    groundGrass: [232, 121, 249]
+                },
+                obstacleTheme: {
+                    plantHead: '#e879f9',
+                    plantRim: '#86198f',
+                    stem: '#06b6d4',
+                    logMain: '#312e81',
+                    logDark: '#1e1b4b',
+                    rockMain: '#1e293b',
+                    rockTop: '#22d3ee',
+                    flyBody: '#f43f5e'
+                }
+            }
+        ];
+
         const CUSTOMIZATION_CATALOG = {
             skins: [
                 {
@@ -792,7 +1009,7 @@
                     rarity: 'ÉPICO',
                     unlockType: 'score',
                     reqValue: 1400,
-                    desc: 'Premio por sobrevivir dos ciclos completos (1400 m).',
+                    desc: 'Premio por sobrevivir hasta los 1400 m.',
                     colors: {
                         outline: '#7f1d1d',
                         bodyDark: '#dc2626',
@@ -929,7 +1146,7 @@
                     rarity: 'RARO',
                     unlockType: 'score',
                     reqValue: 800,
-                    desc: 'Premio por superar la primera noche (800 m).'
+                    desc: 'Premio por superar los 800 metros.'
                 },
                 {
                     id: 'viking_helm',
@@ -1060,11 +1277,18 @@
                     check: (stats) => stats.highScore >= 200
                 },
                 {
-                    id: 'dragonfly_dodger',
-                    name: 'Domador de Libélulas',
-                    icon: '蜻',
-                    reqText: 'Alcanza 500 metros',
-                    check: (stats) => stats.highScore >= 500
+                    id: 'sakura_traveler',
+                    name: 'Viajero de los Cerezos',
+                    icon: '🌸',
+                    reqText: 'Alcanza 2000m o desbloquea 2 Escenarios',
+                    check: (stats) => stats.unlockedStages.length >= 2
+                },
+                {
+                    id: 'world_collector',
+                    name: 'Explorador de Biomas',
+                    icon: '🗺️',
+                    reqText: 'Desbloquea 4 Escenarios Diferentes',
+                    check: (stats) => stats.unlockedStages.length >= 4
                 },
                 {
                     id: 'night_survivor',
@@ -1077,36 +1301,29 @@
                     id: 'fly_hunter',
                     name: 'Cazador de Moscas',
                     icon: '🪰',
-                    reqText: 'Atrapa 30 moscas en total',
-                    check: (stats) => stats.lifetimeFlies >= 30
-                },
-                {
-                    id: 'swamp_veteran',
-                    name: 'Maestro del Salto',
-                    icon: '🔥',
-                    reqText: 'Supera los 1800 metros',
-                    check: (stats) => stats.highScore >= 1800
+                    reqText: 'Atrapa 50 moscas en total',
+                    check: (stats) => stats.lifetimeFlies >= 50
                 },
                 {
                     id: 'fly_tycoon',
                     name: 'Magnate Dorado',
                     icon: '💰',
-                    reqText: 'Atrapa 100 moscas en total',
-                    check: (stats) => stats.lifetimeFlies >= 100
+                    reqText: 'Atrapa 150 moscas en total',
+                    check: (stats) => stats.lifetimeFlies >= 150
                 },
                 {
                     id: 'swamp_monarch',
-                    name: 'Rey del Pantano',
+                    name: 'Rey de los Mundos',
                     icon: '👑',
-                    reqText: 'Supera los 3000 metros',
-                    check: (stats) => stats.highScore >= 3000
+                    reqText: 'Desbloquea los 6 Escenarios',
+                    check: (stats) => stats.unlockedStages.length >= 6
                 },
                 {
                     id: 'immortal_kero',
                     name: 'Leyenda Inmortal',
                     icon: '🌌',
-                    reqText: 'Alcanza los 5000 metros',
-                    check: (stats) => stats.highScore >= 5000
+                    reqText: 'Alcanza los 4000 metros',
+                    check: (stats) => stats.highScore >= 4000
                 }
             ]
         };
@@ -1235,7 +1452,6 @@
                 });
             }
 
-            // Fanfarria especial al desbloquear un nuevo premio o comprar un ítem
             playUnlockFanfare() {
                 if (this.muted) return;
                 this.init();
@@ -1292,16 +1508,18 @@
 
         /**
          * ============================================================================
-         * 3. ESTADO DE PROGRESIÓN PERSISTENTE (LocalStorage) Y FUNCIONES DE DESBLOQUEO
+         * 3. ESTADO DE PROGRESIÓN PERSISTENTE (LocalStorage) Y DESBLOQUEO DE ESCENARIOS
          * ============================================================================
          */
         let playerData = {
             highScore: 0,
             flyBank: 0,
             lifetimeFlies: 0,
+            equippedStage: 'emerald_swamp',
             equippedSkin: 'classic',
             equippedHat: 'none',
             equippedTrail: 'default',
+            unlockedStages: ['emerald_swamp'],
             unlockedSkins: ['classic'],
             unlockedHats: ['none'],
             unlockedTrails: ['default']
@@ -1309,14 +1527,19 @@
 
         function loadPlayerData() {
             try {
-                const saved = localStorage.getItem('kero_runner_save_v2');
+                const saved = localStorage.getItem('kero_runner_save_v3');
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     playerData = { ...playerData, ...parsed };
                 } else {
-                    // Migrar récord anterior si existía
-                    const oldHi = parseInt(localStorage.getItem('kero_runner_highscore') || '0', 10);
-                    if (oldHi > 0) playerData.highScore = oldHi;
+                    const oldV2 = localStorage.getItem('kero_runner_save_v2');
+                    if (oldV2) {
+                        const parsedV2 = JSON.parse(oldV2);
+                        playerData = { ...playerData, ...parsedV2 };
+                    }
+                }
+                if (!Array.isArray(playerData.unlockedStages) || playerData.unlockedStages.length === 0) {
+                    playerData.unlockedStages = ['emerald_swamp'];
                 }
             } catch (e) {
                 console.warn('No se pudo leer localStorage');
@@ -1326,18 +1549,18 @@
 
         function savePlayerData() {
             try {
+                localStorage.setItem('kero_runner_save_v3', JSON.stringify(playerData));
                 localStorage.setItem('kero_runner_save_v2', JSON.stringify(playerData));
                 localStorage.setItem('kero_runner_highscore', String(Math.floor(playerData.highScore)));
             } catch (e) { }
             updateHeaderUnlockCounter();
         }
 
-        // Cola de notificaciones Toast para mostrar premios ganados mientras corres
         let toastQueue = [];
         let toastActive = false;
 
-        function showUnlockToast(icon, title) {
-            toastQueue.push({ icon, title });
+        function showUnlockToast(icon, title, headerText = '¡PREMIO DESBLOQUEADO!') {
+            toastQueue.push({ icon, title, headerText });
             processToastQueue();
         }
 
@@ -1347,10 +1570,11 @@
             const next = toastQueue.shift();
             const toastEl = document.getElementById('unlockToast');
             document.getElementById('toastIcon').textContent = next.icon;
+            document.getElementById('toastHeader').textContent = next.headerText;
             document.getElementById('toastTitle').textContent = next.title;
 
             toastEl.classList.remove('hidden', 'animate-toast');
-            void toastEl.offsetWidth; // reflow
+            void toastEl.offsetWidth;
             toastEl.classList.add('animate-toast');
             sound.playUnlockFanfare();
 
@@ -1363,6 +1587,29 @@
 
         function checkAllScoreUnlocks(currentPts, notify = true) {
             let unlockedAnything = false;
+
+            // Desbloqueo de Escenarios al llegar más lejos (por distancia)
+            STAGES_CATALOG.forEach(stage => {
+                if (!playerData.unlockedStages.includes(stage.id)) {
+                    if (stage.reqScore > 0 && currentPts >= stage.reqScore) {
+                        playerData.unlockedStages.push(stage.id);
+                        playerData.equippedStage = stage.id;
+                        unlockedAnything = true;
+
+                        // Si estamos jugando, cambia el escenario en vivo para celebrar que llegó tan lejos
+                        if (typeof gameState !== 'undefined' && gameState === 'PLAYING') {
+                            activeStageId = stage.id;
+                            portalFlashAlpha = 0.7;
+                            updateActiveStageHUD();
+                            createFloatingText(`🗺️ ¡${stage.name.toUpperCase()}!`, Math.max(20, kero.x - 20), Math.max(45, kero.y - 18), '#e879f9');
+                        }
+
+                        if (notify) {
+                            showUnlockToast(stage.icon, `Escenario: ${stage.name}`, '¡NUEVO ESCENARIO POR DISTANCIA!');
+                        }
+                    }
+                }
+            });
 
             CUSTOMIZATION_CATALOG.skins.forEach(item => {
                 if (item.unlockType === 'score' && currentPts >= item.reqValue && !playerData.unlockedSkins.includes(item.id)) {
@@ -1393,9 +1640,13 @@
             }
         }
 
-        // Calcula cuál es la siguiente recompensa por distancia aún no desbloqueada
-        function getNextScoreReward(currentReferenceScore) {
+        function getNextScoreReward() {
+            const stageRewards = STAGES_CATALOG
+                .filter(s => !playerData.unlockedStages.includes(s.id) && s.reqScore > 0)
+                .map(s => ({ id: s.id, name: `Mundo ${s.name}`, icon: s.icon, reqValue: s.reqScore }));
+
             const allScoreItems = [
+                ...stageRewards,
                 ...CUSTOMIZATION_CATALOG.skins.filter(i => i.unlockType === 'score' && !playerData.unlockedSkins.includes(i.id)),
                 ...CUSTOMIZATION_CATALOG.hats.filter(i => i.unlockType === 'score' && !playerData.unlockedHats.includes(i.id)),
                 ...CUSTOMIZATION_CATALOG.trails.filter(i => i.unlockType === 'score' && !playerData.unlockedTrails.includes(i.id))
@@ -1405,17 +1656,21 @@
         }
 
         function updateHeaderUnlockCounter() {
-            const totalItems = CUSTOMIZATION_CATALOG.skins.length + CUSTOMIZATION_CATALOG.hats.length + CUSTOMIZATION_CATALOG.trails.length;
-            const unlockedCount = playerData.unlockedSkins.length + playerData.unlockedHats.length + playerData.unlockedTrails.length;
+            const totalItems = STAGES_CATALOG.length + CUSTOMIZATION_CATALOG.skins.length + CUSTOMIZATION_CATALOG.hats.length + CUSTOMIZATION_CATALOG.trails.length;
+            const unlockedCount = playerData.unlockedStages.length + playerData.unlockedSkins.length + playerData.unlockedHats.length + playerData.unlockedTrails.length;
             const badge = document.getElementById('headerUnlockCount');
             if (badge) badge.textContent = `${unlockedCount}/${totalItems}`;
+
+            const stagesBadge = document.getElementById('headerStagesCount');
+            if (stagesBadge) stagesBadge.textContent = `${playerData.unlockedStages.length}/${STAGES_CATALOG.length}`;
+
             const startBank = document.getElementById('startBankFlies');
             if (startBank) startBank.textContent = playerData.flyBank;
         }
 
         /**
          * ============================================================================
-         * 4. CONFIGURACIÓN DEL CANVAS Y ESCALADO RESPONSIVO
+         * 4. CONFIGURACIÓN DEL CANVAS Y PALETAS DINÁMICAS DE ESCENARIOS
          * ============================================================================
          */
         const canvas = document.getElementById('gameCanvas');
@@ -1502,24 +1757,6 @@
         window.addEventListener('resize', checkMobileOrientation);
         updateCanvasSize();
 
-        const PALETTE_DAY = {
-            skyTop: [228, 242, 230],
-            skyBottom: [246, 250, 244],
-            hillsFar: [195, 222, 200],
-            hillsNear: [163, 201, 171],
-            groundMain: [92, 74, 56],
-            groundGrass: [68, 138, 80]
-        };
-
-        const PALETTE_NIGHT = {
-            skyTop: [13, 20, 38],
-            skyBottom: [26, 39, 66],
-            hillsFar: [22, 34, 56],
-            hillsNear: [30, 49, 72],
-            groundMain: [28, 33, 48],
-            groundGrass: [34, 92, 78]
-        };
-
         function lerp(a, b, t) {
             return a + (b - a) * t;
         }
@@ -1540,6 +1777,14 @@
             return found ? found.colors : CUSTOMIZATION_CATALOG.skins[0].colors;
         }
 
+        // Control del Escenario activo durante la partida
+        let activeStageId = 'emerald_swamp';
+        let portalFlashAlpha = 0;
+
+        function getActiveStageObj() {
+            return STAGES_CATALOG.find(s => s.id === activeStageId) || STAGES_CATALOG[0];
+        }
+
         /**
          * ============================================================================
          * 5. DIBUJADO PIXEL-ART DE SOMBREROS Y ACCESORIOS PARA KERO
@@ -1548,7 +1793,6 @@
         function drawKeroHat(ctx, hatId, pxHelper, isDucking, animFrame) {
             if (!hatId || hatId === 'none') return;
 
-            // Desplazamiento cuando Kero se agacha
             const ox = isDucking ? 11 : 0;
             const oy = isDucking ? 1 : 0;
 
@@ -1586,11 +1830,9 @@
                     pxHelper(14, 2, 2, 1, '#38bdf8');
                 }
             } else if (hatId === 'viking_helm') {
-                // Casco vikingo metálico con cuernos blancos
                 pxHelper(5 + ox, -4 + oy, 13, 4, '#64748b');
                 pxHelper(7 + ox, -5 + oy, 9, 2, '#94a3b8');
                 pxHelper(11 + ox, -5 + oy, 2, 5, '#cbd5e1');
-                // Cuernos laterales
                 pxHelper(2 + ox, -5 + oy, 3, 2, '#fef3c7');
                 pxHelper(1 + ox, -7 + oy, 2, 2, '#ffffff');
                 pxHelper(18 + ox, -5 + oy, 3, 2, '#fef3c7');
@@ -1610,11 +1852,9 @@
                 pxHelper(8 + ox, -8 + oy, 7, 3, '#5b21b6');
                 pxHelper(9 + ox, -11 + oy, 4, 3, '#7c3aed');
             } else if (hatId === 'samurai_kabuto') {
-                // Casco Kabuto Samurái con emblema de media luna dorada
                 pxHelper(3 + ox, -2 + oy, 17, 2, '#991b1b');
                 pxHelper(5 + ox, -5 + oy, 13, 3, '#1e293b');
                 pxHelper(7 + ox, -6 + oy, 9, 1, '#334155');
-                // Cresta dorada (Kuwagata)
                 pxHelper(10 + ox, -7 + oy, 3, 3, '#facc15');
                 pxHelper(7 + ox, -9 + oy, 3, 2, '#fde047');
                 pxHelper(13 + ox, -9 + oy, 3, 2, '#fde047');
@@ -1660,10 +1900,15 @@
                 this.blinkTimer = 0;
                 this.tongueTimer = 0;
                 this.tongueTarget = null;
+                this.invincibleTimer = 0;
             }
 
             update(input, gameSpeed, dtScale) {
                 this.x = Math.round(LOGICAL_WIDTH * 0.22);
+
+                if (this.invincibleTimer > 0) {
+                    this.invincibleTimer -= dtScale;
+                }
 
                 if (input.down) {
                     if (!this.isDucking && this.isGrounded) {
@@ -1700,7 +1945,6 @@
                     this.vy += this.gravity * dtScale;
                     this.y += this.vy * dtScale;
 
-                    // Emitir estela en el aire si lleva una estela especial equipada
                     if (playerData.equippedTrail !== 'default' && Math.random() < 0.45 * dtScale) {
                         spawnTrailParticles(this.x + 10, this.y + this.height - 6, 1);
                     }
@@ -1761,6 +2005,12 @@
             draw(ctx, customX = null, customY = null, scaleP = 2) {
                 ctx.save();
 
+                if (this.invincibleTimer > 0 && customX === null) {
+                    if (Math.floor(this.invincibleTimer / 4) % 2 === 0) {
+                        ctx.globalAlpha = 0.55;
+                    }
+                }
+
                 const colors = getActiveSkinColors();
                 let hopBounce = 0;
                 if (this.isGrounded && !this.isDucking && !this.isDead && customX === null) {
@@ -1770,7 +2020,6 @@
                 const drawX = customX !== null ? customX : Math.round(this.x);
                 const drawY = customY !== null ? customY : Math.round(this.y + hopBounce);
 
-                // Sombra en el suelo
                 if (customX === null) {
                     const distFromGround = Math.max(0, (GROUND_Y - (this.y + this.height)));
                     const shadowWidth = Math.max(14, 38 - distFromGround * 0.22);
@@ -1778,7 +2027,6 @@
                     ctx.fillRect(drawX + 6, GROUND_Y - 2, shadowWidth, 4);
                 }
 
-                // Lengua rosa al atrapar mosca
                 if (this.tongueTimer > 0 && this.tongueTarget && customX === null) {
                     ctx.strokeStyle = '#fb7185';
                     ctx.lineWidth = 4;
@@ -1798,7 +2046,6 @@
                 };
 
                 if (this.isDucking && this.isGrounded && customX === null) {
-                    // SPRITE DE KERO AGACHADO CON SKIN PERSONALIZADO
                     px(2, 4, 22, 7, colors.bodyDark);
                     px(3, 5, 21, 5, colors.bodyMain);
                     px(6, 8, 16, 3, colors.bellyMain);
@@ -1820,7 +2067,6 @@
 
                     drawKeroHat(ctx, playerData.equippedHat, px, true, this.animFrame);
                 } else {
-                    // SPRITE DE KERO NORMAL / SALTANDO CON SKIN PERSONALIZADO
                     px(6, 0, 5, 5, colors.outline);
                     px(13, 0, 5, 5, colors.outline);
                     px(7, 1, 4, 4, '#ffffff');
@@ -1848,31 +2094,25 @@
                         px(16, 2, 1, 1, '#ffffff');
                     }
 
-                    // Cabeza y torso
                     px(3, 4, 17, 11, colors.bodyDark);
                     px(4, 5, 15, 9, colors.bodyMain);
                     px(5, 4, 13, 2, colors.highlight);
 
-                    // Panza
                     px(7, 9, 11, 6, colors.bellyTop);
                     px(8, 10, 9, 4, colors.bellyMain);
 
-                    // Mejillas
                     px(5, 7, 2, 2, colors.cheek);
                     px(16, 7, 3, 2, colors.cheek);
 
-                    // Sonrisa
                     if (this.isDead && customX === null) {
                         px(12, 8, 5, 2, '#0f172a');
                     } else {
                         px(11, 8, 7, 1, colors.outline);
                     }
 
-                    // Manchas espalda
                     px(4, 6, 2, 2, colors.outline);
                     px(3, 9, 2, 2, colors.outline);
 
-                    // Patas
                     if (!this.isGrounded && customX === null) {
                         if (this.vy < 0) {
                             px(1, 15, 4, 5, colors.outline);
@@ -1896,7 +2136,6 @@
                         }
                     }
 
-                    // Dibujar sombrero o accesorio equipado
                     drawKeroHat(ctx, playerData.equippedHat, px, false, this.animFrame);
                 }
 
@@ -1906,7 +2145,7 @@
 
         /**
          * ============================================================================
-         * 7. OBSTÁCULOS Y MOSCAS DORADAS
+         * 7. OBSTÁCULOS ADAPTADOS AL ESCENARIO, MOSCAS DORADAS, ORBES DE LOTO Y PORTALES
          * ============================================================================
          */
         class Obstacle {
@@ -1964,6 +2203,7 @@
                 ctx.save();
                 const baseX = Math.round(this.x);
                 const baseY = Math.round(this.y);
+                const theme = getActiveStageObj().obstacleTheme;
 
                 if (this.type === 'CARNIVORE') {
                     for (let i = 0; i < this.groupCount; i++) {
@@ -1971,17 +2211,17 @@
                         const h = (i % 2 === 1 && this.groupCount > 1) ? this.height - 6 : this.height;
                         const oy = GROUND_Y - h;
 
-                        ctx.fillStyle = '#15803d';
+                        ctx.fillStyle = theme.stem;
                         ctx.fillRect(ox + this.singleWidth / 2 - 4, oy + 16, 8, h - 16);
-                        ctx.fillStyle = '#22c55e';
+                        ctx.fillStyle = theme.rockTop;
                         ctx.fillRect(ox + 2, GROUND_Y - 10, this.singleWidth - 4, 8);
 
-                        ctx.fillStyle = '#be123c';
+                        ctx.fillStyle = theme.plantRim;
                         ctx.fillRect(ox + 2, oy, this.singleWidth - 4, 20);
-                        ctx.fillStyle = '#f43f5e';
+                        ctx.fillStyle = theme.plantHead;
                         ctx.fillRect(ox + 4, oy + 2, this.singleWidth - 8, 14);
 
-                        ctx.fillStyle = '#4c0519';
+                        ctx.fillStyle = '#1e1b4b';
                         ctx.fillRect(ox + 6, oy + 6, this.singleWidth - 12, 8);
 
                         ctx.fillStyle = '#ffffff';
@@ -1996,12 +2236,12 @@
                         const h = (i === 1 && this.groupCount === 3) ? this.height + 6 : this.height;
                         const oy = GROUND_Y - h;
 
-                        ctx.fillStyle = '#451a03';
+                        ctx.fillStyle = theme.logDark;
                         ctx.fillRect(ox + 4, oy, this.singleWidth - 8, h);
-                        ctx.fillStyle = '#78350f';
+                        ctx.fillStyle = theme.logMain;
                         ctx.fillRect(ox + 7, oy + 3, this.singleWidth - 14, h - 3);
 
-                        ctx.fillStyle = '#451a03';
+                        ctx.fillStyle = theme.logDark;
                         ctx.fillRect(ox + 11, oy + 8, 3, h - 14);
 
                         ctx.fillStyle = '#fde047';
@@ -2010,7 +2250,7 @@
                         ctx.fillRect(ox, oy + 22, 4, 4);
                         ctx.fillRect(ox + this.singleWidth / 2 - 2, oy - 4, 4, 4);
 
-                        ctx.fillStyle = '#22c55e';
+                        ctx.fillStyle = theme.rockTop;
                         ctx.fillRect(ox + 4, oy, this.singleWidth - 8, 5);
                     }
                 } else if (this.type === 'ROCK') {
@@ -2018,31 +2258,26 @@
                         const ox = baseX + i * (this.singleWidth + 2);
                         const oy = baseY;
 
-                        ctx.fillStyle = '#334155';
+                        ctx.fillStyle = '#1e293b';
                         ctx.fillRect(ox + 2, oy + 6, this.singleWidth - 4, this.height - 6);
-                        ctx.fillStyle = '#475569';
+                        ctx.fillStyle = theme.rockMain;
                         ctx.fillRect(ox + 6, oy + 2, this.singleWidth - 12, this.height - 6);
-                        ctx.fillStyle = '#64748b';
-                        ctx.fillRect(ox + 8, oy + 4, this.singleWidth - 18, 10);
 
-                        ctx.fillStyle = '#16a34a';
+                        ctx.fillStyle = theme.rockTop;
                         ctx.fillRect(ox + 5, oy + 1, this.singleWidth - 10, 6);
-                        ctx.fillStyle = '#4ade80';
-                        ctx.fillRect(ox + 8, oy + 1, this.singleWidth - 16, 3);
                     }
                 } else if (this.type === 'DRAGONFLY') {
                     const wingUp = Math.floor(this.animTimer) % 2 === 0;
 
-                    ctx.fillStyle = '#0284c7';
+                    ctx.fillStyle = theme.flyBody;
                     ctx.fillRect(baseX + 20, baseY + 12, 26, 6);
-                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillStyle = '#bae6fd';
                     ctx.fillRect(baseX + 24, baseY + 13, 4, 4);
                     ctx.fillRect(baseX + 32, baseY + 13, 4, 4);
                     ctx.fillRect(baseX + 40, baseY + 13, 4, 4);
 
-                    ctx.fillStyle = '#0369a1';
+                    ctx.fillStyle = theme.flyBody;
                     ctx.fillRect(baseX + 8, baseY + 10, 14, 10);
-                    ctx.fillStyle = '#0ea5e9';
                     ctx.fillRect(baseX + 2, baseY + 9, 9, 10);
 
                     ctx.fillStyle = '#facc15';
@@ -2050,7 +2285,7 @@
                     ctx.fillStyle = '#0f172a';
                     ctx.fillRect(baseX + 3, baseY + 12, 2, 2);
 
-                    ctx.fillStyle = 'rgba(186, 230, 253, 0.85)';
+                    ctx.fillStyle = 'rgba(224, 242, 254, 0.85)';
                     if (wingUp) {
                         ctx.fillRect(baseX + 12, baseY, 16, 10);
                         ctx.fillRect(baseX + 18, baseY + 2, 14, 8);
@@ -2123,7 +2358,7 @@
 
         /**
          * ============================================================================
-         * 8. PARTÍCULAS Y ESTELAS PERSONALIZADAS
+         * 8. PARTÍCULAS, ESTELAS Y CLIMA DINÁMICO POR ESCENARIO
          * ============================================================================
          */
         let particles = [];
@@ -2176,11 +2411,11 @@
         function createDustParticles(x, y, count, color) {
             for (let i = 0; i < count; i++) {
                 particles.push({
-                    x: x + (Math.random() * 12 - 6),
-                    y: y - Math.random() * 4,
-                    vx: -Math.random() * 2.5 - 0.5,
-                    vy: -Math.random() * 2.2 - 0.3,
-                    size: Math.random() * 3 + 2,
+                    x: x + (Math.random() * 16 - 8),
+                    y: y - Math.random() * 8,
+                    vx: (Math.random() - 0.5) * 4.5,
+                    vy: (Math.random() - 0.5) * 4.5,
+                    size: Math.random() * 4 + 2,
                     alpha: 1,
                     color: color
                 });
@@ -2192,9 +2427,9 @@
                 text,
                 x,
                 y,
-                vy: -1.3,
+                vy: -1.2,
                 alpha: 1.0,
-                life: 48,
+                life: 54,
                 color
             });
         }
@@ -2224,10 +2459,12 @@
             blinkOffset: Math.random() * 10
         }));
 
-        const fireflies = Array.from({ length: 15 }, () => ({
+        // Partículas climáticas de bioma (luciérnagas, pétalos sakura, nieve, brasas, lluvia neón)
+        const weatherParticles = Array.from({ length: 18 }, () => ({
             x: Math.random() * 960,
-            y: 90 + Math.random() * (GROUND_Y - 110),
-            vx: -0.25 - Math.random() * 0.45,
+            y: 25 + Math.random() * (GROUND_Y - 35),
+            vx: -0.4 - Math.random() * 0.6,
+            vy: 0.3 + Math.random() * 0.5,
             phase: Math.random() * Math.PI * 2
         }));
 
@@ -2240,7 +2477,7 @@
 
         /**
          * ============================================================================
-         * 9. LÓGICA DEL JUEGO Y BUCLE PRINCIPAL
+         * 9. LÓGICA DEL JUEGO Y DESBLOQUEO DE ESCENARIOS POR DISTANCIA
          * ============================================================================
          */
         const kero = new KeroPlayer();
@@ -2261,7 +2498,7 @@
 
         let gameSpeed = INITIAL_SPEED;
         let spawnTimer = 0;
-        let flySpawnTimer = 180;
+        let flySpawnTimer = 140;
 
         let isNight = false;
         let nightLerp = 0;
@@ -2272,8 +2509,38 @@
         };
 
         loadPlayerData();
+        activeStageId = playerData.equippedStage || 'emerald_swamp';
         document.getElementById('hiScoreText').textContent = formatScore(playerData.highScore);
         updateHeaderUnlockCounter();
+        updateActiveStageHUD();
+
+        function updateActiveStageHUD() {
+            const st = getActiveStageObj();
+            const phaseLabelEl = document.getElementById('phaseLabel');
+            const biomeIconEl = document.getElementById('currentBiomeIcon');
+            const timeLabelEl = document.getElementById('timeLabel');
+
+            if (phaseLabelEl) phaseLabelEl.textContent = st.name.toUpperCase();
+            if (biomeIconEl) biomeIconEl.textContent = st.icon;
+            if (timeLabelEl) timeLabelEl.textContent = st.name.split(' ')[0].toUpperCase();
+
+            updateNextStageHUD();
+        }
+
+        function updateNextStageHUD() {
+            const nextLockedStage = STAGES_CATALOG.find(s => !playerData.unlockedStages.includes(s.id));
+            const iconEl = document.getElementById('nextStageHudIcon');
+            const textEl = document.getElementById('nextStageHudText');
+            if (!iconEl || !textEl) return;
+
+            if (nextLockedStage) {
+                iconEl.textContent = nextLockedStage.icon;
+                textEl.textContent = `Mundo: ${nextLockedStage.reqScore}m`;
+            } else {
+                iconEl.textContent = '🗺️';
+                textEl.textContent = '¡6/6 Mundos!';
+            }
+        }
 
         function checkCollision(rectA, rectB) {
             return (
@@ -2334,33 +2601,9 @@
             const speedTextEl = document.getElementById('speedText');
             const speedBarEl = document.getElementById('speedBarFill');
             const speedBadgeEl = document.getElementById('speedBadgeHud');
-            const phaseLabelEl = document.getElementById('phaseLabel');
 
             speedTextEl.textContent = `SPD ${multiplier.toFixed(1)}x`;
             speedBarEl.style.width = `${pct}%`;
-
-            if (phaseLabelEl) {
-                if (score < 80) {
-                    phaseLabelEl.textContent = 'INICIO SUAVE';
-                } else if (score < 250) {
-                    phaseLabelEl.textContent = 'RITMO MEDIO';
-                } else if (gameSpeed < 9.5) {
-                    phaseLabelEl.textContent = 'VELOZ';
-                } else {
-                    phaseLabelEl.textContent = 'TURBO PANTANO';
-                }
-            }
-
-            // Actualizar meta de próximo premio en el HUD superior
-            const nextRewardHudText = document.getElementById('nextRewardHudText');
-            if (nextRewardHudText) {
-                const nextReward = getNextScoreReward(Math.floor(score));
-                if (nextReward) {
-                    nextRewardHudText.textContent = `${nextReward.icon} ${nextReward.reqValue}m`;
-                } else {
-                    nextRewardHudText.textContent = `🏆 ¡Todo desbloqueado!`;
-                }
-            }
 
             if (gameSpeed >= 9.8) {
                 speedTextEl.className = 'font-pixel text-[8px] sm:text-[10px] text-rose-400 transition-colors duration-300';
@@ -2394,8 +2637,12 @@
             milestoneFlashTimer = 0;
             gameSpeed = INITIAL_SPEED;
             spawnTimer = 42;
-            flySpawnTimer = 150;
+            flySpawnTimer = 130;
             isNight = false;
+
+            // Iniciar en el escenario que el jugador tenga equipado
+            activeStageId = playerData.equippedStage || 'emerald_swamp';
+            updateActiveStageHUD();
 
             document.getElementById('startOverlay').classList.add('hidden');
             document.getElementById('gameOverOverlay').classList.add('hidden');
@@ -2422,20 +2669,20 @@
             checkAllScoreUnlocks(finalScore, true);
             savePlayerData();
 
+            const stageName = getActiveStageObj().name;
             const reasons = {
-                'CARNIVORE': '¡Una planta carnívora atrapó a Kero!',
-                'LOG': '¡Kero tropezó con un tronco espinoso!',
-                'ROCK': '¡Kero chocó contra una roca musgosa!',
-                'DRAGONFLY': '¡Kero chocó con una libélula gigante!'
+                'CARNIVORE': `¡Una planta de ${stageName} atrapó a Kero!`,
+                'LOG': `¡Kero tropezó con un tronco en ${stageName}!`,
+                'ROCK': `¡Kero chocó contra una roca en ${stageName}!`,
+                'DRAGONFLY': `¡Una libélula de ${stageName} derribó a Kero!`
             };
-            document.getElementById('deathReasonText').textContent = reasons[obstacleType] || 'Kero chocó en el pantano';
+            document.getElementById('deathReasonText').textContent = reasons[obstacleType] || 'Kero chocó en carrera';
             document.getElementById('finalScoreText').textContent = formatScore(finalScore);
             document.getElementById('finalHiScoreText').textContent = formatScore(playerData.highScore);
             document.getElementById('hiScoreText').textContent = formatScore(playerData.highScore);
             document.getElementById('finalTotalFliesText').textContent = playerData.flyBank;
 
-            // Actualizar barra de progreso hacia el próximo premio por distancia
-            const nextReward = getNextScoreReward(playerData.highScore);
+            const nextReward = getNextScoreReward();
             const nextLabel = document.getElementById('nextMilestoneLabel');
             const nextPct = document.getElementById('nextMilestonePercent');
             const nextFill = document.getElementById('nextMilestoneFill');
@@ -2465,6 +2712,10 @@
             lastTime = now;
             const dtScale = dt / 16.667;
 
+            if (portalFlashAlpha > 0) {
+                portalFlashAlpha = Math.max(0, portalFlashAlpha - 0.03 * dtScale);
+            }
+
             if (gameState === 'PLAYING') {
                 if (gameSpeed < MAX_SPEED) {
                     gameSpeed = Math.min(MAX_SPEED, gameSpeed + ACCELERATION * dtScale);
@@ -2473,7 +2724,6 @@
                 score += gameSpeed * 0.032 * dtScale;
                 const currentFloorScore = Math.floor(score);
 
-                // Comprobar en vivo si alcanzó una distancia de premio
                 checkAllScoreUnlocks(currentFloorScore, true);
 
                 const currentHundred = Math.floor(currentFloorScore / 100);
@@ -2510,7 +2760,7 @@
                 flySpawnTimer -= dtScale;
                 if (flySpawnTimer <= 0) {
                     spawnGoldenFly();
-                    flySpawnTimer = 190 + Math.random() * 170;
+                    flySpawnTimer = 160 + Math.random() * 145;
                 }
 
                 if (gameSpeed > 7.5) {
@@ -2526,7 +2776,7 @@
                     const obs = obstacles[i];
                     obs.update(gameSpeed, dtScale);
 
-                    if (checkCollision(keroBox, obs.getHitbox())) {
+                    if (kero.invincibleTimer <= 0 && checkCollision(keroBox, obs.getHitbox())) {
                         document.getElementById('scoreHud').style.opacity = '1';
                         triggerGameOver(obs.type);
                         break;
@@ -2588,13 +2838,10 @@
             nightLerp += (targetNight - nightLerp) * 0.035 * dtScale;
 
             const timeIcon = document.getElementById('timeIcon');
-            const timeLabel = document.getElementById('timeLabel');
             if (isNight) {
                 timeIcon.textContent = '🌙';
-                timeLabel.textContent = 'NOCHE';
             } else {
                 timeIcon.textContent = '☀️';
-                timeLabel.textContent = 'DÍA';
             }
 
             const envSpeed = gameState === 'PLAYING' ? gameSpeed : 0.6;
@@ -2615,10 +2862,12 @@
                 });
             }
 
-            fireflies.forEach(f => {
-                f.x += (f.vx - (gameState === 'PLAYING' ? gameSpeed * 0.12 : 0)) * dtScale;
-                f.phase += 0.08 * dtScale;
-                if (f.x < -10) f.x = LOGICAL_WIDTH + 10;
+            weatherParticles.forEach(wp => {
+                wp.x += (wp.vx - (gameState === 'PLAYING' ? gameSpeed * 0.16 : 0)) * dtScale;
+                wp.y += wp.vy * dtScale;
+                wp.phase += 0.08 * dtScale;
+                if (wp.x < -10) wp.x = LOGICAL_WIDTH + 10;
+                if (wp.y > GROUND_Y - 6) wp.y = 18;
             });
 
             for (let i = speedLines.length - 1; i >= 0; i--) {
@@ -2641,23 +2890,104 @@
                 const ft = floatingTexts[i];
                 ft.y += ft.vy * dtScale;
                 ft.life -= dtScale;
-                ft.alpha = Math.max(0, ft.life / 48);
+                ft.alpha = Math.max(0, ft.life / 54);
                 if (ft.life <= 0) floatingTexts.splice(i, 1);
             }
+        }
+
+        function drawStageBackgroundDecor(ctx, stageId, farColor, nearColor) {
+            ctx.fillStyle = farColor;
+            if (stageId === 'golden_dunes') {
+                // Pirámides en el horizonte
+                for (let x = 30; x < LOGICAL_WIDTH; x += 220) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, GROUND_Y);
+                    ctx.lineTo(x + 55, GROUND_Y - 52);
+                    ctx.lineTo(x + 110, GROUND_Y);
+                    ctx.fill();
+                }
+            } else if (stageId === 'neon_metropolis') {
+                // Rascacielos Cyberpunk con ventanas iluminadas
+                for (let x = 10; x < LOGICAL_WIDTH; x += 95) {
+                    const h = 38 + (x % 3) * 16;
+                    ctx.fillStyle = farColor;
+                    ctx.fillRect(x, GROUND_Y - h, 52, h);
+                    ctx.fillStyle = 'rgba(34, 211, 238, 0.35)';
+                    ctx.fillRect(x + 8, GROUND_Y - h + 6, 8, h - 12);
+                    ctx.fillRect(x + 28, GROUND_Y - h + 10, 8, h - 16);
+                }
+            } else if (stageId === 'crystal_glacier' || stageId === 'magma_volcano') {
+                // Picos escarpados / volcanes
+                for (let x = 0; x < LOGICAL_WIDTH; x += 170) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, GROUND_Y);
+                    ctx.lineTo(x + 48, GROUND_Y - 46);
+                    ctx.lineTo(x + 72, GROUND_Y - 46);
+                    ctx.lineTo(x + 120, GROUND_Y);
+                    ctx.fill();
+                }
+            } else {
+                // Colinas suaves de Pantano / Laguna Sakura
+                for (let x = 0; x < LOGICAL_WIDTH; x += 160) {
+                    ctx.fillRect(x, GROUND_Y - 28, 110, 28);
+                    ctx.fillRect(x + 20, GROUND_Y - 38, 70, 10);
+                }
+            }
+
+            ctx.fillStyle = nearColor;
+            for (let x = 40; x < LOGICAL_WIDTH; x += 140) {
+                ctx.fillRect(x, GROUND_Y - 18, 95, 18);
+            }
+        }
+
+        function drawStageWeather(ctx, weatherType) {
+            ctx.save();
+            weatherParticles.forEach(wp => {
+                const wx = Math.round(wp.x + Math.sin(wp.phase) * 4);
+                const wy = Math.round(wp.y);
+
+                if (weatherType === 'petals') {
+                    ctx.fillStyle = '#f472b6';
+                    ctx.fillRect(wx, wy, 4, 3);
+                    ctx.fillStyle = '#fbcfe8';
+                    ctx.fillRect(wx + 1, wy + 1, 2, 2);
+                } else if (weatherType === 'snow') {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(wx, wy, 3, 3);
+                } else if (weatherType === 'embers') {
+                    ctx.fillStyle = Math.sin(wp.phase) > 0 ? '#f97316' : '#fde047';
+                    ctx.fillRect(wx, wy, 3, 3);
+                } else if (weatherType === 'sand') {
+                    ctx.fillStyle = 'rgba(253, 224, 71, 0.55)';
+                    ctx.fillRect(wx, wy, 6, 2);
+                } else if (weatherType === 'matrix') {
+                    ctx.fillStyle = 'rgba(34, 211, 238, 0.65)';
+                    ctx.fillRect(wx, wy, 2, 8);
+                } else if (nightLerp > 0.1) {
+                    const glow = (0.4 + 0.6 * Math.sin(wp.phase)) * nightLerp;
+                    ctx.fillStyle = `rgba(190, 242, 100, ${glow})`;
+                    ctx.fillRect(wx, wy, 3, 3);
+                }
+            });
+            ctx.restore();
         }
 
         function drawGame(now) {
             ctx.clearRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
 
+            const stage = getActiveStageObj();
+            const palDay = stage.day;
+            const palNight = stage.night;
+
             const skyGrad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
-            skyGrad.addColorStop(0, lerpColorRGB(PALETTE_DAY.skyTop, PALETTE_NIGHT.skyTop, nightLerp));
-            skyGrad.addColorStop(1, lerpColorRGB(PALETTE_DAY.skyBottom, PALETTE_NIGHT.skyBottom, nightLerp));
+            skyGrad.addColorStop(0, lerpColorRGB(palDay.skyTop, palNight.skyTop, nightLerp));
+            skyGrad.addColorStop(1, lerpColorRGB(palDay.skyBottom, palNight.skyBottom, nightLerp));
             ctx.fillStyle = skyGrad;
             ctx.fillRect(0, 0, LOGICAL_WIDTH, GROUND_Y);
 
-            if (nightLerp > 0.05) {
+            if (nightLerp > 0.05 || stage.id === 'neon_metropolis') {
                 ctx.save();
-                ctx.globalAlpha = nightLerp;
+                ctx.globalAlpha = stage.id === 'neon_metropolis' ? 0.85 : nightLerp;
 
                 stars.forEach(s => {
                     if (s.x <= LOGICAL_WIDTH) {
@@ -2669,15 +2999,13 @@
 
                 const moonX = LOGICAL_WIDTH - 130;
                 const moonY = 48;
-                ctx.fillStyle = '#fef08a';
+                ctx.fillStyle = stage.id === 'neon_metropolis' ? '#f43f5e' : '#fef08a';
                 ctx.fillRect(moonX, moonY, 26, 26);
-                ctx.fillStyle = lerpColorRGB(PALETTE_DAY.skyTop, PALETTE_NIGHT.skyTop, nightLerp);
-                ctx.fillRect(moonX - 6, moonY - 4, 20, 20);
 
                 ctx.restore();
             }
 
-            if (nightLerp < 0.95) {
+            if (nightLerp < 0.95 && stage.id !== 'neon_metropolis') {
                 const sunX = LOGICAL_WIDTH - 136;
                 ctx.save();
                 ctx.globalAlpha = 1 - nightLerp;
@@ -2688,34 +3016,17 @@
                 ctx.restore();
             }
 
-            ctx.fillStyle = nightLerp > 0.5 ? 'rgba(148, 163, 184, 0.22)' : 'rgba(255, 255, 255, 0.85)';
+            ctx.fillStyle = nightLerp > 0.5 ? 'rgba(148, 163, 184, 0.22)' : 'rgba(255, 255, 255, 0.75)';
             clouds.forEach(c => {
                 ctx.fillRect(Math.round(c.x), Math.round(c.y), c.w, 12);
                 ctx.fillRect(Math.round(c.x + 8), Math.round(c.y - 6), c.w - 16, 8);
             });
 
-            ctx.fillStyle = lerpColorRGB(PALETTE_DAY.hillsFar, PALETTE_NIGHT.hillsFar, nightLerp);
-            for (let x = 0; x < LOGICAL_WIDTH; x += 160) {
-                ctx.fillRect(x, GROUND_Y - 28, 110, 28);
-                ctx.fillRect(x + 20, GROUND_Y - 38, 70, 10);
-            }
+            const farHillCol = lerpColorRGB(palDay.hillsFar, palNight.hillsFar, nightLerp);
+            const nearHillCol = lerpColorRGB(palDay.hillsNear, palNight.hillsNear, nightLerp);
+            drawStageBackgroundDecor(ctx, stage.id, farHillCol, nearHillCol);
 
-            ctx.fillStyle = lerpColorRGB(PALETTE_DAY.hillsNear, PALETTE_NIGHT.hillsNear, nightLerp);
-            for (let x = 40; x < LOGICAL_WIDTH; x += 140) {
-                ctx.fillRect(x, GROUND_Y - 18, 95, 18);
-            }
-
-            if (nightLerp > 0.1) {
-                ctx.save();
-                fireflies.forEach(f => {
-                    const glow = (0.4 + 0.6 * Math.sin(f.phase)) * nightLerp;
-                    ctx.fillStyle = `rgba(190, 242, 100, ${glow * 0.35})`;
-                    ctx.fillRect(Math.round(f.x - 2), Math.round(f.y + Math.sin(f.phase) * 4 - 2), 7, 7);
-                    ctx.fillStyle = `rgba(236, 252, 203, ${glow})`;
-                    ctx.fillRect(Math.round(f.x), Math.round(f.y + Math.sin(f.phase) * 4), 3, 3);
-                });
-                ctx.restore();
-            }
+            drawStageWeather(ctx, stage.weatherType);
 
             if (speedLines.length > 0) {
                 ctx.save();
@@ -2728,19 +3039,19 @@
                 ctx.restore();
             }
 
-            ctx.fillStyle = lerpColorRGB(PALETTE_DAY.groundMain, PALETTE_NIGHT.groundMain, nightLerp);
+            ctx.fillStyle = lerpColorRGB(palDay.groundMain, palNight.groundMain, nightLerp);
             ctx.fillRect(0, GROUND_Y, LOGICAL_WIDTH, LOGICAL_HEIGHT - GROUND_Y);
 
-            ctx.fillStyle = lerpColorRGB(PALETTE_DAY.groundGrass, PALETTE_NIGHT.groundGrass, nightLerp);
+            ctx.fillStyle = lerpColorRGB(palDay.groundGrass, palNight.groundGrass, nightLerp);
             ctx.fillRect(0, GROUND_Y, LOGICAL_WIDTH, 6);
 
             groundBumps.forEach(b => {
                 if (b.isTuft) {
-                    ctx.fillStyle = nightLerp > 0.5 ? '#15803d' : '#22c55e';
+                    ctx.fillStyle = lerpColorRGB(palDay.groundGrass, palNight.groundGrass, nightLerp);
                     ctx.fillRect(Math.round(b.x), GROUND_Y - 4, 3, 4);
                     ctx.fillRect(Math.round(b.x + 4), GROUND_Y - 6, 3, 6);
                 } else {
-                    ctx.fillStyle = nightLerp > 0.5 ? '#475569' : '#78716c';
+                    ctx.fillStyle = 'rgba(148, 163, 184, 0.35)';
                     ctx.fillRect(Math.round(b.x), GROUND_Y + b.yOffset, b.w, 3);
                 }
             });
@@ -2760,7 +3071,7 @@
             floatingTexts.forEach(ft => {
                 ctx.save();
                 ctx.globalAlpha = ft.alpha;
-                ctx.font = 'bold 11px "Press Start 2P", monospace';
+                ctx.font = 'bold 10px "Press Start 2P", monospace';
                 ctx.fillStyle = '#0f172a';
                 ctx.fillText(ft.text, Math.round(ft.x) + 2, Math.round(ft.y) + 2);
                 ctx.fillStyle = ft.color;
@@ -2768,7 +3079,14 @@
                 ctx.restore();
             });
 
-            // Si el armario está abierto, animar la vista previa de Kero
+            // Destello dimensional al cruzar un portal
+            if (portalFlashAlpha > 0) {
+                ctx.save();
+                ctx.fillStyle = `rgba(240, 171, 252, ${portalFlashAlpha})`;
+                ctx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+                ctx.restore();
+            }
+
             if (!document.getElementById('wardrobeOverlay').classList.contains('hidden')) {
                 drawWardrobePreview();
             }
@@ -2782,10 +3100,10 @@
 
         /**
          * ============================================================================
-         * 10. INTERFAZ DEL ARMARIO Y SISTEMA DE TIENDA / EQUIPAMIENTO
+         * 10. INTERFAZ DEL SELECTOR DE ESCENARIOS, ARMARIO Y TIENDA
          * ============================================================================
          */
-        let currentWardrobeTab = 'skins';
+        let currentWardrobeTab = 'stages';
         const previewCanvas = document.getElementById('keroPreviewCanvas');
         const previewCtx = previewCanvas.getContext('2d');
 
@@ -2793,23 +3111,28 @@
             previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
             previewCtx.imageSmoothingEnabled = false;
 
-            // Fondo de pedestal del pantano
-            previewCtx.fillStyle = '#1e293b';
-            previewCtx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
-            previewCtx.fillStyle = '#15803d';
-            previewCtx.fillRect(14, 74, 82, 6);
-            previewCtx.fillStyle = '#451a03';
-            previewCtx.fillRect(18, 80, 74, 8);
+            const eqStage = STAGES_CATALOG.find(s => s.id === playerData.equippedStage) || STAGES_CATALOG[0];
+            const skyCol = `rgb(${eqStage.day.skyTop[0]}, ${eqStage.day.skyTop[1]}, ${eqStage.day.skyTop[2]})`;
+            const grassCol = `rgb(${eqStage.day.groundGrass[0]}, ${eqStage.day.groundGrass[1]}, ${eqStage.day.groundGrass[2]})`;
+            const groundCol = `rgb(${eqStage.day.groundMain[0]}, ${eqStage.day.groundMain[1]}, ${eqStage.day.groundMain[2]})`;
 
-            // Dibujar a Kero centrado a escala 2.4x
+            previewCtx.fillStyle = skyCol;
+            previewCtx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+            previewCtx.fillStyle = grassCol;
+            previewCtx.fillRect(10, 74, 90, 6);
+            previewCtx.fillStyle = groundCol;
+            previewCtx.fillRect(14, 80, 82, 10);
+
             kero.draw(previewCtx, 31, 25, 2.3);
         }
 
         function updatePreviewLabels() {
+            const stageObj = STAGES_CATALOG.find(s => s.id === playerData.equippedStage);
             const skinObj = CUSTOMIZATION_CATALOG.skins.find(s => s.id === playerData.equippedSkin);
             const hatObj = CUSTOMIZATION_CATALOG.hats.find(h => h.id === playerData.equippedHat);
             const trailObj = CUSTOMIZATION_CATALOG.trails.find(t => t.id === playerData.equippedTrail);
 
+            document.getElementById('previewStageName').textContent = stageObj ? `${stageObj.icon} ${stageObj.name}` : 'Pantano';
             document.getElementById('previewSkinName').textContent = skinObj ? skinObj.name : 'Clásico';
             document.getElementById('previewHatName').textContent = hatObj ? hatObj.name : 'Sin Sombrero';
             document.getElementById('previewTrailName').textContent = `Estela: ${trailObj ? trailObj.name : 'Polvo'}`;
@@ -2821,6 +3144,108 @@
             const grid = document.getElementById('wardrobeItemsGrid');
             grid.innerHTML = '';
             updatePreviewLabels();
+
+            if (currentWardrobeTab === 'stages') {
+                STAGES_CATALOG.forEach(stage => {
+                    const isUnlocked = playerData.unlockedStages.includes(stage.id);
+                    const isEquipped = playerData.equippedStage === stage.id;
+                    const canAffordFlies = playerData.flyBank >= stage.flyCost;
+
+                    const skyColor = `rgb(${stage.day.skyTop[0]}, ${stage.day.skyTop[1]}, ${stage.day.skyTop[2]})`;
+                    const grassColor = `rgb(${stage.day.groundGrass[0]}, ${stage.day.groundGrass[1]}, ${stage.day.groundGrass[2]})`;
+
+                    const card = document.createElement('div');
+                    card.className = `p-2.5 rounded-xl border flex flex-col justify-between gap-2 transition-all ${isEquipped
+                            ? 'bg-emerald-950/50 border-2 border-emerald-400 shadow-lg'
+                            : isUnlocked
+                                ? 'bg-slate-800/80 border-slate-700 hover:border-slate-500'
+                                : 'bg-slate-950/80 border-slate-800/90'
+                        }`;
+
+                    let actionHTML = '';
+                    if (isEquipped) {
+                        actionHTML = `
+                            <button class="w-full py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-pixel text-[8px] font-bold cursor-default">
+                                ✓ ESCENARIO ACTIVO
+                            </button>
+                        `;
+                    } else if (isUnlocked) {
+                        actionHTML = `
+                            <button data-stage-action="equip" data-id="${stage.id}" class="w-full py-1.5 rounded-lg bg-slate-700 hover:bg-emerald-400 hover:text-slate-950 text-slate-100 font-pixel text-[8px] font-bold cursor-pointer transition-colors">
+                                ELEGIR ESCENARIO
+                            </button>
+                        `;
+                    } else {
+                        const scorePct = Math.min(100, Math.round((playerData.highScore / stage.reqScore) * 100));
+
+                        actionHTML = `
+                            <div class="flex flex-col gap-1.5">
+                                <div class="text-[9px] text-emerald-300 font-bold flex items-center justify-between">
+                                    <span>🏃 Meta de distancia: <b>${stage.reqScore} m</b></span>
+                                    <span>${scorePct}% (HI: ${Math.floor(playerData.highScore)}m)</span>
+                                </div>
+                                <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-emerald-500 to-amber-400" style="width: ${scorePct}%"></div>
+                                </div>
+                                <button data-stage-action="buy" data-id="${stage.id}" class="w-full py-1.5 rounded-lg ${canAffordFlies
+                                ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 cursor-pointer shadow'
+                                : 'bg-slate-800 text-slate-400 cursor-not-allowed'
+                            } font-pixel text-[8px] font-bold transition-colors">
+                                    🪰 COMPRAR POR ${stage.flyCost} MOSCAS (${playerData.flyBank}/${stage.flyCost})
+                                </button>
+                            </div>
+                        `;
+                    }
+
+                    card.innerHTML = `
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-11 h-11 rounded-xl border-2 border-white/20 flex flex-col items-center justify-center text-lg shrink-0 overflow-hidden shadow-inner"
+                                 style="background: linear-gradient(to bottom, ${skyColor} 65%, ${grassColor} 65%);">
+                                ${stage.icon}
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center justify-between gap-1">
+                                    <span class="text-xs font-bold text-white truncate">${stage.name}</span>
+                                    <span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-400/40 shrink-0">${stage.rarity}</span>
+                                </div>
+                                <p class="text-[10px] text-slate-400 leading-tight mt-0.5">${stage.desc}</p>
+                            </div>
+                        </div>
+                        <div class="mt-1">${actionHTML}</div>
+                    `;
+
+                    grid.appendChild(card);
+                });
+
+                grid.querySelectorAll('button[data-stage-action]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const action = btn.getAttribute('data-stage-action');
+                        const id = btn.getAttribute('data-id');
+                        const stageObj = STAGES_CATALOG.find(s => s.id === id);
+                        if (!stageObj) return;
+
+                        if (action === 'equip') {
+                            playerData.equippedStage = id;
+                            activeStageId = id;
+                            sound.playJump();
+                            savePlayerData();
+                            updateActiveStageHUD();
+                            renderWardrobeItems();
+                        } else if (action === 'buy' && playerData.flyBank >= stageObj.flyCost) {
+                            playerData.flyBank -= stageObj.flyCost;
+                            playerData.unlockedStages.push(id);
+                            playerData.equippedStage = id;
+                            activeStageId = id;
+                            sound.playUnlockFanfare();
+                            savePlayerData();
+                            updateActiveStageHUD();
+                            renderWardrobeItems();
+                        }
+                    });
+                });
+                return;
+            }
 
             if (currentWardrobeTab === 'badges') {
                 CUSTOMIZATION_CATALOG.badges.forEach(badge => {
@@ -2924,7 +3349,6 @@
                     `;
                 }
 
-                // Muestra de color si es una skin
                 let colorSwatch = '';
                 if (currentWardrobeTab === 'skins' && item.colors) {
                     colorSwatch = `
@@ -2954,7 +3378,6 @@
                 grid.appendChild(card);
             });
 
-            // Eventos para botones de Equipar o Canjear con moscas
             grid.querySelectorAll('button[data-action]').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -2997,8 +3420,16 @@
             }
         }
 
-        function openWardrobe() {
-            if (gameState === 'PLAYING') return; // Solo abrir en pausa/inicio/gameover
+        function openWardrobe(initialTab = 'stages') {
+            if (gameState === 'PLAYING') return;
+            currentWardrobeTab = initialTab;
+            document.querySelectorAll('.wardrobe-tab').forEach(b => {
+                if (b.getAttribute('data-tab') === currentWardrobeTab) {
+                    b.className = 'wardrobe-tab flex-1 py-1.5 px-1.5 rounded-t-lg font-pixel text-[7px] sm:text-[8px] bg-emerald-500 text-slate-950 font-bold cursor-pointer transition-colors whitespace-nowrap';
+                } else {
+                    b.className = 'wardrobe-tab flex-1 py-1.5 px-1.5 rounded-t-lg font-pixel text-[7px] sm:text-[8px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors whitespace-nowrap';
+                }
+            });
             renderWardrobeItems();
             drawWardrobePreview();
             document.getElementById('wardrobeOverlay').classList.remove('hidden');
@@ -3009,34 +3440,37 @@
             updateHeaderUnlockCounter();
         }
 
-        // Pestañas del armario
         document.querySelectorAll('.wardrobe-tab').forEach(tabBtn => {
             tabBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 currentWardrobeTab = tabBtn.getAttribute('data-tab');
                 document.querySelectorAll('.wardrobe-tab').forEach(b => {
-                    b.className = 'wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors';
+                    b.className = 'wardrobe-tab flex-1 py-1.5 px-1.5 rounded-t-lg font-pixel text-[7px] sm:text-[8px] bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer transition-colors whitespace-nowrap';
                 });
-                tabBtn.className = 'wardrobe-tab flex-1 py-1.5 px-2 rounded-t-lg font-pixel text-[8px] sm:text-[9px] bg-emerald-500 text-slate-950 font-bold cursor-pointer transition-colors';
+                tabBtn.className = 'wardrobe-tab flex-1 py-1.5 px-1.5 rounded-t-lg font-pixel text-[7px] sm:text-[8px] bg-emerald-500 text-slate-950 font-bold cursor-pointer transition-colors whitespace-nowrap';
                 renderWardrobeItems();
             });
         });
 
         document.getElementById('startWardrobeBtn').addEventListener('click', (e) => {
             e.stopPropagation();
-            openWardrobe();
+            openWardrobe('stages');
         });
         document.getElementById('gameOverWardrobeBtn').addEventListener('click', (e) => {
             e.stopPropagation();
-            openWardrobe();
+            openWardrobe('stages');
         });
         document.getElementById('hudWardrobeBtn').addEventListener('click', (e) => {
             e.stopPropagation();
-            if (gameState !== 'PLAYING') openWardrobe();
+            if (gameState !== 'PLAYING') openWardrobe('stages');
+        });
+        document.getElementById('headerStagesBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (gameState !== 'PLAYING') openWardrobe('stages');
         });
         document.getElementById('headerWardrobeBtn').addEventListener('click', (e) => {
             e.stopPropagation();
-            if (gameState !== 'PLAYING') openWardrobe();
+            if (gameState !== 'PLAYING') openWardrobe('skins');
         });
         document.getElementById('closeWardrobeBtn').addEventListener('click', (e) => {
             e.stopPropagation();
@@ -3092,7 +3526,7 @@
                 return;
             }
             if (e.code === 'KeyC' && gameState !== 'PLAYING') {
-                openWardrobe();
+                openWardrobe('stages');
                 return;
             }
             if (['Space', 'ArrowUp', 'KeyW'].includes(e.code)) {
@@ -3211,7 +3645,6 @@
         };
     </script>
     <script>
-        // Registro del Service Worker (PWA / modo sin conexión)
         if ('serviceWorker' in navigator && location.protocol !== 'file:') {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch((err) => console.warn('SW no registrado:', err));
