@@ -309,7 +309,7 @@
                     <span>🐾</span>
                     <span>Personajes</span>
                     <span id="headerCharsCount"
-                        class="bg-cyan-400 text-slate-950 px-1.5 py-0.2 rounded-md font-pixel text-[9px]">1/6</span>
+                        class="bg-cyan-400 text-slate-950 px-1.5 py-0.2 rounded-md font-pixel text-[9px]">1/10</span>
                 </button>
                 <button id="headerStagesBtn"
                     class="bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/60 text-purple-300 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors">
@@ -425,17 +425,8 @@
                 <div id="startOverlay"
                     class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-[2px] p-3 text-center transition-opacity duration-200">
                     <div
-                        class="bg-slate-900/95 border-2 border-emerald-500/80 px-4 sm:px-6 py-3 sm:py-5 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center gap-2 sm:gap-2.5">
-                        <div class="flex flex-wrap items-center justify-center gap-1.5">
-                            <span
-                                class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">🐾 6 Personajes</span>
-                            <span
-                                class="bg-purple-500/20 text-purple-300 border border-purple-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider uppercase">🗺️ 6 Escenarios</span>
-                            <span
-                                class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold">🪰
-                                Banco: <b id="startBankFlies">0</b></span>
-                        </div>
-                        <h2 class="font-pixel text-sm sm:text-xl text-emerald-400 drop-shadow">KERO RUNNER</h2>
+                        class="bg-slate-900/95 border-2 border-emerald-500/80 px-4 sm:px-6 py-4 sm:py-6 rounded-2xl shadow-2xl max-w-md w-full flex flex-col items-center gap-2.5 sm:gap-3">
+                        <h2 class="font-pixel text-base sm:text-2xl text-emerald-400 drop-shadow">KERO RUNNER</h2>
                         <p class="text-[11px] sm:text-xs text-slate-300 leading-relaxed">
                             ¡Salta los obstáculos, llega más lejos y demuestra que eres el rey indiscutible del pantano!
                         </p>
@@ -648,7 +639,7 @@
     <script>
         /**
          * ============================================================================
-         * 1. CATÁLOGO DE PERSONAJES, ESCENARIOS (BIOMAS), SKINS, SOMBREROS Y LOGROS
+         * 1. CATÁLOGO DE PERSONAJES (INCLUYENDO PERSONAJES OCULTOS / SECRETOS)
          * ============================================================================
          */
         const CHARACTERS_CATALOG = [
@@ -671,7 +662,7 @@
                 unlockType: 'hybrid',
                 reqScore: 1200,
                 flyCost: 60,
-                desc: 'Ajolote místico con branquias rosadas y cola acuática. ¡Llega a 1200 m o cómpralo por 60 🪰!',
+                desc: 'Ajolote místico con branquias rosadas y cola acuática.',
                 accentColor: '#f472b6'
             },
             {
@@ -682,7 +673,7 @@
                 unlockType: 'hybrid',
                 reqScore: 2500,
                 flyCost: 120,
-                desc: 'Se esconde y gira dentro de su caparazón al agacharse. ¡Llega a 2500 m o cómpralo por 120 🪰!',
+                desc: 'Se esconde y gira dentro de su caparazón al agacharse.',
                 accentColor: '#10b981'
             },
             {
@@ -693,7 +684,7 @@
                 unlockType: 'hybrid',
                 reqScore: 4200,
                 flyCost: 200,
-                desc: 'Veloz pato corredor que aletea en el aire al saltar. ¡Llega a 4200 m o cómpralo por 200 🪰!',
+                desc: 'Veloz pato corredor que aletea en el aire al saltar.',
                 accentColor: '#facc15'
             },
             {
@@ -704,7 +695,7 @@
                 unlockType: 'hybrid',
                 reqScore: 6000,
                 flyCost: 300,
-                desc: 'Espíritu zorro de orejas puntiagudas y cola esponjosa. ¡Llega a 6000 m o cómpralo por 300 🪰!',
+                desc: 'Espíritu zorro de orejas puntiagudas y cola esponjosa.',
                 accentColor: '#f97316'
             },
             {
@@ -715,8 +706,52 @@
                 unlockType: 'hybrid',
                 reqScore: 8500,
                 flyCost: 450,
-                desc: 'Pequeño dragón alado con cuernos dorados y aliento ígneo. ¡Llega a 8500 m o cómpralo por 450 🪰!',
+                desc: 'Pequeño dragón alado con cuernos dorados y aliento ígneo.',
                 accentColor: '#a855f7'
+            },
+            {
+                id: 'baku_ghost',
+                name: 'Baku el Espectro',
+                icon: '👻',
+                rarity: 'OCULTO',
+                unlockType: 'secret',
+                isSecret: true,
+                secretHint: 'Modo Sigilo: Mantén presionado AGACHARSE sin soltar desde el inicio hasta alcanzar 150 metros.',
+                desc: 'Espíritu ancestral que levita suavemente sobre el pantano.',
+                accentColor: '#38bdf8'
+            },
+            {
+                id: 'mecha_kero',
+                name: 'Mecha-Kero X9',
+                icon: '🤖',
+                rarity: 'OCULTO',
+                unlockType: 'secret',
+                isSecret: true,
+                secretHint: 'Truco en el Armario: Toca 7 veces seguidas el recuadro de vista previa del personaje.',
+                desc: 'Androide cibernético con visor láser, antena de radar y propulsor.',
+                accentColor: '#22d3ee'
+            },
+            {
+                id: 'kappa_yokai',
+                name: 'Kappa del Río',
+                icon: '🥒',
+                rarity: 'OCULTO',
+                unlockType: 'secret',
+                isSecret: true,
+                secretHint: 'Haz 8 reverencias rápidas (Agacharse) seguidas al empezar la partida (antes de los 60 m).',
+                desc: 'Criatura mitológica japonesa con plato de agua sagrada en la cabeza.',
+                accentColor: '#84cc16'
+            },
+            {
+                id: 'glitch_zero',
+                name: 'Entidad 404',
+                icon: '👾',
+                rarity: 'OCULTO',
+                unlockType: 'secret',
+                isSecret: true,
+                secretHint: 'Código Secreto: Escribe "KERO" en tu teclado o alterna 6 veces el botón de Sonido 🔊/🔇.',
+                desc: 'Anomalía dimensional con aura cambiante y disparo láser digital.',
+                accentColor: '#f43f5e'
             }
         ];
 
@@ -767,7 +802,7 @@
                 reqScore: 2000,
                 flyCost: 80,
                 weatherType: 'petals',
-                desc: 'Jardín oriental con lluvia de pétalos rosas. ¡Llega a 2000 m o cómpralo por 80 🪰!',
+                desc: 'Jardín oriental con lluvia de pétalos rosas.',
                 day: {
                     skyTop: [252, 228, 236],
                     skyBottom: [255, 245, 248],
@@ -804,7 +839,7 @@
                 reqScore: 3500,
                 flyCost: 150,
                 weatherType: 'sand',
-                desc: 'Dunas ancestrales con pirámides y tormenta de arena. ¡Llega a 3500 m o cómpralo por 150 🪰!',
+                desc: 'Dunas ancestrales con pirámides y tormenta de arena.',
                 day: {
                     skyTop: [254, 215, 170],
                     skyBottom: [254, 243, 199],
@@ -841,7 +876,7 @@
                 reqScore: 5000,
                 flyCost: 240,
                 weatherType: 'snow',
-                desc: 'Tundra helada con copos de nieve brillantes. ¡Llega a 5000 m o cómpralo por 240 🪰!',
+                desc: 'Tundra helada con copos de nieve brillantes.',
                 day: {
                     skyTop: [186, 230, 253],
                     skyBottom: [240, 249, 255],
@@ -878,7 +913,7 @@
                 reqScore: 7000,
                 flyCost: 350,
                 weatherType: 'embers',
-                desc: 'Ríos de lava ardiente y cenizas volcánicas. ¡Llega a 7000 m o cómpralo por 350 🪰!',
+                desc: 'Ríos de lava ardiente y cenizas volcánicas.',
                 day: {
                     skyTop: [127, 29, 29],
                     skyBottom: [251, 146, 60],
@@ -915,7 +950,7 @@
                 reqScore: 10000,
                 flyCost: 500,
                 weatherType: 'matrix',
-                desc: 'Ciudad Synthwave con lluvia digital neón. ¡Llega a 10000 m o cómpralo por 500 🪰!',
+                desc: 'Ciudad Synthwave con lluvia digital neón.',
                 day: {
                     skyTop: [46, 16, 101],
                     skyBottom: [112, 26, 117],
@@ -1337,6 +1372,13 @@
                     check: (stats) => (stats.unlockedCharacters || []).length >= 3
                 },
                 {
+                    id: 'secret_finder',
+                    name: 'Cazador de Secretos',
+                    icon: '🕵️',
+                    reqText: 'Descubre al menos 1 Personaje Oculto',
+                    check: (stats) => ['baku_ghost', 'mecha_kero', 'kappa_yokai', 'glitch_zero'].some(id => (stats.unlockedCharacters || []).includes(id))
+                },
+                {
                     id: 'sakura_traveler',
                     name: 'Viajero de los Cerezos',
                     icon: '🌸',
@@ -1365,18 +1407,11 @@
                     check: (stats) => stats.lifetimeFlies >= 50
                 },
                 {
-                    id: 'fly_tycoon',
-                    name: 'Magnate Dorado',
-                    icon: '💰',
-                    reqText: 'Atrapa 150 moscas en total',
-                    check: (stats) => stats.lifetimeFlies >= 150
-                },
-                {
                     id: 'swamp_monarch',
-                    name: 'Maestro de Héroes y Mundos',
+                    name: 'Maestro de Secretos y Mundos',
                     icon: '👑',
-                    reqText: 'Desbloquea los 6 Personajes o los 6 Escenarios',
-                    check: (stats) => stats.unlockedStages.length >= 6 || (stats.unlockedCharacters || []).length >= 6
+                    reqText: 'Desbloquea los 6 Escenarios o los 4 Personajes Ocultos',
+                    check: (stats) => stats.unlockedStages.length >= 6 || ['baku_ghost', 'mecha_kero', 'kappa_yokai', 'glitch_zero'].every(id => (stats.unlockedCharacters || []).includes(id))
                 }
             ]
         };
@@ -1864,6 +1899,7 @@
 
             // Desbloqueo de Personajes al llegar más lejos (por distancia)
             CHARACTERS_CATALOG.forEach(charObj => {
+                if (charObj.unlockType === 'secret') return;
                 if (!playerData.unlockedCharacters.includes(charObj.id)) {
                     if (charObj.reqScore > 0 && currentPts >= charObj.reqScore) {
                         playerData.unlockedCharacters.push(charObj.id);
@@ -1928,9 +1964,29 @@
             }
         }
 
+        function unlockSecretCharacter(charId) {
+            if (playerData.unlockedCharacters.includes(charId)) return false;
+            const charObj = CHARACTERS_CATALOG.find(c => c.id === charId);
+            if (!charObj) return false;
+
+            playerData.unlockedCharacters.push(charId);
+            playerData.equippedCharacter = charId;
+            savePlayerData();
+
+            showUnlockToast(charObj.icon, `¡Secreto: ${charObj.name}!`, '🕵️ ¡PERSONAJE OCULTO DESCUBIERTO!');
+            if (typeof gameState !== 'undefined' && gameState === 'PLAYING' && typeof kero !== 'undefined') {
+                createFloatingText(`🕵️ ¡${charObj.name.toUpperCase()}!`, Math.max(20, kero.x - 10), Math.max(45, kero.y - 20), '#22d3ee');
+            }
+            if (!document.getElementById('wardrobeOverlay').classList.contains('hidden')) {
+                renderWardrobeItems();
+                drawWardrobePreview();
+            }
+            return true;
+        }
+
         function getNextScoreReward() {
             const charRewards = CHARACTERS_CATALOG
-                .filter(c => !playerData.unlockedCharacters.includes(c.id) && c.reqScore > 0)
+                .filter(c => c.unlockType !== 'secret' && !playerData.unlockedCharacters.includes(c.id) && c.reqScore > 0)
                 .map(c => ({ id: c.id, name: `Héroe ${c.name}`, icon: c.icon, reqValue: c.reqScore }));
 
             const stageRewards = STAGES_CATALOG
@@ -2305,17 +2361,19 @@
             draw(ctx, customX = null, customY = null, scaleP = 2) {
                 ctx.save();
 
-                if (this.invincibleTimer > 0 && customX === null) {
-                    if (Math.floor(this.invincibleTimer / 4) % 2 === 0) {
-                        ctx.globalAlpha = 0.55;
-                    }
+                if (this.invincibleTimer > 0 && Math.floor(this.invincibleTimer / 4) % 2 === 0 && customX === null) {
+                    ctx.globalAlpha = 0.55;
                 }
 
-                const colors = getActiveSkinColors();
                 const charId = playerData.equippedCharacter || 'kero_frog';
+                const colors = getActiveSkinColors();
                 let hopBounce = 0;
                 if (this.isGrounded && !this.isDucking && !this.isDead && customX === null) {
                     hopBounce = this.animFrame === 0 ? 0 : -3;
+                }
+                // Flotación suave si es Baku el Espectro
+                if (charId === 'baku_ghost' && customX === null) {
+                    hopBounce = Math.sin(performance.now() * 0.008) * 3 - 3;
                 }
 
                 const drawX = customX !== null ? customX : Math.round(this.x);
@@ -2328,16 +2386,24 @@
                     ctx.fillRect(drawX + 6, GROUND_Y - 2, shadowWidth, 4);
                 }
 
-                // Efecto al atrapar mosca (lengua o destello de fuego para Draco)
+                // Efecto al atrapar mosca (lengua, láser o aliento de fuego)
                 if (this.tongueTimer > 0 && this.tongueTarget && customX === null) {
-                    ctx.strokeStyle = charId === 'draco_dragon' ? '#f97316' : '#fb7185';
+                    ctx.strokeStyle = charId === 'draco_dragon'
+                        ? '#f97316'
+                        : (charId === 'mecha_kero' || charId === 'glitch_zero')
+                            ? '#22d3ee'
+                            : '#fb7185';
                     ctx.lineWidth = 4;
                     ctx.beginPath();
                     ctx.moveTo(drawX + this.width - 6, drawY + 16);
                     ctx.lineTo(this.tongueTarget.x, this.tongueTarget.y);
                     ctx.stroke();
 
-                    ctx.fillStyle = charId === 'draco_dragon' ? '#fde047' : '#f43f5e';
+                    ctx.fillStyle = charId === 'draco_dragon'
+                        ? '#fde047'
+                        : (charId === 'mecha_kero' || charId === 'glitch_zero')
+                            ? '#f43f5e'
+                            : '#f43f5e';
                     ctx.fillRect(this.tongueTarget.x - 4, this.tongueTarget.y - 4, 8, 8);
                 }
 
@@ -2361,8 +2427,8 @@
                         px(2, 8 + wag, 3, 2, '#f43f5e');
                         px(18, 2 - wag, 3, 2, '#f43f5e');
                         px(19, 5, 3, 2, '#fb7185');
-                    } else if (charId === 'kame_turtle') {
-                        // Caparazón abovedado de Tortuga en la espalda
+                    } else if (charId === 'kame_turtle' || charId === 'kappa_yokai') {
+                        // Caparazón abovedado en la espalda
                         px(0, 4, 10, 11, '#065f46');
                         px(1, 5, 8, 9, '#047857');
                         px(2, 6, 5, 7, '#10b981');
@@ -2382,18 +2448,36 @@
                         px(-1, wingY + 1, 4, 5, '#c084fc');
                         px(-4, 13 + wag, 7, 3, colors.bodyDark);
                         px(-5, 12 + wag, 3, 3, '#facc15');
+                    } else if (charId === 'mecha_kero') {
+                        // Jet thruster cibernético en la espalda
+                        px(0, 7, 4, 7, '#475569');
+                        px(-2 - wag, 9, 3, 3, '#22d3ee');
+                        px(-4 - wag, 10, 2, 1, '#fde047');
+                    } else if (charId === 'baku_ghost') {
+                        // Estela fantasmal flotante
+                        px(-3, 11 + wag, 5, 4, 'rgba(186, 230, 253, 0.7)');
+                        px(-5, 13 - wag, 3, 2, 'rgba(56, 189, 248, 0.6)');
+                    } else if (charId === 'glitch_zero') {
+                        // Fragmentos digitales flotantes alrededor de Entidad 404
+                        px(-3 - wag, 4, 3, 2, '#f43f5e');
+                        px(-2 + wag, 12, 3, 2, '#22d3ee');
+                        px(20, 3 + wag, 2, 2, '#a855f7');
                     }
                 }
 
                 if (isCrouching) {
-                    if (charId === 'kame_turtle') {
-                        // Kame se mete dentro de su caparazón giratorio al agacharse
+                    if (charId === 'kame_turtle' || charId === 'kappa_yokai') {
+                        // Kame y Kappa se meten dentro de su caparazón al agacharse
                         px(3, 2, 20, 9, '#065f46');
                         px(5, 3, 16, 7, '#10b981');
                         px(8 + wag * 2, 4, 4, 5, '#34d399');
                         px(14 - wag * 2, 4, 4, 5, '#047857');
                         px(2, 9, 22, 2, '#fde68a');
                         px(4, 11, 18, 2, colors.outline);
+                        if (charId === 'kappa_yokai') {
+                            px(7, 0, 12, 2, '#bae6fd');
+                            px(9, 1, 8, 1, '#38bdf8');
+                        }
                     } else {
                         px(2, 4, 22, 7, colors.bodyDark);
                         px(3, 5, 21, 5, colors.bodyMain);
@@ -2403,7 +2487,7 @@
                         px(19, 2, 4, 3, '#ffffff');
                         px(21, 3, 2, 2, '#0f172a');
 
-                        if (charId === 'cuac_duck') {
+                        if (charId === 'cuac_duck' || charId === 'kappa_yokai') {
                             px(23, 5, 5, 3, '#f97316');
                             px(23, 7, 4, 1, '#ea580c');
                         } else if (charId === 'axo_axolotl') {
@@ -2415,6 +2499,12 @@
                         } else if (charId === 'draco_dragon') {
                             px(16, -2, 2, 3, '#facc15');
                             px(20, -2, 2, 3, '#facc15');
+                        } else if (charId === 'mecha_kero') {
+                            px(18, 2, 6, 2, '#ef4444');
+                            px(19, -2, 2, 3, '#94a3b8');
+                            px(19, -3, 2, 1, '#22d3ee');
+                        } else if (charId === 'glitch_zero') {
+                            px(18, 2, 6, 2, wag === 0 ? '#22d3ee' : '#f43f5e');
                         }
 
                         px(20, 6, 3, 2, colors.cheek);
@@ -2431,7 +2521,7 @@
 
                     drawKeroHat(ctx, playerData.equippedHat, px, true, this.animFrame);
                 } else {
-                    // Orejas / Cuernos / Cresta superiores según personaje
+                    // Orejas / Cuernos / Antena / Plato Kappa superiores según personaje
                     if (charId === 'kitsune_fox') {
                         px(5, -3, 4, 5, colors.outline);
                         px(6, -2, 2, 3, '#fef08a');
@@ -2445,6 +2535,15 @@
                     } else if (charId === 'cuac_duck') {
                         px(9, -2, 4, 3, colors.highlight);
                         px(10, -3, 3, 2, colors.bodyMain);
+                    } else if (charId === 'mecha_kero') {
+                        px(10, -4, 2, 4, '#94a3b8');
+                        px(9, -5, 4, 2, wag === 0 ? '#22d3ee' : '#ef4444');
+                    } else if (charId === 'kappa_yokai') {
+                        px(6, -2, 11, 2, '#e2e8f0');
+                        px(8, -2, 7, 1, '#38bdf8');
+                    } else if (charId === 'baku_ghost') {
+                        px(9, -3 + wag, 4, 2, '#38bdf8');
+                        px(10, -4 + wag, 2, 1, '#bae6fd');
                     }
 
                     // Ojos
@@ -2453,7 +2552,17 @@
                     px(7, 1, 4, 4, '#ffffff');
                     px(14, 1, 4, 4, '#ffffff');
 
-                    if (this.isDead && customX === null) {
+                    if (charId === 'mecha_kero') {
+                        // Visor láser cibernético
+                        px(6, 1, 13, 3, '#0f172a');
+                        px(7 + wag, 2, 10, 1, '#ef4444');
+                    } else if (charId === 'glitch_zero') {
+                        // Ojos asimétricos corruptos
+                        px(7, 1, 4, 4, '#0f172a');
+                        px(14, 1, 4, 4, '#0f172a');
+                        px(8, 2, 2, 2, wag === 0 ? '#22d3ee' : '#f43f5e');
+                        px(15, 2, 2, 2, wag === 0 ? '#f43f5e' : '#facc15');
+                    } else if (this.isDead && customX === null) {
                         px(7, 1, 1, 1, '#0f172a');
                         px(10, 1, 1, 1, '#0f172a');
                         px(8, 2, 2, 2, '#0f172a');
@@ -2484,6 +2593,12 @@
                     px(7, 9, 11, 6, colors.bellyTop);
                     px(8, 10, 9, 4, colors.bellyMain);
 
+                    // Núcleo de energía para Mecha-Kero
+                    if (charId === 'mecha_kero') {
+                        px(11, 10, 4, 3, '#0284c7');
+                        px(12, 11, 2, 1, '#bae6fd');
+                    }
+
                     // Mejillas
                     px(5, 7, 2, 2, colors.cheek);
                     px(16, 7, 3, 2, colors.cheek);
@@ -2492,6 +2607,9 @@
                     if (charId === 'cuac_duck') {
                         px(17, 6, 6, 3, '#f97316');
                         px(17, 8, 5, 1, '#ea580c');
+                    } else if (charId === 'kappa_yokai') {
+                        px(16, 6, 5, 3, '#facc15');
+                        px(16, 8, 4, 1, '#ca8a04');
                     } else if (this.isDead && customX === null) {
                         px(12, 8, 5, 2, '#0f172a');
                     } else {
@@ -2508,28 +2626,34 @@
                         px(3, 9, 2, 2, colors.outline);
                     }
 
-                    // Patas
+                    // Patas o cola espectral para Baku
                     const footColor = charId === 'cuac_duck' ? '#f97316' : colors.outline;
-                    if (!this.isGrounded && customX === null) {
+                    if (charId === 'baku_ghost') {
+                        // Cola de fantasma flotante en lugar de patas
+                        px(4, 15, 14, 3, colors.bodyMain);
+                        px(5 + wag, 18, 3, 2, colors.highlight);
+                        px(10, 18 - wag, 3, 2, colors.highlight);
+                        px(15 - wag, 18, 3, 2, colors.highlight);
+                    } else if (!this.isGrounded && customX === null) {
                         if (this.vy < 0) {
-                            px(1, 15, 4, 5, footColor);
-                            px(0, 19, 4, 2, footColor);
-                            px(16, 13, 4, 3, colors.bodyDark);
+                            px(3, 15, 4, 5, footColor);
+                            px(2, 19, 5, 2, footColor);
+                            px(15, 13, 4, 3, colors.bodyDark);
                         } else {
-                            px(2, 14, 5, 4, footColor);
+                            px(3, 14, 4, 4, footColor);
                             px(14, 14, 4, 4, colors.bodyDark);
                         }
                     } else {
                         if (this.animFrame === 0) {
-                            px(2, 14, 6, 5, footColor);
-                            px(1, 19, 8, 2, footColor);
+                            px(4, 15, 4, 6, footColor);
+                            px(3, 19, 6, 2, footColor);
                             px(14, 15, 4, 6, colors.bodyDark);
-                            px(14, 19, 6, 2, footColor);
+                            px(14, 19, 6, 2, colors.bodyDark);
                         } else {
-                            px(4, 15, 5, 6, footColor);
-                            px(3, 19, 7, 2, footColor);
+                            px(5, 15, 4, 6, footColor);
+                            px(4, 19, 6, 2, footColor);
                             px(12, 14, 4, 5, colors.bodyDark);
-                            px(13, 18, 5, 2, footColor);
+                            px(13, 18, 5, 2, colors.bodyDark);
                         }
                     }
 
@@ -2895,6 +3019,15 @@
 
         let gameSpeed = INITIAL_SPEED;
         let spawnTimer = 0;
+
+        // Variables de seguimiento para desbloquear Personajes Ocultos
+        let jumpsInCurrentRun = 0;
+        let stealthDuckDistance = 0;
+        let earlyCrouchCount = 0;
+        let wasDuckingLastFrame = false;
+        let previewSecretClicks = 0;
+        let muteSecretToggles = 0;
+        let keySecretBuffer = '';
         let flySpawnTimer = 140;
 
         let isNight = false;
@@ -2933,6 +3066,16 @@
             const canSpawnDragonfly = score >= 250;
             const roll = Math.random();
             let createdObs = null;
+
+            // Si el jugador está haciendo el truco secreto de mantener Agacharse desde el inicio para Baku el Espectro,
+            // invocamos libélulas rasantes que pasan justo por encima de Kero agachado para que sea 100% posible y emocionante
+            if (jumpsInCurrentRun === 0 && kero.isDucking && score < 170) {
+                const heights = ['MID', 'HIGH'];
+                const chosenHeight = heights[Math.floor(Math.random() * heights.length)];
+                createdObs = new Obstacle('DRAGONFLY', chosenHeight, LOGICAL_WIDTH + 24, 1);
+                obstacles.push(createdObs);
+                return createdObs;
+            }
 
             if (canSpawnDragonfly && roll < 0.28) {
                 const heights = ['LOW', 'MID', 'HIGH'];
@@ -3017,6 +3160,10 @@
             spawnTimer = 42;
             flySpawnTimer = 130;
             isNight = false;
+            jumpsInCurrentRun = 0;
+            stealthDuckDistance = 0;
+            earlyCrouchCount = 0;
+            wasDuckingLastFrame = false;
 
             // Iniciar en el escenario que el jugador tenga equipado
             activeStageId = playerData.equippedStage || 'emerald_swamp';
@@ -3105,6 +3252,25 @@
                 const currentFloorScore = Math.floor(score);
 
                 checkAllScoreUnlocks(currentFloorScore, true);
+
+                // Condición secreta 1: Baku el Espectro (Mantenerse agachado 150m seguidos sin saltar)
+                if (kero.isDucking && jumpsInCurrentRun === 0) {
+                    stealthDuckDistance += gameSpeed * 0.032 * dtScale;
+                    if (stealthDuckDistance >= 150) {
+                        unlockSecretCharacter('baku_ghost');
+                    }
+                } else if (!kero.isDucking) {
+                    stealthDuckDistance = 0;
+                }
+
+                // Condición secreta 2: Kappa del Río (8 reverencias rápidas antes de los 60m)
+                if (kero.isDucking && !wasDuckingLastFrame && currentFloorScore < 60) {
+                    earlyCrouchCount++;
+                    if (earlyCrouchCount >= 8) {
+                        unlockSecretCharacter('kappa_yokai');
+                    }
+                }
+                wasDuckingLastFrame = kero.isDucking;
 
                 const currentHundred = Math.floor(currentFloorScore / 100);
                 if (currentHundred > lastMilestone && currentFloorScore >= 100) {
@@ -3526,13 +3692,16 @@
                     const isUnlocked = playerData.unlockedCharacters.includes(charObj.id);
                     const isEquipped = playerData.equippedCharacter === charObj.id;
                     const canAffordFlies = playerData.flyBank >= charObj.flyCost;
+                    const isSecretLocked = charObj.isSecret && !isUnlocked;
 
                     const card = document.createElement('div');
                     card.className = `p-2.5 rounded-xl border flex flex-col justify-between gap-2 transition-all ${isEquipped
                             ? 'bg-emerald-950/50 border-2 border-emerald-400 shadow-lg'
                             : isUnlocked
                                 ? 'bg-slate-800/80 border-slate-700 hover:border-slate-500'
-                                : 'bg-slate-950/80 border-slate-800/90'
+                                : isSecretLocked
+                                    ? 'bg-slate-950/95 border-dashed border-fuchsia-500/50'
+                                    : 'bg-slate-950/80 border-slate-800/90'
                         }`;
 
                     let actionHTML = '';
@@ -3548,40 +3717,49 @@
                                 ELEGIR PERSONAJE
                             </button>
                         `;
+                    } else if (isSecretLocked) {
+                        actionHTML = `
+                            <div class="w-full py-1.5 px-2 rounded-lg bg-fuchsia-950/40 border border-fuchsia-500/30 text-[9px] text-fuchsia-300 font-bold leading-snug">
+                                🕵️ Pista: ${charObj.secretHint}
+                            </div>
+                        `;
                     } else {
-                        const scorePct = Math.min(100, Math.round((playerData.highScore / charObj.reqScore) * 100));
-
                         actionHTML = `
                             <div class="flex flex-col gap-1.5">
-                                <div class="text-[9px] text-cyan-300 font-bold flex items-center justify-between">
-                                    <span>🏃 Meta de distancia: <b>${charObj.reqScore} m</b></span>
-                                    <span>${scorePct}% (HI: ${Math.floor(playerData.highScore)}m)</span>
-                                </div>
-                                <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-cyan-500 to-emerald-400" style="width: ${scorePct}%"></div>
+                                <div class="text-[9px] text-cyan-300 font-bold">
+                                    🔒 Se desbloquea a los ${charObj.reqScore} m o:
                                 </div>
                                 <button data-char-action="buy" data-id="${charObj.id}" class="w-full py-1.5 rounded-lg ${canAffordFlies
                                 ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 cursor-pointer shadow'
                                 : 'bg-slate-800 text-slate-400 cursor-not-allowed'
                             } font-pixel text-[8px] font-bold transition-colors">
-                                    🪰 COMPRAR POR ${charObj.flyCost} MOSCAS (${playerData.flyBank}/${charObj.flyCost})
+                                    🪰 ${charObj.flyCost} MOSCAS
                                 </button>
                             </div>
                         `;
                     }
 
+                    const displayIcon = isSecretLocked ? '❓' : charObj.icon;
+                    const displayName = isSecretLocked ? '??? (Personaje Oculto)' : charObj.name;
+                    const displayDesc = isSecretLocked
+                        ? 'Realiza la acción secreta indicada abajo para revelar y desbloquear este héroe.'
+                        : charObj.desc;
+                    const badgeStyle = charObj.isSecret
+                        ? 'bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-400/50'
+                        : 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40';
+
                     card.innerHTML = `
                         <div class="flex items-start gap-2.5">
                             <div class="w-11 h-11 rounded-xl bg-slate-900 border-2 flex items-center justify-center text-xl shrink-0 shadow-inner"
-                                 style="border-color: ${charObj.accentColor};">
-                                ${charObj.icon}
+                                 style="border-color: ${isSecretLocked ? '#d946ef' : charObj.accentColor};">
+                                ${displayIcon}
                             </div>
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center justify-between gap-1">
-                                    <span class="text-xs font-bold text-white truncate">${charObj.name}</span>
-                                    <span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 shrink-0">${charObj.rarity}</span>
+                                    <span class="text-xs font-bold ${isSecretLocked ? 'text-fuchsia-300' : 'text-white'} truncate">${displayName}</span>
+                                    <span class="text-[8px] font-bold px-1.5 py-0.5 rounded ${badgeStyle} shrink-0">${charObj.rarity}</span>
                                 </div>
-                                <p class="text-[10px] text-slate-400 leading-tight mt-0.5">${charObj.desc}</p>
+                                <p class="text-[10px] text-slate-400 leading-tight mt-0.5">${displayDesc}</p>
                             </div>
                         </div>
                         <div class="mt-1">${actionHTML}</div>
@@ -3647,22 +3825,16 @@
                             </button>
                         `;
                     } else {
-                        const scorePct = Math.min(100, Math.round((playerData.highScore / stage.reqScore) * 100));
-
                         actionHTML = `
                             <div class="flex flex-col gap-1.5">
-                                <div class="text-[9px] text-emerald-300 font-bold flex items-center justify-between">
-                                    <span>🏃 Meta de distancia: <b>${stage.reqScore} m</b></span>
-                                    <span>${scorePct}% (HI: ${Math.floor(playerData.highScore)}m)</span>
-                                </div>
-                                <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                    <div class="h-full bg-gradient-to-r from-emerald-500 to-amber-400" style="width: ${scorePct}%"></div>
+                                <div class="text-[9px] text-emerald-300 font-bold">
+                                    🔒 Se desbloquea a los ${stage.reqScore} m o:
                                 </div>
                                 <button data-stage-action="buy" data-id="${stage.id}" class="w-full py-1.5 rounded-lg ${canAffordFlies
                                 ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 cursor-pointer shadow'
                                 : 'bg-slate-800 text-slate-400 cursor-not-allowed'
                             } font-pixel text-[8px] font-bold transition-colors">
-                                    🪰 COMPRAR POR ${stage.flyCost} MOSCAS (${playerData.flyBank}/${stage.flyCost})
+                                    🪰 ${stage.flyCost} MOSCAS
                                 </button>
                             </div>
                         `;
@@ -3793,31 +3965,18 @@
                     `;
                 } else if (item.unlockType === 'flies') {
                     const canAfford = playerData.flyBank >= item.reqValue;
-                    const flyPct = Math.min(100, Math.floor((playerData.flyBank / item.reqValue) * 100));
                     actionBtnHTML = `
-                        <div class="flex flex-col gap-1">
-                            <button data-action="buy" data-id="${item.id}" class="w-full py-1.5 rounded-lg ${canAfford
+                        <button data-action="buy" data-id="${item.id}" class="w-full py-1.5 rounded-lg ${canAfford
                             ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 cursor-pointer shadow'
                             : 'bg-slate-800 text-slate-400 cursor-not-allowed'
                         } font-pixel text-[8px] font-bold transition-colors">
-                                🪰 CANJEAR (${playerData.flyBank}/${item.reqValue})
-                            </button>
-                            <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
-                                <div class="h-full bg-amber-400" style="width: ${flyPct}%"></div>
-                            </div>
-                        </div>
+                            🪰 ${item.reqValue} MOSCAS
+                        </button>
                     `;
                 } else if (item.unlockType === 'score') {
-                    const pct = Math.min(100, Math.floor((playerData.highScore / item.reqValue) * 100));
                     actionBtnHTML = `
-                        <div class="w-full">
-                            <div class="flex justify-between text-[9px] text-amber-300 font-bold mb-0.5">
-                                <span>🔒 Meta: ${item.reqValue} m</span>
-                                <span>${pct}%</span>
-                            </div>
-                            <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                <div class="h-full bg-gradient-to-r from-emerald-500 to-amber-400" style="width: ${pct}%"></div>
-                            </div>
+                        <div class="w-full py-1 text-[9px] text-amber-300 font-bold">
+                            🔒 Se desbloquea a los ${item.reqValue} m
                         </div>
                     `;
                 }
@@ -3954,6 +4113,21 @@
             closeWardrobe();
         });
 
+        // Truco Secreto 3: Tocar 7 veces la vista previa del personaje en el Armario desbloquea a Mecha-Kero X9
+        previewCanvas.style.cursor = 'pointer';
+        previewCanvas.title = '¿Qué pasará si tocas a Kero varias veces?';
+        previewCanvas.addEventListener('click', (e) => {
+            e.stopPropagation();
+            previewSecretClicks++;
+            kero.animFrame = (kero.animFrame + 1) % 2;
+            sound.playJump();
+            drawWardrobePreview();
+            if (previewSecretClicks >= 7) {
+                unlockSecretCharacter('mecha_kero');
+                previewSecretClicks = 0;
+            }
+        });
+
         /**
          * ============================================================================
          * 11. EVENTOS DE TECLADO, CLIC Y CONTROLES TÁCTILES
@@ -3967,6 +4141,9 @@
             if (gameState === 'START' || gameState === 'GAMEOVER') {
                 startGame();
                 return;
+            }
+            if (kero.isGrounded && !kero.isDucking) {
+                jumpsInCurrentRun++;
             }
             input.down = false;
             touchDuckBtn.classList.remove('active-press');
@@ -3994,6 +4171,14 @@
         }
 
         window.addEventListener('keydown', (e) => {
+            // Truco Secreto 4 (Teclado): Escribir "KERO" desbloquea a Entidad 404
+            if (e.key && e.key.length === 1) {
+                keySecretBuffer = (keySecretBuffer + e.key.toUpperCase()).slice(-6);
+                if (keySecretBuffer.endsWith('KERO')) {
+                    unlockSecretCharacter('glitch_zero');
+                }
+            }
+
             if (e.code === 'Escape') {
                 closeWardrobe();
                 return;
@@ -4041,6 +4226,12 @@
             const noteBadge = document.getElementById('musicNoteBadge');
             if (noteBadge) {
                 noteBadge.style.opacity = isMuted ? '0.3' : '1';
+            }
+            // Truco Secreto 4 (Móvil / Click): Alternar 6 veces el botón de sonido también desbloquea a Entidad 404
+            muteSecretToggles++;
+            if (muteSecretToggles >= 6) {
+                unlockSecretCharacter('glitch_zero');
+                muteSecretToggles = 0;
             }
         }
 
