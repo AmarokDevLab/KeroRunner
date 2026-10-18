@@ -716,7 +716,7 @@
                 rarity: 'OCULTO',
                 unlockType: 'secret',
                 isSecret: true,
-                secretHint: 'Modo Sigilo: Mantén presionado AGACHARSE sin soltar desde el inicio hasta alcanzar 150 metros.',
+                secretHint: 'Ayuno Espiritual: Recorre 150 metros seguidos sin comer ni una sola mosca.',
                 desc: 'Espíritu ancestral que levita suavemente sobre el pantano.',
                 accentColor: '#38bdf8'
             },
@@ -839,7 +839,7 @@
                 reqScore: 3500,
                 flyCost: 150,
                 weatherType: 'sand',
-                desc: 'Dunas ancestrales con pirámides y tormenta de arena.',
+                desc: 'Dunas ancestrales con 2 pirámides, la Gran Esfinge y tormenta de arena.',
                 day: {
                     skyTop: [254, 215, 170],
                     skyBottom: [254, 243, 199],
@@ -3021,8 +3021,7 @@
         let spawnTimer = 0;
 
         // Variables de seguimiento para desbloquear Personajes Ocultos
-        let jumpsInCurrentRun = 0;
-        let stealthDuckDistance = 0;
+        let noFlyDistance = 0;
         let earlyCrouchCount = 0;
         let wasDuckingLastFrame = false;
         let previewSecretClicks = 0;
@@ -3066,16 +3065,6 @@
             const canSpawnDragonfly = score >= 250;
             const roll = Math.random();
             let createdObs = null;
-
-            // Si el jugador está haciendo el truco secreto de mantener Agacharse desde el inicio para Baku el Espectro,
-            // invocamos libélulas rasantes que pasan justo por encima de Kero agachado para que sea 100% posible y emocionante
-            if (jumpsInCurrentRun === 0 && kero.isDucking && score < 170) {
-                const heights = ['MID', 'HIGH'];
-                const chosenHeight = heights[Math.floor(Math.random() * heights.length)];
-                createdObs = new Obstacle('DRAGONFLY', chosenHeight, LOGICAL_WIDTH + 24, 1);
-                obstacles.push(createdObs);
-                return createdObs;
-            }
 
             if (canSpawnDragonfly && roll < 0.28) {
                 const heights = ['LOW', 'MID', 'HIGH'];
@@ -3160,8 +3149,7 @@
             spawnTimer = 42;
             flySpawnTimer = 130;
             isNight = false;
-            jumpsInCurrentRun = 0;
-            stealthDuckDistance = 0;
+            noFlyDistance = 0;
             earlyCrouchCount = 0;
             wasDuckingLastFrame = false;
 
@@ -3248,19 +3236,16 @@
                     gameSpeed = Math.min(MAX_SPEED, gameSpeed + ACCELERATION * dtScale);
                 }
 
-                score += gameSpeed * 0.032 * dtScale;
+                const distanceDelta = gameSpeed * 0.032 * dtScale;
+                score += distanceDelta;
                 const currentFloorScore = Math.floor(score);
 
                 checkAllScoreUnlocks(currentFloorScore, true);
 
-                // Condición secreta 1: Baku el Espectro (Mantenerse agachado 150m seguidos sin saltar)
-                if (kero.isDucking && jumpsInCurrentRun === 0) {
-                    stealthDuckDistance += gameSpeed * 0.032 * dtScale;
-                    if (stealthDuckDistance >= 150) {
-                        unlockSecretCharacter('baku_ghost');
-                    }
-                } else if (!kero.isDucking) {
-                    stealthDuckDistance = 0;
+                // Condición secreta 1: Baku el Espectro (Recorrer 150 metros seguidos sin comer una mosca)
+                noFlyDistance += distanceDelta;
+                if (noFlyDistance >= 150) {
+                    unlockSecretCharacter('baku_ghost');
                 }
 
                 // Condición secreta 2: Kappa del Río (8 reverencias rápidas antes de los 60m)
@@ -3339,6 +3324,7 @@
 
                     if (!fly.collected && checkCollision(keroBox, fly.getHitbox())) {
                         fly.collected = true;
+                        noFlyDistance = 0; // Reinicia el contador de ayuno de moscas para Baku el Espectro
                         fliesCollected++;
                         playerData.flyBank++;
                         playerData.lifetimeFlies++;
@@ -3437,14 +3423,94 @@
         function drawStageBackgroundDecor(ctx, stageId, farColor, nearColor) {
             ctx.fillStyle = farColor;
             if (stageId === 'golden_dunes') {
-                // Pirámides en el horizonte
-                for (let x = 30; x < LOGICAL_WIDTH; x += 220) {
-                    ctx.beginPath();
-                    ctx.moveTo(x, GROUND_Y);
-                    ctx.lineTo(x + 55, GROUND_Y - 52);
-                    ctx.lineTo(x + 110, GROUND_Y);
-                    ctx.fill();
-                }
+                // Fondo limpio de Desierto Dorado: 2 Pirámides monumentales y 1 Esfinge (sin rectángulos en la base)
+                const cx = Math.round(LOGICAL_WIDTH * 0.5);
+
+                // Pirámide 1: Gran Pirámide a la izquierda con cara iluminada y cara en sombra
+                const p1Left = cx - 250;
+                const p1ApexX = cx - 165;
+                const p1ApexY = GROUND_Y - 88;
+                const p1Right = cx - 80;
+
+                ctx.fillStyle = farColor;
+                ctx.beginPath();
+                ctx.moveTo(p1Left, GROUND_Y);
+                ctx.lineTo(p1ApexX, p1ApexY);
+                ctx.lineTo(p1ApexX + 18, GROUND_Y);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = nearColor;
+                ctx.beginPath();
+                ctx.moveTo(p1ApexX, p1ApexY);
+                ctx.lineTo(p1Right, GROUND_Y);
+                ctx.lineTo(p1ApexX + 18, GROUND_Y);
+                ctx.closePath();
+                ctx.fill();
+
+                // Pirámide 2: Segunda Pirámide al centro
+                const p2Left = cx - 95;
+                const p2ApexX = cx - 28;
+                const p2ApexY = GROUND_Y - 68;
+                const p2Right = cx + 40;
+
+                ctx.fillStyle = farColor;
+                ctx.beginPath();
+                ctx.moveTo(p2Left, GROUND_Y);
+                ctx.lineTo(p2ApexX, p2ApexY);
+                ctx.lineTo(p2ApexX + 14, GROUND_Y);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = nearColor;
+                ctx.beginPath();
+                ctx.moveTo(p2ApexX, p2ApexY);
+                ctx.lineTo(p2Right, GROUND_Y);
+                ctx.lineTo(p2ApexX + 14, GROUND_Y);
+                ctx.closePath();
+                ctx.fill();
+
+                // La Gran Esfinge a la derecha (sin rectángulos sueltos abajo)
+                const sx = cx + 85;
+                const sy = GROUND_Y;
+
+                // Cuerpo de león recostado y patas delanteras extendidas
+                ctx.fillStyle = nearColor;
+                ctx.beginPath();
+                ctx.moveTo(sx, sy);
+                ctx.lineTo(sx + 6, sy - 24);
+                ctx.lineTo(sx + 58, sy - 24);
+                ctx.lineTo(sx + 68, sy - 11);
+                ctx.lineTo(sx + 98, sy - 11);
+                ctx.lineTo(sx + 98, sy);
+                ctx.closePath();
+                ctx.fill();
+
+                // Iluminación superior del lomo y patas de la Esfinge
+                ctx.fillStyle = farColor;
+                ctx.fillRect(sx + 8, sy - 24, 48, 5);
+                ctx.fillRect(sx + 68, sy - 11, 28, 3);
+
+                // Tocado real egipcio (Nemes) y cabeza de la Esfinge mirando hacia el horizonte
+                ctx.fillStyle = nearColor;
+                ctx.beginPath();
+                ctx.moveTo(sx + 44, sy - 24);
+                ctx.lineTo(sx + 38, sy - 44);
+                ctx.lineTo(sx + 52, sy - 54);
+                ctx.lineTo(sx + 68, sy - 52);
+                ctx.lineTo(sx + 74, sy - 38);
+                ctx.lineTo(sx + 71, sy - 28);
+                ctx.lineTo(sx + 66, sy - 24);
+                ctx.closePath();
+                ctx.fill();
+
+                // Franjas iluminadas del tocado Nemes y perfil facial
+                ctx.fillStyle = farColor;
+                ctx.fillRect(sx + 45, sy - 48, 18, 3);
+                ctx.fillRect(sx + 43, sy - 41, 16, 3);
+                ctx.fillRect(sx + 42, sy - 34, 15, 3);
+                ctx.fillRect(sx + 62, sy - 45, 9, 12);
+                return;
             } else if (stageId === 'neon_metropolis') {
                 // Rascacielos Cyberpunk con ventanas iluminadas
                 for (let x = 10; x < LOGICAL_WIDTH; x += 95) {
@@ -4141,9 +4207,6 @@
             if (gameState === 'START' || gameState === 'GAMEOVER') {
                 startGame();
                 return;
-            }
-            if (kero.isGrounded && !kero.isDucking) {
-                jumpsInCurrentRun++;
             }
             input.down = false;
             touchDuckBtn.classList.remove('active-press');
