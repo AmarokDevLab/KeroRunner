@@ -364,6 +364,18 @@
                             </div>
                         </div>
 
+                        <!-- Indicadores de Power-Ups Activos (Escudo y Magneto) -->
+                        <div id="shieldBadgeHud"
+                            class="hidden items-center gap-1 bg-sky-950/90 backdrop-blur-md border border-sky-400 px-2 py-1 rounded-xl text-sky-300 font-pixel text-[8px] shadow-md animate-pulse">
+                            <span>🫧</span>
+                            <span class="hidden sm:inline">ESCUDO</span>
+                        </div>
+                        <div id="magnetBadgeHud"
+                            class="hidden items-center gap-1 bg-fuchsia-950/90 backdrop-blur-md border border-fuchsia-400 px-2 py-1 rounded-xl text-fuchsia-300 font-pixel text-[8px] shadow-md">
+                            <span>🌺</span>
+                            <span id="magnetTimerText">8s</span>
+                        </div>
+
                         <!-- Botón de Música y Sonido -->
                         <button id="muteBtn"
                             class="bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md text-slate-100 border border-slate-700/80 px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 text-xs font-bold shadow-md cursor-pointer active:scale-95 transition-transform"
@@ -610,7 +622,7 @@
                         <!-- Pie del Armario -->
                         <div
                             class="px-3.5 py-2 bg-slate-950/90 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400 shrink-0">
-                            <span>🗺️ <b>Desbloquea Escenarios:</b> Llega a la distancia requerida en carrera o cómpralos con Moscas Doradas.</span>
+                            <span>🏆 <b>¡Nuevo!</b> Cada Logro completado te regala <b>Moscas Doradas 🪰</b> automáticamente.</span>
                             <button id="wardrobePlayBtn"
                                 class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-pixel text-[9px] px-3 py-1.5 rounded-lg font-bold cursor-pointer shrink-0">
                                 ¡JUGAR!
@@ -626,12 +638,12 @@
             class="desktop-chrome w-full bg-slate-900/85 border border-slate-800 rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300 shrink-0">
             <div class="flex flex-wrap items-center gap-4">
                 <span class="flex items-center gap-1.5"><span
-                        class="inline-block w-2 h-2 rounded-full bg-purple-400"></span> <b>🗺️ Escenarios:</b> Desbloquéalos llegando más lejos (2000m - 10000m) o comprándolos con Moscas</span>
+                        class="inline-block w-2 h-2 rounded-full bg-sky-400"></span> <b>🫧 Escudo & 🌺 Imán:</b> Power-Ups en carrera</span>
                 <span class="flex items-center gap-1.5"><span
-                        class="inline-block w-2 h-2 rounded-full bg-amber-400"></span> <b>🪰 Moscas Doradas:</b> Moneda para comprar escenarios y trajes exclusivos</span>
+                        class="inline-block w-2 h-2 rounded-full bg-amber-400"></span> <b>⚡ Bono ¡CASI!:</b> Salta al límite sobre un obstáculo para ganar puntos extra</span>
             </div>
             <div class="flex items-center gap-3 text-slate-400 text-[11px] ml-auto">
-                <span>Tecla <b>C</b>: Abrir Armario</span>
+                <span>Tecla <b>C</b>: Abrir Armario y Logros</span>
             </div>
         </footer>
     </div>
@@ -1361,13 +1373,47 @@
                     id: 'first_hop',
                     name: 'Aprendiz del Pantano',
                     icon: '🌱',
-                    reqText: 'Alcanza 200 metros',
+                    rewardFlies: 10,
+                    reqText: 'Alcanza 200 metros en una carrera',
                     check: (stats) => stats.highScore >= 200
+                },
+                {
+                    id: 'fly_snack',
+                    name: 'Aperitivo Dorado',
+                    icon: '🪰',
+                    rewardFlies: 15,
+                    reqText: 'Atrapa 12 moscas en una sola partida',
+                    check: (stats) => (stats.maxFliesInSingleRun || 0) >= 12
+                },
+                {
+                    id: 'close_call_novice',
+                    name: 'Temerario del Pantano',
+                    icon: '⚡',
+                    rewardFlies: 20,
+                    reqText: 'Consigue 5 esquives al límite (¡CASI!)',
+                    check: (stats) => (stats.totalCloseCalls || 0) >= 5
+                },
+                {
+                    id: 'shield_breaker',
+                    name: 'Salvado por la Burbuja',
+                    icon: '🫧',
+                    rewardFlies: 25,
+                    reqText: 'Sobrevive a un choque usando el Escudo Burbuja',
+                    check: (stats) => (stats.shieldsBroken || 0) >= 1
+                },
+                {
+                    id: 'lotus_collector',
+                    name: 'Maestro del Loto',
+                    icon: '🌺',
+                    rewardFlies: 25,
+                    reqText: 'Recoge 5 Power-Ups en tus partidas',
+                    check: (stats) => (stats.powerupsCollected || 0) >= 5
                 },
                 {
                     id: 'hero_collector',
                     name: 'Reclutador de Héroes',
                     icon: '🐾',
+                    rewardFlies: 30,
                     reqText: 'Desbloquea 3 Personajes Diferentes',
                     check: (stats) => (stats.unlockedCharacters || []).length >= 3
                 },
@@ -1375,41 +1421,79 @@
                     id: 'secret_finder',
                     name: 'Cazador de Secretos',
                     icon: '🕵️',
+                    rewardFlies: 35,
                     reqText: 'Descubre al menos 1 Personaje Oculto',
                     check: (stats) => ['baku_ghost', 'mecha_kero', 'kappa_yokai', 'glitch_zero'].some(id => (stats.unlockedCharacters || []).includes(id))
-                },
-                {
-                    id: 'sakura_traveler',
-                    name: 'Viajero de los Cerezos',
-                    icon: '🌸',
-                    reqText: 'Alcanza 2000m o desbloquea 2 Escenarios',
-                    check: (stats) => stats.unlockedStages.length >= 2
-                },
-                {
-                    id: 'world_collector',
-                    name: 'Explorador de Biomas',
-                    icon: '🗺️',
-                    reqText: 'Desbloquea 4 Escenarios Diferentes',
-                    check: (stats) => stats.unlockedStages.length >= 4
                 },
                 {
                     id: 'night_survivor',
                     name: 'Vigilante Nocturno',
                     icon: '🌙',
+                    rewardFlies: 30,
                     reqText: 'Sobrevive hasta los 1000 metros',
                     check: (stats) => stats.highScore >= 1000
                 },
                 {
+                    id: 'sakura_traveler',
+                    name: 'Viajero de los Cerezos',
+                    icon: '🌸',
+                    rewardFlies: 35,
+                    reqText: 'Desbloquea 2 Escenarios Diferentes',
+                    check: (stats) => stats.unlockedStages.length >= 2
+                },
+                {
+                    id: 'fashion_frog',
+                    name: 'Ícono de la Moda',
+                    icon: '🎩',
+                    rewardFlies: 30,
+                    reqText: 'Desbloquea 5 Sombreros o Colores',
+                    check: (stats) => ((stats.unlockedSkins || []).length + (stats.unlockedHats || []).length) >= 6
+                },
+                {
                     id: 'fly_hunter',
                     name: 'Cazador de Moscas',
-                    icon: '🪰',
-                    reqText: 'Atrapa 50 moscas en total',
+                    icon: '🎯',
+                    rewardFlies: 40,
+                    reqText: 'Atrapa 50 moscas doradas en total',
                     check: (stats) => stats.lifetimeFlies >= 50
                 },
                 {
+                    id: 'close_call_pro',
+                    name: 'Reflejos Ninja',
+                    icon: '🥷',
+                    rewardFlies: 50,
+                    reqText: 'Acumula 25 esquives al límite (¡CASI!)',
+                    check: (stats) => (stats.totalCloseCalls || 0) >= 25
+                },
+                {
+                    id: 'world_collector',
+                    name: 'Explorador de Biomas',
+                    icon: '🗺️',
+                    rewardFlies: 60,
+                    reqText: 'Desbloquea 4 Escenarios Diferentes',
+                    check: (stats) => stats.unlockedStages.length >= 4
+                },
+                {
+                    id: 'fly_tycoon',
+                    name: 'Magnate del Pantano',
+                    icon: '💰',
+                    rewardFlies: 75,
+                    reqText: 'Atrapa 150 moscas doradas en total',
+                    check: (stats) => stats.lifetimeFlies >= 150
+                },
+                {
+                    id: 'speed_demon',
+                    name: 'Supersónico',
+                    icon: '🚀',
+                    rewardFlies: 80,
+                    reqText: 'Alcanza los 3000 metros en una partida',
+                    check: (stats) => stats.highScore >= 3000
+                },
+                {
                     id: 'swamp_monarch',
-                    name: 'Maestro de Secretos y Mundos',
+                    name: 'Monarca Supremo',
                     icon: '👑',
+                    rewardFlies: 120,
                     reqText: 'Desbloquea los 6 Escenarios o los 4 Personajes Ocultos',
                     check: (stats) => stats.unlockedStages.length >= 6 || ['baku_ghost', 'mecha_kero', 'kappa_yokai', 'glitch_zero'].every(id => (stats.unlockedCharacters || []).includes(id))
                 }
@@ -1777,6 +1861,54 @@
                 });
             }
 
+            playPowerup() {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const notes = [392.00, 523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+
+                    gain.gain.setValueAtTime(0.14, now + idx * 0.04);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.14);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now + idx * 0.04);
+                    osc.stop(now + idx * 0.04 + 0.14);
+                });
+            }
+
+            playShieldBreak() {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const notes = [659.25, 493.88, 329.63, 220.00];
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.05);
+
+                    gain.gain.setValueAtTime(0.15, now + idx * 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.12);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now + idx * 0.05);
+                    osc.stop(now + idx * 0.05 + 0.12);
+                });
+            }
+
             playGameOver() {
                 if (this.muted) return;
                 this.init();
@@ -1816,6 +1948,10 @@
             highScore: 0,
             flyBank: 0,
             lifetimeFlies: 0,
+            maxFliesInSingleRun: 0,
+            totalCloseCalls: 0,
+            shieldsBroken: 0,
+            powerupsCollected: 0,
             equippedCharacter: 'kero_frog',
             equippedStage: 'emerald_swamp',
             equippedSkin: 'classic',
@@ -1825,7 +1961,8 @@
             unlockedStages: ['emerald_swamp'],
             unlockedSkins: ['classic'],
             unlockedHats: ['none'],
-            unlockedTrails: ['default']
+            unlockedTrails: ['default'],
+            unlockedBadges: []
         };
 
         function loadPlayerData() {
@@ -1847,6 +1984,9 @@
                 if (!Array.isArray(playerData.unlockedCharacters) || playerData.unlockedCharacters.length === 0) {
                     playerData.unlockedCharacters = ['kero_frog'];
                 }
+                if (!Array.isArray(playerData.unlockedBadges)) {
+                    playerData.unlockedBadges = [];
+                }
                 if (!playerData.equippedCharacter) {
                     playerData.equippedCharacter = 'kero_frog';
                 }
@@ -1854,6 +1994,7 @@
                 console.warn('No se pudo leer localStorage');
             }
             checkAllScoreUnlocks(playerData.highScore, false);
+            checkBadgeAchievements(false);
         }
 
         function savePlayerData() {
@@ -1863,6 +2004,27 @@
                 localStorage.setItem('kero_runner_highscore', String(Math.floor(playerData.highScore)));
             } catch (e) { }
             updateHeaderUnlockCounter();
+        }
+
+        function checkBadgeAchievements(notify = true) {
+            if (!Array.isArray(playerData.unlockedBadges)) {
+                playerData.unlockedBadges = [];
+            }
+            let newlyUnlocked = false;
+            CUSTOMIZATION_CATALOG.badges.forEach(badge => {
+                if (!playerData.unlockedBadges.includes(badge.id) && badge.check(playerData)) {
+                    playerData.unlockedBadges.push(badge.id);
+                    const reward = badge.rewardFlies || 20;
+                    playerData.flyBank += reward;
+                    newlyUnlocked = true;
+                    if (notify) {
+                        showUnlockToast(badge.icon, `${badge.name} (+${reward} 🪰)`, '🏆 ¡LOGRO COMPLETADO!');
+                    }
+                }
+            });
+            if (newlyUnlocked) {
+                savePlayerData();
+            }
         }
 
         let toastQueue = [];
@@ -1962,6 +2124,7 @@
             if (unlockedAnything) {
                 savePlayerData();
             }
+            checkBadgeAchievements(notify);
         }
 
         function unlockSecretCharacter(charId) {
@@ -1972,6 +2135,7 @@
             playerData.unlockedCharacters.push(charId);
             playerData.equippedCharacter = charId;
             savePlayerData();
+            checkBadgeAchievements(true);
 
             showUnlockToast(charObj.icon, `¡Secreto: ${charObj.name}!`, '🕵️ ¡PERSONAJE OCULTO DESCUBIERTO!');
             if (typeof gameState !== 'undefined' && gameState === 'PLAYING' && typeof kero !== 'undefined') {
@@ -2660,13 +2824,29 @@
                     drawKeroHat(ctx, playerData.equippedHat, px, false, this.animFrame);
                 }
 
+                // Burbuja protectora si Kero tiene el Escudo de Agua activo
+                if (customX === null && typeof hasBubbleShield !== 'undefined' && hasBubbleShield) {
+                    const pulse = Math.sin(performance.now() * 0.01) * 2;
+                    ctx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
+                    ctx.lineWidth = 2.5;
+                    ctx.fillStyle = 'rgba(186, 230, 253, 0.18)';
+                    ctx.beginPath();
+                    ctx.arc(drawX + this.width / 2, drawY + this.height / 2, Math.max(this.width, this.height) * 0.62 + pulse, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Brillo de la burbuja
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+                    ctx.fillRect(drawX + 8, drawY + 2, 5, 4);
+                }
+
                 ctx.restore();
             }
         }
 
         /**
          * ============================================================================
-         * 7. OBSTÁCULOS ADAPTADOS AL ESCENARIO, MOSCAS DORADAS, ORBES DE LOTO Y PORTALES
+         * 7. OBSTÁCULOS ADAPTADOS AL ESCENARIO, MOSCAS DORADAS Y POWER-UPS
          * ============================================================================
          */
         class Obstacle {
@@ -2676,6 +2856,7 @@
                 this.x = x;
                 this.groupCount = groupCount;
                 this.animTimer = Math.random() * 10;
+                this.closeCallChecked = false;
 
                 if (type === 'CARNIVORE') {
                     this.singleWidth = subtype === 'LARGE' ? 30 : 24;
@@ -2877,6 +3058,66 @@
             }
         }
 
+        class SwampPowerUp {
+            constructor(x, y, powerType) {
+                this.x = x;
+                this.baseY = y;
+                this.y = y;
+                this.powerType = powerType; // 'SHIELD' (🫧) o 'MAGNET' (🌺)
+                this.width = 26;
+                this.height = 26;
+                this.timer = Math.random() * Math.PI * 2;
+            }
+
+            update(gameSpeed, dtScale) {
+                this.x -= gameSpeed * 0.92 * dtScale;
+                this.timer += 0.11 * dtScale;
+                this.y = this.baseY + Math.sin(this.timer) * 8;
+            }
+
+            getHitbox() {
+                return {
+                    x: this.x - 6,
+                    y: this.y - 6,
+                    width: this.width + 12,
+                    height: this.height + 12
+                };
+            }
+
+            draw(ctx) {
+                ctx.save();
+                const bx = Math.round(this.x);
+                const by = Math.round(this.y);
+
+                if (this.powerType === 'SHIELD') {
+                    // Orbe Burbuja Protectora
+                    ctx.fillStyle = 'rgba(56, 189, 248, 0.25)';
+                    ctx.fillRect(bx - 2, by - 2, 30, 30);
+                    ctx.fillStyle = '#0284c7';
+                    ctx.fillRect(bx + 4, by + 2, 18, 22);
+                    ctx.fillRect(bx + 2, by + 4, 22, 18);
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(bx + 5, by + 5, 16, 16);
+                    ctx.fillStyle = '#e0f2fe';
+                    ctx.fillRect(bx + 7, by + 7, 6, 5);
+                } else {
+                    // Flor de Loto Magnética
+                    ctx.fillStyle = 'rgba(232, 121, 249, 0.25)';
+                    ctx.fillRect(bx - 2, by - 2, 30, 30);
+                    ctx.fillStyle = '#15803d';
+                    ctx.fillRect(bx + 3, by + 18, 20, 5);
+                    ctx.fillStyle = '#db2777';
+                    ctx.fillRect(bx + 4, by + 8, 18, 11);
+                    ctx.fillStyle = '#f472b6';
+                    ctx.fillRect(bx + 7, by + 4, 12, 13);
+                    ctx.fillStyle = '#fef08a';
+                    ctx.fillRect(bx + 10, by + 7, 6, 6);
+                }
+
+                ctx.restore();
+            }
+        }
+
         /**
          * ============================================================================
          * 8. PARTÍCULAS, ESTELAS Y CLIMA DINÁMICO POR ESCENARIO
@@ -3004,6 +3245,7 @@
         const kero = new KeroPlayer();
         let obstacles = [];
         let goldenFlies = [];
+        let powerUps = [];
 
         let gameState = 'START';
         let score = 0;
@@ -3011,6 +3253,11 @@
         let lastMilestone = 0;
         let milestoneFlashTimer = 0;
         let milestoneDisplayScore = 0;
+
+        // Estado de Power-Ups activos en carrera
+        let hasBubbleShield = false;
+        let lotusMagnetTimer = 0;
+        let powerUpSpawnTimer = 420;
 
         const INITIAL_SPEED = 3.7;
         const MAX_SPEED = 13.5;
@@ -3104,6 +3351,36 @@
             goldenFlies.push(new GoldenFly(spawnX, flyY));
         }
 
+        function spawnSwampPowerUp() {
+            const lastObs = obstacles[obstacles.length - 1];
+            let spawnX = LOGICAL_WIDTH + 48;
+            if (lastObs && Math.abs(lastObs.x - spawnX) < 130) {
+                spawnX = lastObs.x + lastObs.width + 105;
+            }
+            const pType = (!hasBubbleShield && Math.random() < 0.55) ? 'SHIELD' : 'MAGNET';
+            const pY = GROUND_Y - (58 + Math.random() * 50);
+            powerUps.push(new SwampPowerUp(spawnX, pY, pType));
+        }
+
+        function updatePowerUpHUD() {
+            const shieldBadge = document.getElementById('shieldBadgeHud');
+            const magnetBadge = document.getElementById('magnetBadgeHud');
+            const magnetText = document.getElementById('magnetTimerText');
+
+            if (shieldBadge) {
+                shieldBadge.classList.toggle('hidden', !hasBubbleShield);
+                shieldBadge.classList.toggle('flex', hasBubbleShield);
+            }
+            if (magnetBadge) {
+                const activeMag = lotusMagnetTimer > 0;
+                magnetBadge.classList.toggle('hidden', !activeMag);
+                magnetBadge.classList.toggle('flex', activeMag);
+                if (activeMag && magnetText) {
+                    magnetText.textContent = `${Math.ceil(lotusMagnetTimer / 60)}s`;
+                }
+            }
+        }
+
         function updateSpeedometerHUD() {
             const multiplier = gameSpeed / INITIAL_SPEED;
             const pct = Math.min(100, Math.max(6, ((gameSpeed - INITIAL_SPEED) / (MAX_SPEED - INITIAL_SPEED)) * 94 + 6));
@@ -3137,6 +3414,7 @@
             kero.reset();
             obstacles = [];
             goldenFlies = [];
+            powerUps = [];
             particles = [];
             floatingTexts = [];
             speedLines = [];
@@ -3148,6 +3426,9 @@
             gameSpeed = INITIAL_SPEED;
             spawnTimer = 42;
             flySpawnTimer = 130;
+            powerUpSpawnTimer = 380;
+            hasBubbleShield = false;
+            lotusMagnetTimer = 0;
             isNight = false;
             noFlyDistance = 0;
             earlyCrouchCount = 0;
@@ -3156,6 +3437,7 @@
             // Iniciar en el escenario que el jugador tenga equipado
             activeStageId = playerData.equippedStage || 'emerald_swamp';
             updateActiveStageHUD();
+            updatePowerUpHUD();
 
             document.getElementById('startOverlay').classList.add('hidden');
             document.getElementById('gameOverOverlay').classList.add('hidden');
@@ -3172,6 +3454,9 @@
         function triggerGameOver(obstacleType) {
             gameState = 'GAMEOVER';
             kero.isDead = true;
+            hasBubbleShield = false;
+            lotusMagnetTimer = 0;
+            updatePowerUpHUD();
             sound.stopBGM();
             sound.playGameOver();
 
@@ -3181,7 +3466,11 @@
                 playerData.highScore = finalScore;
                 isNewRecord = true;
             }
+            if (fliesCollected > (playerData.maxFliesInSingleRun || 0)) {
+                playerData.maxFliesInSingleRun = fliesCollected;
+            }
             checkAllScoreUnlocks(finalScore, true);
+            checkBadgeAchievements(true);
             savePlayerData();
 
             const stageName = getActiveStageObj().name;
@@ -3294,6 +3583,17 @@
                     flySpawnTimer = 160 + Math.random() * 145;
                 }
 
+                powerUpSpawnTimer -= dtScale;
+                if (powerUpSpawnTimer <= 0) {
+                    spawnSwampPowerUp();
+                    powerUpSpawnTimer = 450 + Math.random() * 320;
+                }
+
+                if (lotusMagnetTimer > 0) {
+                    lotusMagnetTimer = Math.max(0, lotusMagnetTimer - dtScale);
+                    updatePowerUpHUD();
+                }
+
                 if (gameSpeed > 7.5) {
                     const windChance = ((gameSpeed - 7.5) / (MAX_SPEED - 7.5)) * 0.45 * dtScale;
                     if (Math.random() < windChance) {
@@ -3308,9 +3608,35 @@
                     obs.update(gameSpeed, dtScale);
 
                     if (kero.invincibleTimer <= 0 && checkCollision(keroBox, obs.getHitbox())) {
-                        document.getElementById('scoreHud').style.opacity = '1';
-                        triggerGameOver(obs.type);
-                        break;
+                        if (hasBubbleShield) {
+                            // El Escudo Burbuja absorbe el impacto y salva a Kero
+                            hasBubbleShield = false;
+                            kero.invincibleTimer = 55;
+                            playerData.shieldsBroken = (playerData.shieldsBroken || 0) + 1;
+                            sound.playShieldBreak();
+                            createDustParticles(kero.x + 20, kero.y + 20, 16, '#38bdf8');
+                            createFloatingText('🫧 ¡ESCUDO SALVADOR!', Math.max(16, kero.x - 10), Math.max(40, kero.y - 16), '#38bdf8');
+                            updatePowerUpHUD();
+                            checkBadgeAchievements(true);
+                            obstacles.splice(i, 1);
+                            continue;
+                        } else {
+                            document.getElementById('scoreHud').style.opacity = '1';
+                            triggerGameOver(obs.type);
+                            break;
+                        }
+                    }
+
+                    // Detección de esquive al límite "¡CASI!" (Near-Miss Bonus)
+                    if (!obs.closeCallChecked && obs.x + obs.width < keroBox.x) {
+                        obs.closeCallChecked = true;
+                        const vertDist = Math.abs((keroBox.y + keroBox.height) - obs.y);
+                        if (!kero.isGrounded && vertDist <= 18) {
+                            score += 15;
+                            playerData.totalCloseCalls = (playerData.totalCloseCalls || 0) + 1;
+                            createFloatingText('⚡ ¡CASI! +15m', kero.x, Math.max(42, kero.y - 12), '#a3e635');
+                            checkBadgeAchievements(true);
+                        }
                     }
 
                     if (obs.x + obs.width < -50) {
@@ -3318,9 +3644,45 @@
                     }
                 }
 
+                // Actualizar Power-Ups en carrera
+                for (let i = powerUps.length - 1; i >= 0; i--) {
+                    const pu = powerUps[i];
+                    pu.update(gameSpeed, dtScale);
+
+                    if (checkCollision(keroBox, pu.getHitbox())) {
+                        playerData.powerupsCollected = (playerData.powerupsCollected || 0) + 1;
+                        sound.playPowerup();
+
+                        if (pu.powerType === 'SHIELD') {
+                            hasBubbleShield = true;
+                            createDustParticles(pu.x + 12, pu.y + 12, 12, '#38bdf8');
+                            createFloatingText('🫧 ¡ESCUDO ACTIVO!', kero.x - 8, Math.max(42, kero.y - 14), '#38bdf8');
+                        } else {
+                            lotusMagnetTimer = 480; // ~8 segundos de atracción magnética
+                            createDustParticles(pu.x + 12, pu.y + 12, 12, '#e879f9');
+                            createFloatingText('🌺 ¡IMÁN DE MOSCAS!', kero.x - 8, Math.max(42, kero.y - 14), '#e879f9');
+                        }
+                        updatePowerUpHUD();
+                        checkBadgeAchievements(true);
+                        savePlayerData();
+                        powerUps.splice(i, 1);
+                        continue;
+                    }
+
+                    if (pu.x + pu.width < -40) {
+                        powerUps.splice(i, 1);
+                    }
+                }
+
                 for (let i = goldenFlies.length - 1; i >= 0; i--) {
                     const fly = goldenFlies[i];
                     fly.update(gameSpeed, dtScale);
+
+                    // Si el Imán de Loto está activo, atrae las moscas cercanas hacia Kero
+                    if (lotusMagnetTimer > 0 && fly.x < LOGICAL_WIDTH && Math.abs(fly.x - kero.x) < 230) {
+                        fly.x += (kero.x + 20 - fly.x) * 0.14 * dtScale;
+                        fly.y += (kero.y + 16 - fly.y) * 0.18 * dtScale;
+                    }
 
                     if (!fly.collected && checkCollision(keroBox, fly.getHitbox())) {
                         fly.collected = true;
@@ -3328,6 +3690,10 @@
                         fliesCollected++;
                         playerData.flyBank++;
                         playerData.lifetimeFlies++;
+                        if (fliesCollected > (playerData.maxFliesInSingleRun || 0)) {
+                            playerData.maxFliesInSingleRun = fliesCollected;
+                        }
+                        checkBadgeAchievements(true);
                         savePlayerData();
 
                         kero.triggerTongue(fly.x + 10, fly.y + 10);
@@ -3661,6 +4027,7 @@
                 }
             });
 
+            powerUps.forEach(pu => pu.draw(ctx));
             goldenFlies.forEach(fly => fly.draw(ctx));
             obstacles.forEach(obs => obs.draw(ctx));
             kero.draw(ctx);
@@ -3960,20 +4327,24 @@
 
             if (currentWardrobeTab === 'badges') {
                 CUSTOMIZATION_CATALOG.badges.forEach(badge => {
-                    const achieved = badge.check(playerData);
+                    const achieved = (playerData.unlockedBadges || []).includes(badge.id) || badge.check(playerData);
+                    const rewardFlies = badge.rewardFlies || 20;
                     const card = document.createElement('div');
                     card.className = `p-2.5 rounded-xl border flex items-center gap-2.5 ${achieved
                             ? 'bg-emerald-950/40 border-emerald-500/60 text-slate-100'
-                            : 'bg-slate-950/60 border-slate-800 text-slate-500 opacity-75'
+                            : 'bg-slate-950/60 border-slate-800 text-slate-500 opacity-85'
                         }`;
                     card.innerHTML = `
                         <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 ${achieved ? 'bg-emerald-500/20 border border-emerald-400' : 'bg-slate-900 border border-slate-800'
                         }">${badge.icon}</div>
                         <div class="min-w-0 flex-1">
-                            <div class="text-xs font-bold truncate ${achieved ? 'text-emerald-300' : 'text-slate-400'}">${badge.name}</div>
-                            <div class="text-[10px] text-slate-400">${badge.reqText}</div>
+                            <div class="flex items-center justify-between gap-1">
+                                <div class="text-xs font-bold truncate ${achieved ? 'text-emerald-300' : 'text-slate-300'}">${badge.name}</div>
+                                <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40 shrink-0">+${rewardFlies} 🪰</span>
+                            </div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">${badge.reqText}</div>
                             <div class="mt-1 font-pixel text-[8px] ${achieved ? 'text-amber-400' : 'text-slate-500'}">
-                                ${achieved ? '★ COMPLETADO ★' : '🔒 PENDIENTE'}
+                                ${achieved ? '★ COMPLETADO Y COBRADO ★' : '🔒 EN PROGRESO'}
                             </div>
                         </div>
                     `;
@@ -4112,6 +4483,7 @@
                         playerData.equippedTrail = itemId;
                     }
                     sound.playUnlockFanfare();
+                    checkBadgeAchievements(true);
                     savePlayerData();
                     renderWardrobeItems();
                 }
