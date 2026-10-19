@@ -375,6 +375,13 @@
                             <span>🌺</span>
                             <span id="magnetTimerText">8s</span>
                         </div>
+                        <!-- Indicador de Jefe Activo -->
+                        <div id="bossBadgeHud"
+                            class="hidden items-center gap-1.5 bg-rose-950/95 backdrop-blur-md border-2 border-rose-500 px-2.5 py-1 rounded-xl text-rose-300 font-pixel text-[8px] sm:text-[9px] shadow-lg animate-pulse">
+                            <span id="bossHudIcon">🐍</span>
+                            <span id="bossHudName" class="hidden md:inline text-rose-200">JEFE</span>
+                            <span id="bossTimerText" class="text-amber-300 font-bold">15.0s</span>
+                        </div>
 
                         <!-- Botón de Música y Sonido -->
                         <button id="muteBtn"
@@ -1191,6 +1198,114 @@
                         bellyMain: '#5eead4',
                         cheek: '#facc15'
                     }
+                },
+                {
+                    id: 'electric_pika',
+                    name: 'Voltaje Pika',
+                    icon: '⚡',
+                    rarity: 'RARO',
+                    unlockType: 'flies',
+                    reqValue: 40,
+                    desc: 'Amarillo eléctrico con mejillas rojas cargadas de energía.',
+                    colors: {
+                        outline: '#713f12',
+                        bodyDark: '#eab308',
+                        bodyMain: '#facc15',
+                        highlight: '#fef08a',
+                        bellyTop: '#fef9c3',
+                        bellyMain: '#fde047',
+                        cheek: '#ef4444'
+                    }
+                },
+                {
+                    id: 'plumber_red',
+                    name: 'Fontanero Bros',
+                    icon: '🍄',
+                    rarity: 'ÉPICO',
+                    unlockType: 'score',
+                    reqValue: 1150,
+                    desc: 'Traje rojo clásico con overol azul del Reino Champiñón (1150 m).',
+                    colors: {
+                        outline: '#7f1d1d',
+                        bodyDark: '#b91c1c',
+                        bodyMain: '#ef4444',
+                        highlight: '#f87171',
+                        bellyTop: '#3b82f6',
+                        bellyMain: '#1d4ed8',
+                        cheek: '#fde047'
+                    }
+                },
+                {
+                    id: 'saiyan_aura',
+                    name: 'Guerrero Saiyajin',
+                    icon: '🟠',
+                    rarity: 'ÉPICO',
+                    unlockType: 'flies',
+                    reqValue: 65,
+                    desc: 'Gi de combate naranja con interior azul marino y ki dorado.',
+                    colors: {
+                        outline: '#1e3a8a',
+                        bodyDark: '#c2410c',
+                        bodyMain: '#f97316',
+                        highlight: '#fdba74',
+                        bellyTop: '#2563eb',
+                        bellyMain: '#1d4ed8',
+                        cheek: '#fde047'
+                    }
+                },
+                {
+                    id: 'vocal_idol',
+                    name: 'Ídolo Virtual 01',
+                    icon: '🎤',
+                    rarity: 'ÉPICO',
+                    unlockType: 'score',
+                    reqValue: 1700,
+                    desc: 'Turquesa cibernético con destellos magenta estilo Diva Virtual (1700 m).',
+                    colors: {
+                        outline: '#1e293b',
+                        bodyDark: '#0d9488',
+                        bodyMain: '#2dd4bf',
+                        highlight: '#99f6e4',
+                        bellyTop: '#f1f5f9',
+                        bellyMain: '#cbd5e1',
+                        cheek: '#ec4899'
+                    }
+                },
+                {
+                    id: 'eva_unit01',
+                    name: 'Mecha Unidad-01',
+                    icon: '🟣',
+                    rarity: 'MÍTICO',
+                    unlockType: 'flies',
+                    reqValue: 90,
+                    desc: 'Blindaje púrpura biomecánico con núcleo verde neón.',
+                    colors: {
+                        outline: '#2e1065',
+                        bodyDark: '#581c87',
+                        bodyMain: '#7e22ce',
+                        highlight: '#a3e635',
+                        bellyTop: '#bef264',
+                        bellyMain: '#84cc16',
+                        cheek: '#f97316'
+                    }
+                },
+                {
+                    id: 'akatsuki_crimson',
+                    name: 'Renegado Carmesí',
+                    icon: '☁️',
+                    rarity: 'LEYENDA',
+                    unlockType: 'flies',
+                    reqValue: 125,
+                    desc: 'Túnica oscura de organización secreta con nubes rojas.',
+                    colors: {
+                        outline: '#09090b',
+                        bodyDark: '#18181b',
+                        bodyMain: '#27272a',
+                        highlight: '#dc2626',
+                        bellyTop: '#ef4444',
+                        bellyMain: '#991b1b',
+                        cheek: '#f8fafc'
+                    }
                 }
             ],
             hats: [
@@ -1292,6 +1407,78 @@
                     unlockType: 'score',
                     reqValue: 3200,
                     desc: 'Premio divino por alcanzar 3200 metros.'
+                },
+                {
+                    id: 'plumber_cap',
+                    name: 'Gorra Bros',
+                    icon: '🧢',
+                    rarity: 'RARO',
+                    unlockType: 'flies',
+                    reqValue: 32,
+                    desc: 'Gorra roja de salto clásico con insignia frontal.'
+                },
+                {
+                    id: 'shinobi_headband',
+                    name: 'Banda de la Hoja',
+                    icon: '🍥',
+                    rarity: 'RARO',
+                    unlockType: 'score',
+                    reqValue: 650,
+                    desc: 'Protector frontal shinobi con placa metálica (650 m).'
+                },
+                {
+                    id: 'straw_pirate',
+                    name: 'Sombrero Mugiwara',
+                    icon: '🏴‍☠️',
+                    rarity: 'ÉPICO',
+                    unlockType: 'flies',
+                    reqValue: 60,
+                    desc: 'Legendario sombrero de paja con cinta roja del Rey Pirata.'
+                },
+                {
+                    id: 'wizard_glasses',
+                    name: 'Gafas y Cicatriz',
+                    icon: '⚡',
+                    rarity: 'ÉPICO',
+                    unlockType: 'score',
+                    reqValue: 1550,
+                    desc: 'Lentes redondos con cicatriz de rayo mágico (1550 m).'
+                },
+                {
+                    id: 'scouter_visor',
+                    name: 'Rastreador 9000+',
+                    icon: '📟',
+                    rarity: 'ÉPICO',
+                    unlockType: 'flies',
+                    reqValue: 70,
+                    desc: 'Visor táctico que mide el nivel de poder en combate.'
+                },
+                {
+                    id: 'demon_mask',
+                    name: 'Máscara Kitsune Cazador',
+                    icon: '👺',
+                    rarity: 'MÍTICO',
+                    unlockType: 'score',
+                    reqValue: 2300,
+                    desc: 'Máscara protectora de los cazadores nocturnos (2300 m).'
+                },
+                {
+                    id: 'chainsaw_horn',
+                    name: 'Motosierra Demoníaca',
+                    icon: '🪚',
+                    rarity: 'MÍTICO',
+                    unlockType: 'flies',
+                    reqValue: 105,
+                    desc: 'Hoja de motosierra giratoria en la frente a toda revolución.'
+                },
+                {
+                    id: 'saiyan_hair',
+                    name: 'Melena Super Saiyajin',
+                    icon: '🔥',
+                    rarity: 'LEYENDA',
+                    unlockType: 'flies',
+                    reqValue: 140,
+                    desc: 'Cabellera dorada legendaria con destellos de ki.'
                 }
             ],
             trails: [
@@ -1405,9 +1592,9 @@
                     id: 'lotus_collector',
                     name: 'Maestro del Loto',
                     icon: '🌺',
-                    rewardFlies: 25,
-                    reqText: 'Recoge 5 Power-Ups en tus partidas',
-                    check: (stats) => (stats.powerupsCollected || 0) >= 5
+                    rewardFlies: 35,
+                    reqText: 'Recoge 3 Power-Ups raros en tus partidas',
+                    check: (stats) => (stats.powerupsCollected || 0) >= 3
                 },
                 {
                     id: 'hero_collector',
@@ -1450,6 +1637,14 @@
                     check: (stats) => ((stats.unlockedSkins || []).length + (stats.unlockedHats || []).length) >= 6
                 },
                 {
+                    id: 'otaku_collector',
+                    name: 'Coleccionista Geek',
+                    icon: '🍥',
+                    rewardFlies: 65,
+                    reqText: 'Desbloquea 12 Sombreros o Colores del Armario',
+                    check: (stats) => ((stats.unlockedSkins || []).length + (stats.unlockedHats || []).length) >= 12
+                },
+                {
                     id: 'fly_hunter',
                     name: 'Cazador de Moscas',
                     icon: '🎯',
@@ -1490,6 +1685,46 @@
                     check: (stats) => stats.highScore >= 3000
                 },
                 {
+                    id: 'boss_slayer',
+                    name: 'Cazador de Colosos',
+                    icon: '⚔️',
+                    rewardFlies: 50,
+                    reqText: 'Sobrevive al ataque de tu primer Jefe (1400m)',
+                    check: (stats) => (stats.bossesDefeated || 0) >= 1
+                },
+                {
+                    id: 'boss_veteran',
+                    name: 'Domador de Bestias',
+                    icon: '🛡️',
+                    rewardFlies: 70,
+                    reqText: 'Sobrevive a 3 ataques de Jefes en total',
+                    check: (stats) => (stats.bossesDefeated || 0) >= 3
+                },
+                {
+                    id: 'boss_double_run',
+                    name: 'Doble Asalto Épico',
+                    icon: '🔥',
+                    rewardFlies: 90,
+                    reqText: 'Sobrevive a 2 Jefes en una misma partida (2800m+)',
+                    check: (stats) => (stats.maxBossesInSingleRun || 0) >= 2
+                },
+                {
+                    id: 'boss_master',
+                    name: 'Terror de los Jefes',
+                    icon: '💀',
+                    rewardFlies: 110,
+                    reqText: 'Sobrevive a 6 ataques de Jefes en total',
+                    check: (stats) => (stats.bossesDefeated || 0) >= 6
+                },
+                {
+                    id: 'boss_legend',
+                    name: 'Leyenda Inmortal',
+                    icon: '🌌',
+                    rewardFlies: 160,
+                    reqText: 'Sobrevive a 12 ataques de Jefes en total',
+                    check: (stats) => (stats.bossesDefeated || 0) >= 12
+                },
+                {
                     id: 'swamp_monarch',
                     name: 'Monarca Supremo',
                     icon: '👑',
@@ -1498,6 +1733,69 @@
                     check: (stats) => stats.unlockedStages.length >= 6 || ['baku_ghost', 'mecha_kero', 'kappa_yokai', 'glitch_zero'].every(id => (stats.unlockedCharacters || []).includes(id))
                 }
             ]
+        };
+
+        const STAGE_BOSSES_CATALOG = {
+            emerald_swamp: {
+                name: 'Rey Víbora del Pantano',
+                icon: '🐍',
+                bodyColor: '#15803d',
+                accentColor: '#84cc16',
+                eyeColor: '#facc15',
+                projectileName: 'Ácido Venenoso',
+                projColor: '#a3e635',
+                projCore: '#ecfccb'
+            },
+            sakura_lagoon: {
+                name: 'Oni de la Tormenta',
+                icon: '👹',
+                bodyColor: '#be123c',
+                accentColor: '#f472b6',
+                eyeColor: '#fde047',
+                projectileName: 'Shuriken Sakura',
+                projColor: '#f43f5e',
+                projCore: '#ffe4e6'
+            },
+            golden_dunes: {
+                name: 'Faraón Escorpión',
+                icon: '🦂',
+                bodyColor: '#b45309',
+                accentColor: '#facc15',
+                eyeColor: '#38bdf8',
+                projectileName: 'Orbe Solar',
+                projColor: '#eab308',
+                projCore: '#fef9c3'
+            },
+            crystal_glacier: {
+                name: 'Gólem de Escarcha',
+                icon: '🧊',
+                bodyColor: '#0369a1',
+                accentColor: '#38bdf8',
+                eyeColor: '#e0f2fe',
+                projectileName: 'Lanza Glacial',
+                projColor: '#22d3ee',
+                projCore: '#ffffff'
+            },
+            magma_volcano: {
+                name: 'Titán Piroclasto',
+                icon: '🔥',
+                bodyColor: '#7f1d1d',
+                accentColor: '#f97316',
+                eyeColor: '#fde047',
+                projectileName: 'Meteorito Ígneo',
+                projColor: '#ef4444',
+                projCore: '#fef08a'
+            },
+            neon_metropolis: {
+                name: 'Dron Centinela X-99',
+                icon: '🛸',
+                bodyColor: '#312e81',
+                accentColor: '#e879f9',
+                eyeColor: '#22d3ee',
+                projectileName: 'Pulso Láser',
+                projColor: '#22d3ee',
+                projCore: '#f0abfc'
+            }
         };
 
         /**
@@ -1909,6 +2207,51 @@
                 });
             }
 
+            playBossWarning() {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const notes = [180, 140, 180, 130];
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.11);
+
+                    gain.gain.setValueAtTime(0.14, now + idx * 0.11);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.11 + 0.1);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + idx * 0.11);
+                    osc.stop(now + idx * 0.11 + 0.1);
+                });
+            }
+
+            playBossShoot() {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(420, now);
+                osc.frequency.exponentialRampToValueAtTime(130, now + 0.09);
+
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.095);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.095);
+            }
+
             playGameOver() {
                 if (this.muted) return;
                 this.init();
@@ -1952,6 +2295,8 @@
             totalCloseCalls: 0,
             shieldsBroken: 0,
             powerupsCollected: 0,
+            bossesDefeated: 0,
+            maxBossesInSingleRun: 0,
             equippedCharacter: 'kero_frog',
             equippedStage: 'emerald_swamp',
             equippedSkin: 'classic',
@@ -2384,6 +2729,83 @@
                 pxHelper(5 + ox, -5 + oy + floatY, 2, 1, '#eab308');
                 pxHelper(16 + ox, -5 + oy + floatY, 2, 1, '#eab308');
                 pxHelper(7 + ox, -4 + oy + floatY, 9, 1, '#ca8a04');
+            } else if (hatId === 'plumber_cap') {
+                // Gorra roja estilo Mario Bros con visera e insignia blanca
+                pxHelper(4 + ox, -5 + oy, 14, 3, '#dc2626');
+                pxHelper(6 + ox, -6 + oy, 10, 1, '#ef4444');
+                pxHelper(4 + ox, -2 + oy, 18, 2, '#b91c1c');
+                pxHelper(10 + ox, -5 + oy, 4, 2, '#ffffff');
+                pxHelper(11 + ox, -4 + oy, 2, 1, '#dc2626');
+            } else if (hatId === 'shinobi_headband') {
+                // Protector frontal ninja azul con placa metálica plateada
+                const wave = animFrame === 0 ? 0 : 1;
+                pxHelper(4 + ox, -2 + oy, 15, 3, '#1e3a8a');
+                pxHelper(8 + ox, -2 + oy, 8, 2, '#cbd5e1');
+                pxHelper(11 + ox, -1 + oy, 2, 1, '#475569');
+                pxHelper(0 + ox, -2 + oy + wave, 4, 2, '#1d4ed8');
+                pxHelper(-2 + ox, -1 + oy - wave, 3, 2, '#1e40af');
+            } else if (hatId === 'straw_pirate') {
+                // Sombrero de paja Mugiwara con cinta roja
+                pxHelper(1 + ox, -2 + oy, 21, 2, '#facc15');
+                pxHelper(5 + ox, -6 + oy, 13, 4, '#eab308');
+                pxHelper(7 + ox, -7 + oy, 9, 1, '#fef08a');
+                pxHelper(5 + ox, -3 + oy, 13, 1, '#dc2626');
+            } else if (hatId === 'wizard_glasses') {
+                // Gafas redondas y cicatriz de rayo mágico en la frente
+                pxHelper(11 + ox, -3 + oy, 2, 2, '#facc15');
+                pxHelper(12 + ox, -2 + oy, 2, 2, '#fde047');
+                if (isDucking) {
+                    pxHelper(17, 2, 8, 3, '#0f172a');
+                    pxHelper(19, 3, 2, 1, '#bae6fd');
+                } else {
+                    pxHelper(5, 0, 6, 5, '#0f172a');
+                    pxHelper(12, 0, 6, 5, '#0f172a');
+                    pxHelper(11, 2, 1, 1, '#0f172a');
+                    pxHelper(6, 1, 4, 3, '#e0f2fe');
+                    pxHelper(13, 1, 4, 3, '#e0f2fe');
+                }
+            } else if (hatId === 'scouter_visor') {
+                // Rastreador de poder Saiyajin con lente verde traslúcido
+                if (isDucking) {
+                    pxHelper(15, 1, 3, 4, '#cbd5e1');
+                    pxHelper(18, 1, 6, 4, 'rgba(34, 197, 94, 0.85)');
+                } else {
+                    pxHelper(3, 1, 3, 4, '#e2e8f0');
+                    pxHelper(4, 2, 2, 2, '#ef4444');
+                    pxHelper(6, 1, 7, 1, '#94a3b8');
+                    pxHelper(12, 0, 7, 5, 'rgba(34, 197, 94, 0.82)');
+                    pxHelper(14, 2, 3, 1, '#fef08a');
+                }
+            } else if (hatId === 'demon_mask') {
+                // Máscara Kitsune blanca con detalles escarlata en un costado
+                pxHelper(13 + ox, -6 + oy, 8, 5, '#f8fafc');
+                pxHelper(14 + ox, -8 + oy, 2, 2, '#f8fafc');
+                pxHelper(19 + ox, -8 + oy, 2, 2, '#f8fafc');
+                pxHelper(14 + ox, -7 + oy, 1, 1, '#ef4444');
+                pxHelper(19 + ox, -7 + oy, 1, 1, '#ef4444');
+                pxHelper(14 + ox, -4 + oy, 2, 1, '#dc2626');
+                pxHelper(18 + ox, -4 + oy, 2, 1, '#dc2626');
+                pxHelper(16 + ox, -2 + oy, 3, 1, '#0f172a');
+            } else if (hatId === 'chainsaw_horn') {
+                // Casco naranja y espada-motosierra en la frente
+                const teethShift = animFrame === 0 ? 0 : 1;
+                pxHelper(7 + ox, -5 + oy, 9, 4, '#ea580c');
+                pxHelper(9 + ox, -6 + oy, 5, 2, '#f97316');
+                pxHelper(14 + ox, -7 + oy, 10, 3, '#94a3b8');
+                pxHelper(15 + ox + teethShift, -8 + oy, 2, 1, '#f8fafc');
+                pxHelper(19 + ox + teethShift, -8 + oy, 2, 1, '#f8fafc');
+                pxHelper(22 + ox + teethShift, -8 + oy, 2, 1, '#f8fafc');
+                pxHelper(16 + ox + teethShift, -4 + oy, 2, 1, '#f8fafc');
+                pxHelper(20 + ox + teethShift, -4 + oy, 2, 1, '#f8fafc');
+            } else if (hatId === 'saiyan_hair') {
+                // Melena dorada erizada Super Saiyajin con aura brillante
+                const spark = animFrame === 0 ? 0 : -1;
+                pxHelper(4 + ox, -4 + oy, 15, 3, '#eab308');
+                pxHelper(2 + ox, -7 + oy, 4, 4, '#facc15');
+                pxHelper(6 + ox, -9 + oy + spark, 4, 6, '#fde047');
+                pxHelper(10 + ox, -11 + oy + spark, 4, 8, '#fef08a');
+                pxHelper(14 + ox, -9 + oy + spark, 4, 6, '#fde047');
+                pxHelper(17 + ox, -6 + oy, 4, 4, '#facc15');
             }
         }
 
@@ -3118,6 +3540,297 @@
             }
         }
 
+        class BossProjectile {
+            constructor(x, y, lane, stageId) {
+                this.x = x;
+                this.y = y;
+                this.baseY = y;
+                this.lane = lane; // 'LOW' (saltar) o 'MID' (agacharse o saltar alto)
+                this.stageId = stageId;
+                this.width = 28;
+                this.height = 18;
+                this.timer = 0;
+                this.closeCallChecked = false;
+            }
+
+            update(gameSpeed, dtScale) {
+                this.x -= (gameSpeed * 1.18 + 1.4) * dtScale;
+                this.timer += 0.25 * dtScale;
+                this.y = this.baseY + Math.sin(this.timer) * 2.5;
+            }
+
+            getHitbox() {
+                return {
+                    x: this.x + 4,
+                    y: this.y + 3,
+                    width: this.width - 8,
+                    height: this.height - 6
+                };
+            }
+
+            draw(ctx) {
+                ctx.save();
+                const bx = Math.round(this.x);
+                const by = Math.round(this.y);
+                const cfg = STAGE_BOSSES_CATALOG[this.stageId] || STAGE_BOSSES_CATALOG.emerald_swamp;
+
+                // Estela energética trasera del proyectil
+                ctx.fillStyle = cfg.projColor;
+                ctx.globalAlpha = 0.45;
+                ctx.fillRect(bx + 16, by + 3, 16, this.height - 6);
+                ctx.globalAlpha = 1;
+
+                if (this.stageId === 'sakura_lagoon') {
+                    // Shuriken giratorio
+                    const spin = Math.floor(this.timer) % 2 === 0;
+                    ctx.fillStyle = cfg.projColor;
+                    ctx.fillRect(bx + 4, by + 2, 16, 14);
+                    ctx.fillStyle = '#e2e8f0';
+                    if (spin) {
+                        ctx.fillRect(bx + 10, by - 2, 4, 22);
+                        ctx.fillRect(bx + 1, by + 7, 22, 4);
+                    } else {
+                        ctx.fillRect(bx + 4, by + 1, 16, 16);
+                    }
+                    ctx.fillStyle = cfg.projCore;
+                    ctx.fillRect(bx + 10, by + 7, 4, 4);
+                } else if (this.stageId === 'crystal_glacier') {
+                    // Lanza de hielo afilada
+                    ctx.fillStyle = cfg.projColor;
+                    ctx.fillRect(bx + 4, by + 4, 22, 10);
+                    ctx.fillStyle = cfg.projCore;
+                    ctx.fillRect(bx, by + 7, 18, 4);
+                } else if (this.stageId === 'neon_metropolis') {
+                    // Pulso láser cibernético
+                    ctx.fillStyle = cfg.projColor;
+                    ctx.fillRect(bx, by + 4, 28, 10);
+                    ctx.fillStyle = cfg.projCore;
+                    ctx.fillRect(bx + 3, by + 7, 22, 4);
+                } else {
+                    // Esfera de ácido / sol / magma
+                    ctx.fillStyle = cfg.projColor;
+                    ctx.fillRect(bx + 2, by + 2, 20, 14);
+                    ctx.fillRect(bx + 5, by, 14, 18);
+                    ctx.fillStyle = cfg.projCore;
+                    ctx.fillRect(bx + 6, by + 5, 10, 8);
+                }
+
+                ctx.restore();
+            }
+        }
+
+        class StageBoss {
+            constructor(stageId) {
+                this.stageId = stageId;
+                this.cfg = STAGE_BOSSES_CATALOG[stageId] || STAGE_BOSSES_CATALOG.emerald_swamp;
+                this.width = 74;
+                this.height = 76;
+                this.x = LOGICAL_WIDTH + 90;
+                this.targetX = LOGICAL_WIDTH - 102;
+                this.baseY = GROUND_Y - 115;
+                this.y = this.baseY;
+
+                this.durationFrames = 15 * 60; // 15 segundos exactos a 60fps
+                this.timerFrames = this.durationFrames;
+                this.shootCooldown = 65;
+                this.animTimer = 0;
+                this.mouthOpenTimer = 0;
+                this.state = 'ENTERING'; // 'ENTERING' | 'ATTACKING' | 'LEAVING'
+                this.defeated = false;
+            }
+
+            update(gameSpeed, dtScale) {
+                this.animTimer += 0.09 * dtScale;
+                this.targetX = LOGICAL_WIDTH - 102;
+
+                if (this.mouthOpenTimer > 0) {
+                    this.mouthOpenTimer -= dtScale;
+                }
+
+                if (this.state === 'ENTERING') {
+                    this.x -= 4.2 * dtScale;
+                    if (this.x <= this.targetX) {
+                        this.x = this.targetX;
+                        this.state = 'ATTACKING';
+                    }
+                } else if (this.state === 'ATTACKING') {
+                    this.x = this.targetX + Math.sin(this.animTimer * 0.8) * 6;
+                    this.y = this.baseY + Math.sin(this.animTimer * 1.4) * 14;
+
+                    this.timerFrames -= dtScale;
+                    this.shootCooldown -= dtScale;
+
+                    if (this.shootCooldown <= 0 && this.timerFrames > 42) {
+                        this.shootProjectile();
+                        const speedFactor = Math.min(18, (gameSpeed - INITIAL_SPEED) * 2.2);
+                        this.shootCooldown = Math.max(40, (66 - speedFactor) + Math.random() * 24);
+                    }
+
+                    if (this.timerFrames <= 0) {
+                        this.timerFrames = 0;
+                        this.state = 'LEAVING';
+                        this.defeated = true;
+                    }
+                } else if (this.state === 'LEAVING') {
+                    this.x += 5.5 * dtScale;
+                    this.y -= 1.5 * dtScale;
+                }
+            }
+
+            shootProjectile() {
+                this.mouthOpenTimer = 16;
+                sound.playBossShoot();
+
+                // Alterna entre proyectiles bajos (para saltar) y medios (para agacharse o saltar alto)
+                const lane = Math.random() < 0.56 ? 'LOW' : 'MID';
+                const projY = lane === 'LOW' ? (GROUND_Y - 26) : (GROUND_Y - 58);
+
+                bossProjectiles.push(new BossProjectile(this.x - 10, projY, lane, this.stageId));
+                createDustParticles(this.x, projY + 8, 6, this.cfg.projColor);
+            }
+
+            draw(ctx) {
+                ctx.save();
+                const bx = Math.round(this.x);
+                const by = Math.round(this.y);
+                const p = 3;
+                const px = (gx, gy, gw, gh, color) => {
+                    ctx.fillStyle = color;
+                    ctx.fillRect(bx + gx * p, by + gy * p, gw * p, gh * p);
+                };
+
+                const floatStep = Math.floor(this.animTimer * 2) % 2;
+                const isShooting = this.mouthOpenTimer > 0;
+
+                // Sombra en el suelo debajo del Jefe
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.32)';
+                ctx.fillRect(bx + 10, GROUND_Y - 3, 52, 5);
+
+                // Barra de tiempo restante sobre la cabeza del Jefe
+                if (this.state === 'ATTACKING') {
+                    const pct = Math.max(0, this.timerFrames / this.durationFrames);
+                    ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+                    ctx.fillRect(bx + 4, by - 14, 64, 7);
+                    ctx.fillStyle = pct > 0.35 ? '#f43f5e' : '#facc15';
+                    ctx.fillRect(bx + 6, by - 12, Math.round(60 * pct), 3);
+                }
+
+                // Dibujo pixel-art temático según el mapa actual
+                if (this.stageId === 'emerald_swamp') {
+                    // Rey Víbora del Pantano: Capucha de cobra real y colmillos
+                    px(6, -3, 12, 3, '#facc15');
+                    px(8, -5, 2, 2, '#fde047');
+                    px(11, -6, 2, 3, '#fde047');
+                    px(14, -5, 2, 2, '#fde047');
+
+                    px(3, 0, 18, 16, this.cfg.bodyColor);
+                    px(1, 3, 22, 10, this.cfg.accentColor);
+                    px(5, 2, 14, 14, this.cfg.bodyColor);
+                    px(7, 16, 12, 8 + floatStep, this.cfg.bodyColor);
+                    px(9, 16, 8, 7, '#bbf7d0');
+
+                    // Ojos reptiles
+                    px(6, 5, 4, 3, this.cfg.eyeColor);
+                    px(7, 6, 2, 2, '#0f172a');
+
+                    // Boca / Colmillos al disparar
+                    if (isShooting) {
+                        px(2, 10, 8, 5, '#0f172a');
+                        px(3, 10, 2, 3, '#ffffff');
+                        px(6, 10, 2, 3, '#ffffff');
+                        px(-2, 12, 5, 2, '#a3e635');
+                    } else {
+                        px(3, 11, 7, 2, '#0f172a');
+                        px(4, 13, 2, 2, '#ffffff');
+                    }
+                } else if (this.stageId === 'sakura_lagoon') {
+                    // Oni de la Tormenta: Cuernos dorados, melena blanca y máscara demoníaca
+                    px(4, -5, 3, 5, '#facc15');
+                    px(15, -5, 3, 5, '#facc15');
+                    px(6, -3, 12, 4, '#f8fafc');
+
+                    px(4, 1, 16, 17, this.cfg.bodyColor);
+                    px(6, 3, 12, 13, '#e11d48');
+                    px(5, 18, 14, 6 + floatStep, '#1e293b');
+
+                    px(5, 5, 5, 3, this.cfg.eyeColor);
+                    px(6, 6, 2, 2, '#0f172a');
+
+                    if (isShooting) {
+                        px(4, 11, 8, 5, '#0f172a');
+                        px(5, 14, 2, 2, '#ffffff');
+                        px(9, 14, 2, 2, '#ffffff');
+                    } else {
+                        px(4, 12, 8, 2, '#0f172a');
+                        px(5, 10, 2, 2, '#ffffff');
+                    }
+                } else if (this.stageId === 'golden_dunes') {
+                    // Faraón Escorpión: Tocado Nemes real y aguijón curvado
+                    px(15, -6 - floatStep, 6, 4, '#f59e0b');
+                    px(18, -3 - floatStep, 4, 12, '#d97706');
+                    px(13, -7 - floatStep, 3, 3, '#a3e635');
+
+                    px(3, 0, 16, 5, '#1d4ed8');
+                    px(5, 1, 12, 3, '#facc15');
+                    px(4, 5, 15, 15, this.cfg.bodyColor);
+                    px(6, 7, 11, 11, '#d97706');
+
+                    px(5, 8, 4, 3, this.cfg.eyeColor);
+                    px(1, 13 + floatStep, 5, 4, '#facc15');
+
+                    if (isShooting) {
+                        px(3, 13, 7, 4, '#fef08a');
+                    }
+                } else if (this.stageId === 'crystal_glacier') {
+                    // Gólem de Escarcha: Picos de cristal helado
+                    px(5, -4, 4, 4, '#bae6fd');
+                    px(11, -6, 4, 6, '#e0f2fe');
+                    px(16, -3, 4, 3, '#bae6fd');
+
+                    px(3, 0, 18, 19, this.cfg.bodyColor);
+                    px(5, 2, 14, 15, this.cfg.accentColor);
+                    px(7, 4, 10, 10, '#bae6fd');
+
+                    px(5, 6, 5, 3, '#0f172a');
+                    px(6, 7, 3, 1, '#ffffff');
+
+                    if (isShooting) {
+                        px(3, 12, 8, 4, '#0f172a');
+                        px(1, 13, 4, 2, '#ffffff');
+                    } else {
+                        px(4, 13, 6, 2, '#0369a1');
+                    }
+                } else if (this.stageId === 'magma_volcano') {
+                    // Titán Piroclasto: Roca volcánica con núcleo de lava ardiente
+                    px(6, -5 - floatStep, 12, 5, '#f97316');
+                    px(8, -7 - floatStep, 8, 3, '#fde047');
+
+                    px(3, 0, 18, 20, '#27272a');
+                    px(5, 2, 14, 16, this.cfg.bodyColor);
+                    px(7, 5, 10, 11, this.cfg.accentColor);
+
+                    px(5, 6, 4, 3, '#fde047');
+                    px(4, 12, 9, isShooting ? 5 : 2, '#fde047');
+                } else {
+                    // Dron Centinela X-99: Nave Cyberpunk con cañón de plasma
+                    px(8, -4, 8, 4, '#22d3ee');
+                    px(2, 2, 20, 14, this.cfg.bodyColor);
+                    px(4, 4, 16, 10, '#1e1b4b');
+                    px(0, 7, 24, 4, this.cfg.accentColor);
+
+                    // Ojo escáner láser
+                    px(4, 6, 8, 4, isShooting ? '#f43f5e' : '#22d3ee');
+                    px(5, 7, 4, 2, '#ffffff');
+
+                    // Propulsores inferiores
+                    px(7, 16, 4, 4 + floatStep, '#22d3ee');
+                    px(13, 16, 4, 4 + floatStep, '#e879f9');
+                }
+
+                ctx.restore();
+            }
+        }
+
         /**
          * ============================================================================
          * 8. PARTÍCULAS, ESTELAS Y CLIMA DINÁMICO POR ESCENARIO
@@ -3246,6 +3959,10 @@
         let obstacles = [];
         let goldenFlies = [];
         let powerUps = [];
+        let activeBoss = null;
+        let bossProjectiles = [];
+        let lastBossMilestone = 0;
+        let bossesInCurrentRun = 0;
 
         let gameState = 'START';
         let score = 0;
@@ -3257,7 +3974,7 @@
         // Estado de Power-Ups activos en carrera
         let hasBubbleShield = false;
         let lotusMagnetTimer = 0;
-        let powerUpSpawnTimer = 420;
+        let nextPowerUpDistance = 750;
 
         const INITIAL_SPEED = 3.7;
         const MAX_SPEED = 13.5;
@@ -3379,6 +4096,22 @@
                     magnetText.textContent = `${Math.ceil(lotusMagnetTimer / 60)}s`;
                 }
             }
+
+            const bossBadge = document.getElementById('bossBadgeHud');
+            const bossIconEl = document.getElementById('bossHudIcon');
+            const bossNameEl = document.getElementById('bossHudName');
+            const bossTimerEl = document.getElementById('bossTimerText');
+
+            if (bossBadge) {
+                const showBoss = activeBoss !== null && activeBoss.state !== 'LEAVING';
+                bossBadge.classList.toggle('hidden', !showBoss);
+                bossBadge.classList.toggle('flex', showBoss);
+                if (showBoss) {
+                    if (bossIconEl) bossIconEl.textContent = activeBoss.cfg.icon;
+                    if (bossNameEl) bossNameEl.textContent = activeBoss.cfg.name.toUpperCase();
+                    if (bossTimerEl) bossTimerEl.textContent = `${(Math.max(0, activeBoss.timerFrames) / 60).toFixed(1)}s`;
+                }
+            }
         }
 
         function updateSpeedometerHUD() {
@@ -3415,6 +4148,9 @@
             obstacles = [];
             goldenFlies = [];
             powerUps = [];
+            activeBoss = null;
+            bossProjectiles = [];
+            lastBossMilestone = 0;
             particles = [];
             floatingTexts = [];
             speedLines = [];
@@ -3422,11 +4158,13 @@
             score = 0;
             fliesCollected = 0;
             lastMilestone = 0;
+            bossesInCurrentRun = 0;
             milestoneFlashTimer = 0;
             gameSpeed = INITIAL_SPEED;
             spawnTimer = 42;
             flySpawnTimer = 130;
-            powerUpSpawnTimer = 380;
+            // Primer potenciador por distancia larga aleatoria (entre 650m y 1050m)
+            nextPowerUpDistance = 650 + Math.floor(Math.random() * 400);
             hasBubbleShield = false;
             lotusMagnetTimer = 0;
             isNight = false;
@@ -3478,7 +4216,10 @@
                 'CARNIVORE': `¡Una planta de ${stageName} atrapó a Kero!`,
                 'LOG': `¡Kero tropezó con un tronco en ${stageName}!`,
                 'ROCK': `¡Kero chocó contra una roca en ${stageName}!`,
-                'DRAGONFLY': `¡Una libélula de ${stageName} derribó a Kero!`
+                'DRAGONFLY': `¡Una libélula de ${stageName} derribó a Kero!`,
+                'BOSS_PROJECTILE': activeBoss
+                    ? `¡${activeBoss.cfg.name} alcanzó a Kero con ${activeBoss.cfg.projectileName}!`
+                    : `¡El proyectil del Jefe derribó a Kero!`
             };
             document.getElementById('deathReasonText').textContent = reasons[obstacleType] || 'Kero chocó en carrera';
             document.getElementById('finalScoreText').textContent = formatScore(finalScore);
@@ -3560,21 +4301,36 @@
                     createFloatingText('⚡ +VELOCIDAD', kero.x + 8, Math.max(48, kero.y - 14), '#38bdf8');
                 }
 
+                // Aparición de Jefe de Escenario cada 1400 metros (1400m, 2800m, 4200m...)
+                const currentBossIndex = Math.floor(currentFloorScore / 1400);
+                if (currentBossIndex > lastBossMilestone && currentFloorScore >= 1400 && !activeBoss) {
+                    lastBossMilestone = currentBossIndex;
+                    activeBoss = new StageBoss(activeStageId);
+                    obstacles = []; // Limpia obstáculos normales para dar inicio al duelo contra el Jefe
+                    sound.playBossWarning();
+                    showUnlockToast(activeBoss.cfg.icon, `${activeBoss.cfg.name} (¡Resiste 15s!)`, '⚠️ ¡JEFE EN CAMINO!');
+                    createFloatingText(`⚠️ ¡${activeBoss.cfg.name.toUpperCase()}!`, Math.max(16, kero.x - 10), Math.max(42, kero.y - 22), '#f43f5e');
+                    updatePowerUpHUD();
+                }
+
                 const cyclePhase = Math.floor(currentFloorScore / 700) % 2;
                 isNight = cyclePhase === 1;
 
                 kero.update(input, gameSpeed, dtScale);
 
-                spawnTimer -= dtScale;
-                if (spawnTimer <= 0) {
-                    const spawned = spawnObstacle();
-                    const speedProgress = (gameSpeed - INITIAL_SPEED) / (MAX_SPEED - INITIAL_SPEED);
+                // Mientras el Jefe está atacando, él lanza proyectiles en lugar de generar obstáculos comunes
+                if (!activeBoss) {
+                    spawnTimer -= dtScale;
+                    if (spawnTimer <= 0) {
+                        const spawned = spawnObstacle();
+                        const speedProgress = (gameSpeed - INITIAL_SPEED) / (MAX_SPEED - INITIAL_SPEED);
 
-                    const minGapPx = spawned.width + lerp(165, 390, speedProgress);
-                    const maxGapPx = minGapPx + lerp(115, 195, 1 - speedProgress * 0.45);
-                    const chosenGapPx = minGapPx + Math.random() * (maxGapPx - minGapPx);
+                        const minGapPx = spawned.width + lerp(165, 390, speedProgress);
+                        const maxGapPx = minGapPx + lerp(115, 195, 1 - speedProgress * 0.45);
+                        const chosenGapPx = minGapPx + Math.random() * (maxGapPx - minGapPx);
 
-                    spawnTimer = chosenGapPx / gameSpeed;
+                        spawnTimer = chosenGapPx / gameSpeed;
+                    }
                 }
 
                 flySpawnTimer -= dtScale;
@@ -3583,10 +4339,10 @@
                     flySpawnTimer = 160 + Math.random() * 145;
                 }
 
-                powerUpSpawnTimer -= dtScale;
-                if (powerUpSpawnTimer <= 0) {
+                // Aparición de Power-Up solo en distancias largas aleatorias (cada 650m a 1100m)
+                if (currentFloorScore >= nextPowerUpDistance) {
                     spawnSwampPowerUp();
-                    powerUpSpawnTimer = 450 + Math.random() * 320;
+                    nextPowerUpDistance = currentFloorScore + 650 + Math.floor(Math.random() * 450);
                 }
 
                 if (lotusMagnetTimer > 0) {
@@ -3644,6 +4400,83 @@
                     }
                 }
 
+                // Actualizar Jefe activo y sus proyectiles
+                if (activeBoss) {
+                    activeBoss.update(gameSpeed, dtScale);
+                    updatePowerUpHUD();
+
+                    if (activeBoss.defeated) {
+                        activeBoss.defeated = false;
+                        // Recompensa por resistir los 15 segundos del Jefe: +10 Moscas Doradas
+                        fliesCollected += 10;
+                        playerData.flyBank += 10;
+                        playerData.lifetimeFlies += 10;
+                        bossesInCurrentRun++;
+                        playerData.bossesDefeated = (playerData.bossesDefeated || 0) + 1;
+                        if (bossesInCurrentRun > (playerData.maxBossesInSingleRun || 0)) {
+                            playerData.maxBossesInSingleRun = bossesInCurrentRun;
+                        }
+                        if (fliesCollected > (playerData.maxFliesInSingleRun || 0)) {
+                            playerData.maxFliesInSingleRun = fliesCollected;
+                        }
+                        document.getElementById('flyCountText').textContent = String(fliesCollected).padStart(2, '0');
+                        bossProjectiles = [];
+                        spawnTimer = 55;
+
+                        sound.playUnlockFanfare();
+                        createDustParticles(activeBoss.x + 25, activeBoss.y + 30, 22, '#facc15');
+                        showUnlockToast('🪰', `¡Sobreviviste a ${activeBoss.cfg.name}! (+10 🪰)`, '🏆 ¡JEFE SUPERADO!');
+                        createFloatingText('🎉 ¡JEFE SUPERADO! +10🪰', Math.max(14, kero.x - 10), Math.max(40, kero.y - 18), '#facc15');
+                        checkBadgeAchievements(true);
+                        savePlayerData();
+                    }
+
+                    if (activeBoss.state === 'LEAVING' && activeBoss.x > LOGICAL_WIDTH + 120) {
+                        activeBoss = null;
+                        updatePowerUpHUD();
+                    }
+                }
+
+                for (let i = bossProjectiles.length - 1; i >= 0; i--) {
+                    const bp = bossProjectiles[i];
+                    bp.update(gameSpeed, dtScale);
+
+                    if (kero.invincibleTimer <= 0 && checkCollision(keroBox, bp.getHitbox())) {
+                        if (hasBubbleShield) {
+                            hasBubbleShield = false;
+                            kero.invincibleTimer = 55;
+                            playerData.shieldsBroken = (playerData.shieldsBroken || 0) + 1;
+                            sound.playShieldBreak();
+                            createDustParticles(kero.x + 20, kero.y + 20, 16, '#38bdf8');
+                            createFloatingText('🫧 ¡ESCUDO SALVADOR!', Math.max(16, kero.x - 10), Math.max(40, kero.y - 16), '#38bdf8');
+                            updatePowerUpHUD();
+                            checkBadgeAchievements(true);
+                            bossProjectiles.splice(i, 1);
+                            continue;
+                        } else {
+                            document.getElementById('scoreHud').style.opacity = '1';
+                            triggerGameOver('BOSS_PROJECTILE');
+                            break;
+                        }
+                    }
+
+                    // Bono ¡CASI! también aplica al esquivar proyectiles del jefe al límite
+                    if (!bp.closeCallChecked && bp.x + bp.width < keroBox.x) {
+                        bp.closeCallChecked = true;
+                        const vertDist = Math.abs((keroBox.y + keroBox.height) - bp.y);
+                        if (vertDist <= 18) {
+                            score += 15;
+                            playerData.totalCloseCalls = (playerData.totalCloseCalls || 0) + 1;
+                            createFloatingText('⚡ ¡CASI! +15m', kero.x, Math.max(42, kero.y - 12), '#a3e635');
+                            checkBadgeAchievements(true);
+                        }
+                    }
+
+                    if (bp.x + bp.width < -50) {
+                        bossProjectiles.splice(i, 1);
+                    }
+                }
+
                 // Actualizar Power-Ups en carrera
                 for (let i = powerUps.length - 1; i >= 0; i--) {
                     const pu = powerUps[i];
@@ -3693,6 +4526,16 @@
                         if (fliesCollected > (playerData.maxFliesInSingleRun || 0)) {
                             playerData.maxFliesInSingleRun = fliesCollected;
                         }
+
+                        // Aparición de Power-Up al llegar a 100 moscas y después cada 10 moscas (110, 120, 130...)
+                        if (
+                            (playerData.lifetimeFlies === 100 || (playerData.lifetimeFlies > 100 && (playerData.lifetimeFlies - 100) % 10 === 0)) ||
+                            (fliesCollected === 100 || (fliesCollected > 100 && (fliesCollected - 100) % 10 === 0))
+                        ) {
+                            spawnSwampPowerUp();
+                            createFloatingText('🎁 ¡BONUS POR MOSCAS!', Math.max(16, kero.x - 10), Math.max(36, kero.y - 24), '#e879f9');
+                        }
+
                         checkBadgeAchievements(true);
                         savePlayerData();
 
@@ -4030,6 +4873,10 @@
             powerUps.forEach(pu => pu.draw(ctx));
             goldenFlies.forEach(fly => fly.draw(ctx));
             obstacles.forEach(obs => obs.draw(ctx));
+            bossProjectiles.forEach(bp => bp.draw(ctx));
+            if (activeBoss) {
+                activeBoss.draw(ctx);
+            }
             kero.draw(ctx);
 
             particles.forEach(p => {
