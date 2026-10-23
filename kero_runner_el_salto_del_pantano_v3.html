@@ -4594,8 +4594,7 @@
             });
 
             if (gameState === 'PLAYING') {
-                drawGroundDetail(now, stage);
-            groundBumps.forEach(b => {
+                groundBumps.forEach(b => {
                     b.x -= gameSpeed * dtScale;
                     if (b.x + b.w < 0) {
                         b.x = LOGICAL_WIDTH + Math.random() * 25;
@@ -4897,6 +4896,7 @@
 
             ctx.fillStyle = lerpColorRGB(palDay.groundMain, palNight.groundMain, nightLerp);
             ctx.fillRect(0, GROUND_Y, LOGICAL_WIDTH, LOGICAL_HEIGHT - GROUND_Y);
+            drawGroundDetail(now, stage);
 
             ctx.fillStyle = lerpColorRGB(palDay.groundGrass, palNight.groundGrass, nightLerp);
             ctx.fillRect(0, GROUND_Y, LOGICAL_WIDTH, 6);
