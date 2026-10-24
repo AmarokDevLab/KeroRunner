@@ -756,17 +756,14 @@
                 desc: 'Androide cibernético con visor láser, antena de radar y propulsor.',
                 accentColor: '#22d3ee'
             },
-            {
-                id: 'kappa_yokai',
-                name: 'Kappa del Río',
-                icon: '🥒',
-                rarity: 'OCULTO',
-                unlockType: 'secret',
-                isSecret: true,
-                secretHint: 'Haz 8 reverencias rápidas (Agacharse) seguidas al empezar la partida (antes de los 60 m).',
-                desc: 'Criatura mitológica japonesa con plato de agua sagrada en la cabeza.',
-                accentColor: '#84cc16'
-            },
+            { id:'noctis_moth', name:'Noctis — Polilla Lunar', icon:'🦋', rarity:'OCULTO', unlockType:'secret', isSecret:true,
+              secretHint:'Ritual Lunar: Haz 8 reverencias antes de los 60 m.', desc:'Polilla nocturna de alas estrelladas y ojos de luna.', accentColor:'#a78bfa' },
+            { id:'myko_mushroom', name:'Myko — Hongo Ancestral', icon:'🍄', rarity:'OCULTO', unlockType:'secret', isSecret:true,
+              secretHint:'Esporas del Bosque: Recolecta 25 moscas en una sola partida.', desc:'Espíritu del bosque con sombrero de hongo y esporas.', accentColor:'#fb7185' },
+            { id:'ignis_salamander', name:'Ignis — Salamandra de Ceniza', icon:'🔥', rarity:'OCULTO', unlockType:'secret', isSecret:true,
+              secretHint:'Corazón de Fuego: Sobrevive hasta los 1800 m en una partida.', desc:'Salamandra de obsidiana con brasas vivas.', accentColor:'#fb923c' },
+            { id:'grom_golem', name:'Grom — Gólem de Cristal', icon:'💎', rarity:'OCULTO', unlockType:'secret', isSecret:true,
+              secretHint:'Resistencia Cristalina: Llega a los 3000 m en una partida.', desc:'Gólem de piedra y cristales brillantes.', accentColor:'#67e8f9' },
             {
                 id: 'glitch_zero',
                 name: 'Entidad 404',
@@ -1356,15 +1353,15 @@
                     "rarity": "ÉPICO",
                     "unlockType": "flies",
                     "reqValue": 45,
-                    "desc": "Marfil de máscara antigua y azul de capa nocturna.",
+                    "desc": "Marfil ancestral y capa negra de sombras profundas.",
                     "colors": {
-                        "outline": "#283144",
-                        "bodyDark": "#576479",
-                        "bodyMain": "#d2dcdf",
-                        "highlight": "#f8faf0",
-                        "bellyTop": "#576a95",
-                        "bellyMain": "#354765",
-                        "cheek": "#82bddd"
+                        "outline": "#05060d",
+                        "bodyDark": "#0b0d19",
+                        "bodyMain": "#171b2b",
+                        "highlight": "#3b435b",
+                        "bellyTop": "#111321",
+                        "bellyMain": "#080a12",
+                        "cheek": "#38465f"
                     }
                 },
                 {
@@ -1832,7 +1829,7 @@
                     icon: '🕵️',
                     rewardFlies: 35,
                     reqText: 'Descubre al menos 1 Personaje Oculto',
-                    check: (stats) => ['baku_ghost', 'mecha_kero', 'kappa_yokai', 'glitch_zero'].some(id => (stats.unlockedCharacters || []).includes(id))
+                    check: (stats) => ['baku_ghost', 'mecha_kero', 'noctis_moth', 'myko_mushroom', 'ignis_salamander', 'grom_golem', 'glitch_zero'].some(id => (stats.unlockedCharacters || []).includes(id))
                 },
                 {
                     id: 'night_survivor',
@@ -1952,7 +1949,7 @@
                     icon: '👑',
                     rewardFlies: 120,
                     reqText: 'Desbloquea los 6 Escenarios o los 4 Personajes Ocultos',
-                    check: (stats) => stats.unlockedStages.length >= 6 || ['baku_ghost', 'mecha_kero', 'kappa_yokai', 'glitch_zero'].every(id => (stats.unlockedCharacters || []).includes(id))
+                    check: (stats) => stats.unlockedStages.length >= 6 || ['baku_ghost', 'mecha_kero', 'noctis_moth', 'myko_mushroom', 'ignis_salamander', 'grom_golem', 'glitch_zero'].every(id => (stats.unlockedCharacters || []).includes(id))
                 }
             ]
         };
@@ -2606,6 +2603,8 @@
                 if (!Array.isArray(playerData.unlockedBadges)) {
                     playerData.unlockedBadges = [];
                 }
+                playerData.unlockedCharacters = playerData.unlockedCharacters.filter(id => id !== 'kappa_yokai');
+                if (playerData.equippedCharacter === 'kappa_yokai') playerData.equippedCharacter = 'kero_frog';
                 if (!playerData.equippedCharacter) {
                     playerData.equippedCharacter = 'kero_frog';
                 }
@@ -2938,20 +2937,22 @@
                 duck?Math.max(1,Math.round(h*.8)):h,c);
             const ink='#182439';
             if(id==='bounty_helmet') {
-                p(4,-5,16,7,ink);p(6,-8,12,3,ink);p(7,-7,10,2,'#d8e4e9');
-                p(5,-4,14,5,'#93a9ba');p(6,-5,12,2,'#bacbd4');
-                p(7,-3,12,2,ink);p(12,-2,3,6,ink);p(8,-3,3,1,'#5cbad2');
-                p(5,1,6,2,'#657e93');p(16,1,3,2,'#657e93');
-                p(21,-8,1,8,'#829aaa');p(20,-9,3,2,'#e5b75a');
+                const maskPixel=(x,y,w,h,c)=>p(x,y+5,w,h,c);
+                maskPixel(4,-5,16,7,ink);maskPixel(6,-8,12,3,ink);maskPixel(7,-7,10,2,'#d8e4e9');
+                maskPixel(5,-4,14,5,'#93a9ba');maskPixel(6,-5,12,2,'#bacbd4');
+                maskPixel(7,-3,12,2,ink);maskPixel(12,-2,3,6,ink);maskPixel(8,-3,3,1,'#5cbad2');
+                maskPixel(5,1,6,2,'#657e93');maskPixel(16,1,3,2,'#657e93');
+                maskPixel(21,-8,1,8,'#829aaa');maskPixel(20,-9,3,2,'#e5b75a');
             } else if(id==='forest_hood') {
                 p(3,-2,18,2,'#244e38');p(4,-4,15,2,'#73a842');p(6,-7,11,3,'#4f8e3f');
                 p(5,-9,10,2,'#4f8e3f');p(2,-8,5,3,'#4f8e3f');p(0,-5,5,3,'#4f8e3f');
                 p(-1,-3+frame,3,3,'#a4c764');p(8,-7,7,1,'#92bd5b');p(5,-2,13,1,'#d8c472');
             } else if(id==='hollow_mask') {
-                p(5,-6,14,8,ink);p(6,-5,12,8,'#ebede2');p(7,-6,10,2,'#fcfff0');
-                p(4,-11,3,6,'#d8e1de');p(3,-12,2,3,'#fcfff0');
-                p(17,-11,3,6,'#d8e1de');p(19,-12,2,3,'#fcfff0');
-                p(8,-2,3,4,ink);p(14,-2,3,4,ink);p(11,2,3,2,'#b6c5cc');
+                const maskPixel=(x,y,w,h,c)=>p(x,y+5,w,h,c);
+                maskPixel(5,-6,14,8,ink);maskPixel(6,-5,12,8,'#ebede2');maskPixel(7,-6,10,2,'#fcfff0');
+                maskPixel(4,-11,3,6,'#d8e1de');maskPixel(3,-12,2,3,'#fcfff0');
+                maskPixel(17,-11,3,6,'#d8e1de');maskPixel(19,-12,2,3,'#fcfff0');
+                maskPixel(8,-2,3,4,ink);maskPixel(14,-2,3,4,ink);maskPixel(11,2,3,2,'#b6c5cc');
             } else if(id==='star_helmet') {
                 p(4,-5,16,6,ink);p(6,-8,12,3,'#b7cad4');p(7,-7,10,5,'#f0f0e3');
                 p(5,-4,3,5,'#dd762e');p(17,-4,3,5,'#dd762e');p(10,-7,3,4,'#ed8736');
@@ -3277,7 +3278,20 @@
                 }
 
                 const charId = playerData.equippedCharacter || 'kero_frog';
-                const colors = getActiveSkinColors();
+                // Los cuatro secretos usan el MISMO cuerpo, ojos, panza, carrera y agachado
+                // que Kero y el resto del elenco; únicamente cambia su paleta y accesorios.
+                const secretPalettes = {
+                    // Paletas propias permanentes: no dependen del color equipado.
+                    // Mantienen todos los detalles, efectos y animaciones originales.
+                    mecha_kero: {outline:'#1e293b',bodyDark:'#475569',bodyMain:'#94a3b8',highlight:'#cbd5e1',bellyTop:'#64748b',bellyMain:'#334155',cheek:'#22d3ee'},
+                    baku_ghost: {outline:'#276c91',bodyDark:'#74c6e5',bodyMain:'#c2edfa',highlight:'#f0fbff',bellyTop:'#e0f7ff',bellyMain:'#b8e7f7',cheek:'#7dd3fc'},
+                    glitch_zero: {outline:'#080d20',bodyDark:'#191534',bodyMain:'#30204d',highlight:'#65418b',bellyTop:'#26173e',bellyMain:'#120f29',cheek:'#f43f5e'},
+                    noctis_moth: {outline:'#302044',bodyDark:'#624080',bodyMain:'#9473b8',highlight:'#c4a5e7',bellyTop:'#d8c7ed',bellyMain:'#bfa9da',cheek:'#f2b9dd'},
+                    myko_mushroom: {outline:'#60423e',bodyDark:'#b78a75',bodyMain:'#f1d5b5',highlight:'#fff0d6',bellyTop:'#fff0d6',bellyMain:'#f6dfc4',cheek:'#f6a6a6'},
+                    ignis_salamander: {outline:'#342532',bodyDark:'#8b3f40',bodyMain:'#d66b46',highlight:'#ffab63',bellyTop:'#f8ba77',bellyMain:'#f4a75e',cheek:'#ffcc80'},
+                    grom_golem: {outline:'#293c50',bodyDark:'#52677a',bodyMain:'#8296a5',highlight:'#b1c6d0',bellyTop:'#90c5ce',bellyMain:'#6ba7b8',cheek:'#5eead4'}
+                };
+                const colors = secretPalettes[charId] || getActiveSkinColors();
                 let hopBounce = 0;
                 if (this.isGrounded && !this.isDucking && !this.isDead && customX === null) {
                     hopBounce = this.animFrame === 0 ? 0 : -3;
@@ -3327,6 +3341,43 @@
                 const isCrouching = this.isDucking && this.isGrounded && customX === null;
                 const wag = this.animFrame === 0 ? 0 : 1;
 
+                // Carcasa mecánica y propulsores dobles con pulso animado.
+                if (charId === 'mecha_kero' && !isCrouching) {
+                    px(-4, 6, 7, 12, '#172535'); px(-5, 9, 4, 6, '#526b7c');
+                    px(-6, 13 + wag, 4, 4, wag ? '#22d3ee' : '#fbbf24');
+                    px(18, 9, 5, 8, '#233c50'); px(21, 12, 3, 4, '#22d3ee');
+                    px(1, 1, 4, 5, '#94a3b8');
+                }
+                // Baku: halo etéreo, wisps y partículas con oscilación suave.
+                if (charId === 'baku_ghost') {
+                    const spiritT = performance.now() * 0.004;
+                    const drift = Math.round(Math.sin(spiritT) * 2);
+                    px(-5, 3 + drift, 3, 3, 'rgba(125,211,252,0.55)');
+                    px(-7, 5 + drift, 2, 2, 'rgba(224,242,254,0.85)');
+                    px(22, 9 - drift, 3, 4, 'rgba(103,232,249,0.55)');
+                    px(25, 7 - drift, 2, 2, 'rgba(240,249,255,0.85)');
+                    px(8, -7, 9, 1, 'rgba(125,211,252,0.7)');
+                    px(10, -8, 5, 1, 'rgba(224,242,254,0.9)');
+                }
+                // Aura de corrupción digital de Entidad 404.
+                if (charId === 'glitch_zero') {
+                    const flick = Math.floor(performance.now()/150)%3;
+                    px(-5-flick, 1, 4, 2, '#22d3ee'); px(22+flick, 7, 4, 2, '#f43f5e');
+                    px(-4, 17, 5, 2, '#a855f7'); px(21, -4-flick, 3, 4, '#facc15');
+                    px(1, -6, 4, 2, '#f43f5e'); px(17, 19, 5, 2, '#22d3ee');
+                }
+                // Accesorios traseros pequeños: respetan la silueta del personaje base.
+                if (charId === 'noctis_moth' && !isCrouching) {
+                    px(-4,5-wag,7,10,'#302044'); px(-3,6-wag,5,8,'#8b5cc0');
+                    px(-2,9-wag,2,2,'#fef3c7');
+                    px(19,5+wag,5,9,'#302044'); px(20,6+wag,3,7,'#9e7bd0');
+                } else if (charId === 'ignis_salamander' && !isCrouching) {
+                    px(-5,13+wag,8,4,'#342532'); px(-7,12+wag,4,4,'#f97316');
+                    px(-8,11+wag,2,3,'#fde68a');
+                } else if (charId === 'grom_golem' && !isCrouching) {
+                    px(-2,7,5,5,'#293c50'); px(-1,6,3,4,'#67e8f9');
+                    px(19,8,5,5,'#293c50'); px(21,7,2,4,'#67e8f9');
+                }
                 // Detalles traseros exclusivos según el personaje elegido
                 if (!isCrouching) {
                     if (charId === 'axo_axolotl') {
@@ -3338,7 +3389,7 @@
                         px(2, 8 + wag, 3, 2, '#f43f5e');
                         px(18, 2 - wag, 3, 2, '#f43f5e');
                         px(19, 5, 3, 2, '#fb7185');
-                    } else if (charId === 'kame_turtle' || charId === 'kappa_yokai') {
+                    } else if (charId === 'kame_turtle') {
                         // Caparazón abovedado en la espalda
                         px(0, 4, 10, 11, '#065f46');
                         px(1, 5, 8, 9, '#047857');
@@ -3368,6 +3419,8 @@
                         // Estela fantasmal flotante
                         px(-3, 11 + wag, 5, 4, 'rgba(186, 230, 253, 0.7)');
                         px(-5, 13 - wag, 3, 2, 'rgba(56, 189, 248, 0.6)');
+                        px(-7, 15 + wag, 3, 2, 'rgba(224, 242, 254, 0.6)');
+                        px(-9, 17 - wag, 2, 2, 'rgba(125, 211, 252, 0.5)');
                     } else if (charId === 'glitch_zero') {
                         // Fragmentos digitales flotantes alrededor de Entidad 404
                         px(-3 - wag, 4, 3, 2, '#f43f5e');
@@ -3377,7 +3430,7 @@
                 }
 
                 if (isCrouching) {
-                    if (charId === 'kame_turtle' || charId === 'kappa_yokai') {
+                    if (charId === 'kame_turtle') {
                         // Kame y Kappa se meten dentro de su caparazón al agacharse
                         px(3, 2, 20, 9, '#065f46');
                         px(5, 3, 16, 7, '#10b981');
@@ -3385,7 +3438,7 @@
                         px(14 - wag * 2, 4, 4, 5, '#047857');
                         px(2, 9, 22, 2, '#fde68a');
                         px(4, 11, 18, 2, colors.outline);
-                        if (charId === 'kappa_yokai') {
+                        if (charId === 'noctis_moth') {
                             px(7, 0, 12, 2, '#bae6fd');
                             px(9, 1, 8, 1, '#38bdf8');
                         }
@@ -3398,7 +3451,7 @@
                         px(19, 2, 4, 3, '#ffffff');
                         px(21, 3, 2, 2, '#0f172a');
 
-                        if (charId === 'cuac_duck' || charId === 'kappa_yokai') {
+                        if (charId === 'cuac_duck' || charId === 'noctis_moth') {
                             px(23, 5, 5, 3, '#f97316');
                             px(23, 7, 4, 1, '#ea580c');
                         } else if (charId === 'axo_axolotl') {
@@ -3430,6 +3483,16 @@
                         }
                     }
 
+                    if (charId === 'myko_mushroom') {
+                        px(4,0,20,3,'#b94363'); px(8,-2,12,3,'#d95b75');
+                        px(7,1,4,2,'#fff0d6'); px(17,0,3,2,'#fff0d6');
+                    } else if (charId === 'noctis_moth') {
+                        px(2,5,5,5,'#7855a8'); px(5,-2,2,3,'#c4a5e7');
+                    } else if (charId === 'ignis_salamander') {
+                        px(2,7,4,3,'#f97316'); px(18,-1,3,3,'#fb923c');
+                    } else if (charId === 'grom_golem') {
+                        px(6,-3,4,5,'#67e8f9'); px(17,-2,3,4,'#67e8f9');
+                    }
                     drawKeroHat(ctx, playerData.equippedHat, px, true, this.animFrame);
                 } else {
                     // Orejas / Cuernos / Antena / Plato Kappa superiores según personaje
@@ -3449,14 +3512,32 @@
                     } else if (charId === 'mecha_kero') {
                         px(10, -4, 2, 4, '#94a3b8');
                         px(9, -5, 4, 2, wag === 0 ? '#22d3ee' : '#ef4444');
-                    } else if (charId === 'kappa_yokai') {
-                        px(6, -2, 11, 2, '#e2e8f0');
-                        px(8, -2, 7, 1, '#38bdf8');
                     } else if (charId === 'baku_ghost') {
                         px(9, -3 + wag, 4, 2, '#38bdf8');
                         px(10, -4 + wag, 2, 1, '#bae6fd');
                     }
 
+                    // Baku: marcas arcanas en la frente, sin modificar el cuerpo.
+                    if (charId === 'baku_ghost') {
+                        px(10, -2, 4, 1, '#e0f2fe');
+                        px(11, -3, 2, 1, '#67e8f9');
+                    }
+                    // Rasgos de especie integrados en la misma cabeza de Kero.
+                    if (charId === 'noctis_moth') {
+                        px(5,-5,3,5,colors.outline); px(6,-5,2,4,'#c4a5e7');
+                        px(15,-5,3,5,colors.outline); px(16,-5,2,4,'#c4a5e7');
+                    } else if (charId === 'myko_mushroom') {
+                        // Sombrero de hongo con volumen, no cabeza independiente.
+                        px(1,-2,22,4,'#77354d'); px(3,-5,18,5,'#bc4564');
+                        px(6,-7,12,3,'#d95b75'); px(5,-3,4,2,'#fff0d6');
+                        px(14,-5,4,2,'#fff0d6'); px(18,-2,3,2,'#fff0d6');
+                    } else if (charId === 'ignis_salamander') {
+                        px(5,-3,3,4,colors.outline); px(6,-4,2,3,'#f97316');
+                        px(15,-3,3,4,colors.outline); px(16,-4,2,3,'#f97316');
+                    } else if (charId === 'grom_golem') {
+                        px(5,-4,5,5,'#293c50'); px(6,-5,3,5,'#67e8f9');
+                        px(15,-4,5,5,'#293c50'); px(16,-5,3,5,'#67e8f9');
+                    }
                     // Ojos
                     px(6, 0, 5, 5, colors.outline);
                     px(13, 0, 5, 5, colors.outline);
@@ -3467,6 +3548,14 @@
                         // Visor láser cibernético
                         px(6, 1, 13, 3, '#0f172a');
                         px(7 + wag, 2, 10, 1, '#ef4444');
+                    } else if (charId === 'baku_ghost') {
+                        // Mirada espiritual azul: pupilas luminosas y brillo interior.
+                        px(7, 1, 4, 4, '#0c4a6e');
+                        px(14, 1, 4, 4, '#0c4a6e');
+                        px(8, 2, 2, 2, '#67e8f9');
+                        px(15, 2, 2, 2, '#67e8f9');
+                        px(9, 2, 1, 1, '#ffffff');
+                        px(16, 2, 1, 1, '#ffffff');
                     } else if (charId === 'glitch_zero') {
                         // Ojos asimétricos corruptos
                         px(7, 1, 4, 4, '#0f172a');
@@ -3504,6 +3593,18 @@
                     px(7, 9, 11, 6, colors.bellyTop);
                     px(8, 10, 9, 4, colors.bellyMain);
 
+                    if (charId === 'mecha_kero') {
+                        // Placas blindadas, juntas, visor y núcleo de reactor.
+                        px(3, 5, 4, 7, '#42586b');px(18, 5, 4, 7, '#42586b');
+                        px(4, 6, 2, 5, '#b5c7d1');px(19, 6, 2, 5, '#b5c7d1');
+                        px(6, 14, 13, 2, '#233747');px(7, 15, 3, 2, '#f59e0b');
+                        px(16, 15, 3, 2, '#22d3ee');
+                    } else if (charId === 'glitch_zero') {
+                        // Silueta rota con circuitos y grietas neón.
+                        px(4, 5, 4, 3, '#0b1025');px(17, 9, 4, 3, '#090b1d');
+                        px(5, 11, 3, 2, '#22d3ee');px(17, 5, 3, 2, '#f43f5e');
+                        px(9, 7, 2, 5, '#a855f7');px(13, 12, 5, 1, '#22d3ee');
+                    }
                     // Núcleo de energía para Mecha-Kero
                     if (charId === 'mecha_kero') {
                         px(11, 10, 4, 3, '#0284c7');
@@ -3518,9 +3619,6 @@
                     if (charId === 'cuac_duck') {
                         px(17, 6, 6, 3, '#f97316');
                         px(17, 8, 5, 1, '#ea580c');
-                    } else if (charId === 'kappa_yokai') {
-                        px(16, 6, 5, 3, '#facc15');
-                        px(16, 8, 4, 1, '#ca8a04');
                     } else if (this.isDead && customX === null) {
                         px(12, 8, 5, 2, '#0f172a');
                     } else {
@@ -3545,6 +3643,8 @@
                         px(5 + wag, 18, 3, 2, colors.highlight);
                         px(10, 18 - wag, 3, 2, colors.highlight);
                         px(15 - wag, 18, 3, 2, colors.highlight);
+                        px(7, 20 + wag, 3, 2, 'rgba(186,230,253,0.75)');
+                        px(13, 20 - wag, 2, 3, 'rgba(103,232,249,0.7)');
                     } else if (!this.isGrounded && customX === null) {
                         if (this.vy < 0) {
                             px(3, 15, 4, 5, footColor);
@@ -3566,6 +3666,25 @@
                             px(12, 14, 4, 5, colors.bodyDark);
                             px(13, 18, 5, 2, colors.bodyDark);
                         }
+                    }
+
+                    // Marcas de especie sobre el mismo rostro y torso base.
+                    if (charId === 'noctis_moth') {
+                        px(9,2,2,2,'#3c2757'); px(16,2,2,2,'#3c2757');
+                        px(10,7,2,1,'#fff0d6'); px(16,7,2,1,'#fff0d6');
+                        px(10,11,5,2,'#e9d5ff');
+                    } else if (charId === 'myko_mushroom') {
+                        px(9,2,2,2,'#493341'); px(16,2,2,2,'#493341');
+                        px(10,8,5,1,'#a65b64');
+                        px(8,11,2,2,'#fff1d9'); px(16,11,2,2,'#fff1d9');
+                    } else if (charId === 'ignis_salamander') {
+                        px(9,2,2,2,'#9a3412'); px(16,2,2,2,'#9a3412');
+                        px(10,10,2,2,'#f97316'); px(16,11,2,2,'#f97316');
+                        px(12,12,3,2,'#fde68a');
+                    } else if (charId === 'grom_golem') {
+                        px(9,2,2,2,'#22d3ee'); px(16,2,2,2,'#22d3ee');
+                        px(11,11,4,3,'#155e75'); px(12,11,2,2,'#67e8f9');
+                        px(5,11,2,3,'#334155'); px(18,10,2,3,'#334155');
                     }
 
                     drawKeroHat(ctx, playerData.equippedHat, px, false, this.animFrame);
@@ -4351,14 +4470,16 @@
                     unlockSecretCharacter('baku_ghost');
                 }
 
-                // Condición secreta 2: Kappa del Río (8 reverencias rápidas antes de los 60m)
+                // Condición secreta 2: Noctis (8 reverencias rápidas antes de los 60m)
                 if (kero.isDucking && !wasDuckingLastFrame && currentFloorScore < 60) {
                     earlyCrouchCount++;
                     if (earlyCrouchCount >= 8) {
-                        unlockSecretCharacter('kappa_yokai');
+                        unlockSecretCharacter('noctis_moth');
                     }
                 }
                 wasDuckingLastFrame = kero.isDucking;
+                if (currentFloorScore >= 1800) unlockSecretCharacter('ignis_salamander');
+                if (currentFloorScore >= 3000) unlockSecretCharacter('grom_golem');
 
                 const currentHundred = Math.floor(currentFloorScore / 100);
                 if (currentHundred > lastMilestone && currentFloorScore >= 100) {
@@ -4584,16 +4705,23 @@
                     const fly = goldenFlies[i];
                     fly.update(gameSpeed, dtScale);
 
-                    // Si el Imán de Loto está activo, atrae las moscas cercanas hacia Kero
-                    if (lotusMagnetTimer > 0 && fly.x < LOGICAL_WIDTH && Math.abs(fly.x - kero.x) < 230) {
-                        fly.x += (kero.x + 20 - fly.x) * 0.14 * dtScale;
-                        fly.y += (kero.y + 16 - fly.y) * 0.18 * dtScale;
+                    // Imán: movimiento convergente incluso si la mosca quedó detrás del jugador.
+                    // La velocidad mínima supera el desplazamiento de la escena; sin persecución infinita.
+                    if (lotusMagnetTimer > 0 && fly.x < LOGICAL_WIDTH && Math.abs(fly.x - kero.x) < 280) {
+                        const targetX = kero.x + kero.width * 0.5 - fly.width * 0.5;
+                        const targetY = kero.y + kero.height * 0.5 - fly.height * 0.5;
+                        const dx = targetX - fly.x, dy = targetY - fly.y;
+                        const dist = Math.hypot(dx, dy);
+                        const step = Math.min(dist, Math.max(10 * dtScale, dist * 0.25 * dtScale));
+                        if (dist > 0) { fly.x += dx / dist * step; fly.y += dy / dist * step; }
+                        if (dist <= Math.max(14, step + 5)) { fly.x = targetX; fly.y = targetY; }
                     }
 
                     if (!fly.collected && checkCollision(keroBox, fly.getHitbox())) {
                         fly.collected = true;
                         noFlyDistance = 0; // Reinicia el contador de ayuno de moscas para Baku el Espectro
                         fliesCollected++;
+                        if (fliesCollected >= 25) unlockSecretCharacter('myko_mushroom');
                         playerData.flyBank++;
                         playerData.lifetimeFlies++;
                         if (fliesCollected > (playerData.maxFliesInSingleRun || 0)) {
