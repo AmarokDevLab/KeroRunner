@@ -1,6 +1,6 @@
 // Service Worker de Kero Runner: permite jugar sin conexión.
 // Sube CACHE_VERSION cada vez que cambies el HTML para forzar la actualización.
-const CACHE_VERSION = 'kero-runner-v3';
+const CACHE_VERSION = 'kero-runner-v10-geek-wardrobe';
 
 const PRECACHE = [
   './',
