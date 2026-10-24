@@ -3784,7 +3784,7 @@
             }
 
             update(gameSpeed, dtScale) {
-                this.x -= Math.min(10.8, gameSpeed * 1.18 + 1.4) * dtScale;
+                this.x -= Math.min(12.3, gameSpeed * 1.28 + 1.6) * dtScale;
                 this.timer += 0.25 * dtScale;
                 this.y = this.baseY + Math.sin(this.timer) * 2.5;
             }
@@ -3835,9 +3835,9 @@
                 this.width = 74; this.height = 76;
                 this.x = LOGICAL_WIDTH + 90; this.targetX = LOGICAL_WIDTH - 102;
                 this.baseY = GROUND_Y - 115; this.y = this.baseY;
-                this.durationFrames = 15 * 60; this.timerFrames = this.durationFrames;
-                this.introFrames = 120; this.introElapsed = 0;
-                this.shootCooldown = 24; this.animTimer = 0; this.mouthOpenTimer = 0;
+                this.durationFrames = 17 * 60; this.timerFrames = this.durationFrames;
+                this.introFrames = 90; this.introElapsed = 0;
+                this.shootCooldown = 18; this.animTimer = 0; this.mouthOpenTimer = 0;
                 this.state = 'ENTERING'; this.defeated = false;
                 this.phase = 0; this.phaseBanner = 0; this.waveNumber = 0;
                 this.pendingLanes = []; this.telegraph = null; this.recoveryFrames = 0;
@@ -3869,9 +3869,9 @@
                         if(this.telegraph.frames <= 0) {
                             const lane=this.telegraph.lane;this.telegraph=null;
                             this.shootProjectile(lane);
-                            if(this.pendingLanes.length) this.shootCooldown=this.phase===1 ? 20 : 40;
+                            if(this.pendingLanes.length) this.shootCooldown=this.phase===1 ? 16 : 27;
                             else {
-                                this.shootCooldown=110;this.recoveryFrames=100;
+                                this.shootCooldown=82;this.recoveryFrames=72;
                                 // Ruta opcional de recompensa durante el respiro entre ráfagas.
                                 const flyY=lane==='LOW'?GROUND_Y-88:GROUND_Y-24;
                                 for(let i=0;i<3;i++)goldenFlies.push(new GoldenFly(this.x+35+i*38,flyY));
@@ -3881,7 +3881,7 @@
                         this.shootCooldown -= dtScale;
                         if(this.shootCooldown<=0 && this.timerFrames>90) {
                             if(!this.pendingLanes.length) this.prepareWave();
-                            this.telegraph={lane:this.pendingLanes.shift(),frames:42};
+                            this.telegraph={lane:this.pendingLanes.shift(),frames:32};
                         }
                     }
                 } else if(this.state==='LEAVING') {this.x+=5.5*dtScale;this.y-=1.5*dtScale;}
@@ -3890,7 +3890,7 @@
             prepareWave() {
                 const index=STAGES_CATALOG.findIndex(stage=>stage.id===this.stageId);
                 const lane=(this.waveNumber+index)%2===0?'LOW':'MID';
-                this.pendingLanes=this.phase===0?[lane]:this.phase===1?[lane,lane]:[lane,lane==='LOW'?'MID':'LOW'];
+                this.pendingLanes=this.phase===0?[lane]:this.phase===1?[lane,lane==='LOW'?'MID':'LOW']:[lane,lane==='LOW'?'MID':'LOW',lane];
                 this.waveNumber++;
             }
 
@@ -4381,8 +4381,8 @@
                     activeBoss = new StageBoss(activeStageId);
                     obstacles = []; // Limpia obstáculos normales para dar inicio al duelo contra el Jefe
                     sound.playBossWarning();
-                    showUnlockToast(activeBoss.cfg.icon, `${activeBoss.cfg.name} (¡Resiste 15s!)`, '⚠️ ¡JEFE EN CAMINO!');
-                    createFloatingText(`⚠️ ¡${activeBoss.cfg.name.toUpperCase()}!`, Math.max(16, kero.x - 10), Math.max(42, kero.y - 22), '#f43f5e');
+                    
+                    
                     updatePowerUpHUD();
                 }
 
@@ -4991,44 +4991,9 @@
             ctx.restore();
         }
 
+        // Los jefes se presentan sin instrucciones, avisos de fase ni pistas de ataque.
         function drawBossEncounterHUD(ctx, boss) {
-            if(boss.state==='LEAVING')return;
-            const palette=getDangerPalette(boss.stageId);
-            ctx.save();
-            ctx.textAlign='center';ctx.textBaseline='middle';
-            const panel=(text,y,color,size=12)=>{
-                ctx.font=`bold ${size}px monospace`;
-                const width=Math.min(LOGICAL_WIDTH-24,ctx.measureText(text).width+30),x=(LOGICAL_WIDTH-width)/2;
-                ctx.fillStyle='rgba(9,15,31,.94)';ctx.fillRect(x,y-15,width,30);
-                ctx.fillStyle=color;ctx.fillRect(x,y-15,3,30);ctx.fillRect(x+width-3,y-15,3,30);
-                ctx.fillStyle='#fffdf2';ctx.fillText(text,LOGICAL_WIDTH/2,y,width-16);
-            };
-            if(boss.state==='ENTERING') {
-                panel('GUARDIÁN DEL ESCENARIO',65,palette.projectile,11);
-                panel(boss.cfg.name.toUpperCase(),101,palette.projectile,Math.min(19,LOGICAL_WIDTH/32));
-                panel('RESISTE · ESQUIVA · ATRAPA LAS MOSCAS',137,palette.projectile,10);
-                // Partículas orbitando al jefe: entrada animada sin ocultar el carril.
-                for(let i=0;i<8;i++) {
-                    const angle=boss.animTimer*.5+i*Math.PI/4;
-                    artOval(ctx,i%2?'#fffdf2':palette.projectile,boss.x+35+Math.cos(angle)*51,boss.y+30+Math.sin(angle)*48,3,3);
-                }
-            } else {
-                if(boss.phaseBanner>0)panel(['FASE 1 · LEE LA SEÑAL','FASE 2 · DOBLE RÁFAGA','FASE 3 · CAMBIA DE ALTURA'][boss.phase],47,palette.projectile,11);
-                else if(boss.recoveryFrames>30&&!boss.telegraph)panel('RESPIRO · ATRAPA LAS MOSCAS',47,'#facc15',10);
-                if(boss.telegraph) {
-                    const low=boss.telegraph.lane==='LOW',y=low?GROUND_Y-17:GROUND_Y-49;
-                    const x=Math.max(kero.x+70,boss.x-65);
-                    artPoly(ctx,'#fffdf2',[[x-17,y],[x-5,y-12],[x+7,y],[x-5,y+12]]);
-                    artPoly(ctx,'#11152b',[[x-13,y],[x-5,y-8],[x+3,y],[x-5,y+8]]);
-                    ctx.fillStyle=palette.projectile;ctx.fillRect(x-7,y-4,4,8);
-                    ctx.textAlign='right';ctx.font='bold 12px monospace';
-                    const text=low?'↑ SALTA':'↓ AGÁCHATE';const width=ctx.measureText(text).width+12;
-                    ctx.fillStyle='#11152b';ctx.fillRect(x-width-23,y-10,width,20);
-                    ctx.fillStyle='#fffdf2';ctx.fillText(text,x-29,y);
-                    ctx.fillStyle=palette.projectile;ctx.fillRect(x-width-23,y+9,width*(1-boss.telegraph.frames/42),2);
-                }
-            }
-            ctx.restore();
+            // La animación y los proyectiles son las únicas señales visuales.
         }
 
         // Ambiente visual mejorado: luz ambiental, luciernagas y capas de profundidad.
